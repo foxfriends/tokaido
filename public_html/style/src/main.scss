@@ -1,0 +1,45 @@
+@import "./macros.scss";
+@import "./base.scss";
+@import "./menu.scss";
+
+.disc {
+    box-sizing: padding-box;
+    width: 24px;
+    height: 24px;
+    border-radius: 100%;
+    &.white {
+        background-color: #86837C;
+        box-shadow:
+            0 1px 0 1px #696765,
+            0 2px 0 1px #696765,
+            0 3px 0 1px #696765;
+    }
+    &.purple {
+        background-color: #50104C;
+        box-shadow:
+            0 1px 0 1px #370934,
+            0 2px 0 1px #370934,
+            0 3px 0 1px #370934;
+    }
+    &.green {
+        background-color: #4F8E02;
+        box-shadow:
+            0 1px 0 1px #315900,
+            0 2px 0 1px #315900,
+            0 3px 0 1px #315900;
+    }
+    &.blue {
+        background-color: #7DC1C0;
+        box-shadow:
+            0 1px 0 1px #528685,
+            0 2px 0 1px #528685,
+            0 3px 0 1px #528685;
+    }
+    &.yellow {
+        background-color: #F3B200;
+        box-shadow:
+            0 1px 0 1px #a27808,
+            0 2px 0 1px #a27808,
+            0 3px 0 1px #a27808;
+    }
+}
