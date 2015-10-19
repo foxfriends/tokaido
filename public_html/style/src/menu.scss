@@ -9,7 +9,7 @@ section#title {
     width: 100%;
     height: 100%;
 
-    color: #778574;
+    color: $title-color;
     opacity: 0;
     @include transition(opacity 2s);
 
@@ -83,47 +83,58 @@ section#title {
         width: 50%;
         padding-left: 20px;
 
-        color: #778574;
+        color: $title-color;
         font-size: 50pt;
 
         background-color: rgba(255, 255, 255, 0.9);
         box-shadow: 0 0 5px 5px rgba(255, 255, 255, 0.9);
 
-        border-bottom: 2px dotted #778574;
+        border-bottom: 2px dotted $title-color;
 
-        @include transition(top 1s, box-shadow 0.2s);
+        @include transition(top 1s, left 2s, box-shadow 0.2s);
         &#game { z-index: 5; }
         &#name { z-index: 4; }
 
         &.error {
             box-shadow:
-                0 0 5px 5px rgba(255, 180, 180, 0.9),
-                0 0 5px 2px rgba(255, 180, 180, 0.9) inset;
+                0 0 5px 5px $error-color,
+                0 0 5px 2px $error-color inset;
         }
     }
     div.button {
         position: absolute;
-        top: -80px;
-        right: 25%;
         z-index: 3;
+        overflow: visible;
+        white-space: nowrap;
 
-        width: 300px;
         height: 70px;
-        padding: 0 10px;
 
-        color: #778574;
+        color: $title-color;
         font-size: 50pt;
+        text-align: right;
 
         background-color: RGBA(255, 255, 255, 0.9);
         box-shadow: 0 0 5px 5px RGBA(255, 255, 255, 0.9);
 
-        @include transition(top 1.2s);
+        @include transition(top 1.2s, right 2s);
 
         cursor: pointer;
+
+        &#button-names {
+            top: -80px;
+            right: 25%;
+            width: 300px;
+        }
+        &#button-colors {
+            top: 400px;
+            right: -75%;
+            width: 250px;
+        }
 
         .en, .hover {
             position: absolute;
             top: 0;
+            right: 10px;
             line-height: 70px;
             @include transition(opacity 0.7s);
         }
@@ -134,5 +145,24 @@ section#title {
         }
         .en, &:hover .hover { opacity: 1; }
         .hover, &:hover .en { opacity: 0; }
+    }
+
+    div#color-form {
+        position: absolute;
+        top: 250px;
+        left: 125%;
+        z-index: 3;
+
+        width: 50%;
+        padding-left: 32px;
+
+        font-size: 40pt;
+
+        background-color: rgba(255, 255, 255, 0.9);
+        box-shadow: 0 0 5px 5px rgba(255, 255, 255, 0.9);
+
+        @include transition(left 2s, opacity 0.2s);
+
+        .container { overflow: visible; }
     }
 }

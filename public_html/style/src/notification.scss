@@ -1,0 +1,44 @@
+section#notification {
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 100;
+
+    pointer-events: none;
+
+    p {
+        position: fixed;
+        top: 30px;
+        width: 100%;
+        height: 32px;
+
+        padding-left: 16px;
+
+        color: $title-color;
+        font-size: 27pt;
+        .jp { font-size: 16pt; }
+        line-height: 32px;
+        vertical-align: text-bottom;
+
+        opacity: 0;
+        &#error {
+            border-top: 2px dotted $error-color;
+            border-bottom: 2px dotted $error-color;
+        }
+        &#success {
+            border-top: 2px dotted green;
+            border-bottom: 2px dotted green;
+        }
+        &#news {
+            border-top: 2px dotted $title-color;
+            border-bottom: 2px dotted $title-color;
+        }
+
+        background-color: rgba(255, 255, 255, 0.8);
+        box-shadow: 0 0 5px 0 rgba(255, 255, 255, 0.8);
+
+        @include transition(opacity 1s);
+    }
+}

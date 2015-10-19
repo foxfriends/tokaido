@@ -2,20 +2,12 @@
 require('babel/polyfill');
 require('../../style/src/main.scss');
 // import {default as $} from 'jquery';
-import {default as io} from 'socket.io-client';
-
-import './menu.es6';
-
-let socket = io();
-socket.on('error', (e) => {
-    console.error(e);
-    //showAlert(e, 'error');
-});
-socket.on('notification', (m) => {
-    //showAlert(m, 'notification');
-});
+import {runner as menu} from './menu.es6';
+import {runner as game} from './game.es6';
+import './chat.es6';
 
 //Main game loop
 let run; (run = function*() {
-    yield;
-}).next();
+    yield* menu(run);
+    yield* game(run);
+}()).next();

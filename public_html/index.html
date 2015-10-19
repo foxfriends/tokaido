@@ -4,28 +4,46 @@
         <meta charset="utf-8">
         <meta name="author" content="Cameron Eldridge">
         <meta name="description" content="An online version of the board game Tokaido">
-        <meta name="keywords" content="tokaido,game,boardgame,board,japan,travel">
-        <title>Tokaido</title>
+        <meta name="keywords" content="tokaido,game,boardgame,board,japan,travel,東海道,east,sea,road,journey">
+        <title>東海道 - Tokaido</title>
         <link rel="stylesheet" type="text/css" href="style/main.css">
     </head>
     <body>
+        <section id="notification">
+            <p id="error"><span class="jp">違う! </span><span id="error-message"></span></p>
+            <p id="success"><span class="jp">成功! </span><span id="success-message"></span></p>
+            <p id="news"><span class="jp">知らせ: </span><span id="news-message"></span></p>
+        </section>
         <section id="title">
-            <h1>TOKAIDO</h1>
+            <h1 class="title">TOKAIDO</h1>
             <h3 class="jp">東海道</h3>
             <h2>
                 <span class="en">Play...</span>
                 <span class="hover"><span class="jp">弾く...</span></span>
             </h2>
-            <input type="text" placeholder="Game name" id="game" tabindex="-1">
-            <input type="text" placeholder="Your name" id="name" tabindex="-1">
-            <div class="button">
+            <input type="text" placeholder="Game name" id="game" class="title" tabindex="-1">
+            <input type="text" placeholder="Your name" id="name" class="title" tabindex="-1">
+            <div class="button" id="button-names">
                 <span class="en">Begin your journey &gt;&gt;</span>
                 <span class="hover"><span class="jp">乗り出します</span>&#8202;&#8202;&gt;&gt;</span>
             </div>
+            <div id="color-form">
+                Choose your colour:
+                <div class="container">
+                    <span class="disc shadow"></span>
+                    <span class="disc white"></span>
+                    <span class="disc yellow"></span>
+                    <span class="disc blue"></span>
+                    <span class="disc green"></span>
+                    <span class="disc purple"></span>
+                </div>
+            </div>
+            <div class="button" id="button-colors">
+                <span class="en">Confirm &gt;&gt;</span>
+                <span class="hover"><span class="jp">確認します</span>&#8202;&#8202;&gt;&gt;</span>
+            </div>
         </section>
-        <section id="game">
-
-        </section>
+        <section id="game"></section>
         <script src="script/tokaido.js"></script>
     </body>
 </html>

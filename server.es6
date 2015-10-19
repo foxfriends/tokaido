@@ -8,13 +8,14 @@ app.use('', express.static('public_html'));
 
 let io = require('socket.io')(server);
 
-let games = [];
-let users = [];
+let data = require('./server/data');
+let addPlayer = require('./server/players').addPlayer;
+let common = require('./server/common')(io);
 
 io.on('connection', (socket) => {
-    socket.on('error', (err) => {
-        console.error(err);
-    });
-
-
+    addPlayer(socket);
+    // socket.on('error', (err) => console.error(`Error on socket ${socket.id}: ${err}`));
+    require('./server/join')(socket.id);
+    require('./server/colorPhase')(socket.id);
+    require('./server/game')(socket.id);
 });

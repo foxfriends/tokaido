@@ -4,7 +4,7 @@
   "description": "Online version of the board game Tokaido",
   "main": "server.es6",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "echo No tests! && exit 1",
     "start": "babel-node server.es6"
   },
   "keywords": [
