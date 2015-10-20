@@ -10,7 +10,7 @@ module.exports = {
         loaders: [
             { test: /\.scss$/, loader: ExtractTextPlugin.extract('style', 'css!sass') },
             { test: /\.es6$/, loader: 'babel' },
-            { test: /\.(otf|ttf|svg|png|jpg)$/, loader: 'url' }
+            { test: /\.(otf|ttf|png|jpg)$/, loader: 'url' }
         ]
     },
     plugins: [

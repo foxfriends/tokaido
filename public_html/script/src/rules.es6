@@ -1,6 +1,21 @@
 'use strict';
 import {default as $} from 'jquery';
 
+export let showRules = () => {
+    $('#rules').css({
+        top: 0,
+        opacity: 1,
+        'pointer-events': 'auto'
+    });
+};
+export let hideRules = () => {
+    $('#rules').css({
+        top: -100,
+        opacity: 0,
+        'pointer-events': 'none'
+    });
+};
+
 $('#rules div.slider').each(function() {
     //Set up the slider to slide when the buttons are pressed
     let pos = 0;
@@ -53,8 +68,5 @@ $('#rules div.space-type')
 //Close the rules when close is clicked
 $('#rules div#button-rules')
     .click(() => {
-        $('#rules').css({
-            opacity: 0,
-            'pointer-events': 'none'
-        });
+        hideRules();
     });

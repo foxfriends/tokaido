@@ -3,6 +3,7 @@ require('babel/polyfill');
 import {default as $} from 'jquery';
 import {socket} from './socket.es6';
 import {error} from './notification.es6';
+import {showRules, hideRules} from './rules.es6';
 
 let moveShadow = (where) => {
     //Place the shadow behind the selected color
@@ -122,6 +123,8 @@ export let runner = function*(runner) {
                 });
                 $colorsButton.off('click');
                 socket.removeAllListeners('color:update');
+                //Show the rules after choosing color
+                showRules();
             }
             break;
         }
@@ -131,6 +134,5 @@ export let runner = function*(runner) {
         'opacity': 0,
         'pointer-events': 'none'
     });
-    $('#rules').css('display', 'block');
     return;
 };
