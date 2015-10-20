@@ -5,6 +5,7 @@ require('../../style/src/main.scss');
 import {runner as menu} from './menu.es6';
 import {runner as game} from './game.es6';
 import './chat.es6';
+import './rules.es6';
 
 //Main game loop
 let run; (run = function*() {

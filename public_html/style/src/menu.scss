@@ -1,4 +1,5 @@
 section#title {
+    background-color: white;
     background-image: url("../../image/title.png");
     background-repeat: no-repeat;
     background-attachment: fixed;
@@ -6,8 +7,11 @@ section#title {
     background-position: center top;
 
     position: fixed;
+    left: 0;
+    top: 0;
     width: 100%;
     height: 100%;
+    z-index: 10;
 
     color: $title-color;
     opacity: 0;
@@ -68,8 +72,9 @@ section#title {
         width: 100%;
 
         font-size: 40pt;
+        font-family: "Rii Pop",sans-serif;
         text-align: center;
-        color: #E6E7E1;
+        color: $subtitle-color;
 
         opacity: 0;
 
@@ -86,8 +91,7 @@ section#title {
         color: $title-color;
         font-size: 50pt;
 
-        background-color: rgba(255, 255, 255, 0.9);
-        box-shadow: 0 0 5px 5px rgba(255, 255, 255, 0.9);
+        @include floating-box();
 
         border-bottom: 2px dotted $title-color;
 
@@ -111,10 +115,8 @@ section#title {
 
         color: $title-color;
         font-size: 50pt;
-        text-align: right;
 
-        background-color: RGBA(255, 255, 255, 0.9);
-        box-shadow: 0 0 5px 5px RGBA(255, 255, 255, 0.9);
+        @include floating-box();
 
         @include transition(top 1.2s, right 2s);
 
@@ -158,8 +160,7 @@ section#title {
 
         font-size: 40pt;
 
-        background-color: rgba(255, 255, 255, 0.9);
-        box-shadow: 0 0 5px 5px rgba(255, 255, 255, 0.9);
+        @include floating-box();
 
         @include transition(left 2s, opacity 0.2s);
 

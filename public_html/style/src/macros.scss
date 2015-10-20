@@ -6,6 +6,14 @@
     src: url("../../fonts/RiiPopkkR.otf");
     font-family: "Rii Pop";
 }
+@font-face {
+    src: url("../../fonts/advent-Lt2.otf");
+    font-family: "Advent";
+}
+@font-face {
+    src: url("../../fonts/KozGoPr6N-Light.otf");
+    font-family: "Kozuka Gothic";
+}
 
 @mixin transition($transitions...) {
     -webkit-transition: $transitions;
@@ -26,6 +34,11 @@
     -o-transform-origin: $x $y;
     transform-origin: $x $y;
 }
+@mixin floating-box() {
+    background-color: rgba(255, 255, 255, 0.9);
+    box-shadow: 0 0 5px 5px rgba(255, 255, 255, 0.9);
+}
 
 $title-color: #778574;
+$subtitle-color: #E6E7E1;
 $error-color: rgba(255, 180, 180, 0.9);
