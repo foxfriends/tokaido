@@ -1,12 +1,28 @@
 'use strict';
 import {default as $} from 'jquery';
 
-export let showRules = () => {
+export let showRules = (expansion) => {
     $('#rules').css({
         top: 0,
         opacity: 1,
         'pointer-events': 'auto'
     });
+    if(expansion !== undefined) {
+        if(expansion.crossroads) {
+            $('#rules>.container').animate({
+                scrollTop: $('#rules>.container')[0].scrollHeight
+            }, 3000);
+            $('#rules-crossroads')
+                .css('max-height', 'none');
+            $('#button-crossroads')
+                .css({
+                    opacity: 0,
+                    'pointer-events': 'none'
+                });
+        }
+    }
+    $('#rules-crossroads')
+        .css('display', 'block');
 };
 export let hideRules = () => {
     $('#rules').css({
@@ -14,6 +30,18 @@ export let hideRules = () => {
         opacity: 0,
         'pointer-events': 'none'
     });
+    window.setTimeout(() => {
+        $('#rules').scrollTop(0);
+        $(`#rules-crossroads`)
+            .css({
+                'max-height': 0
+            });
+        $('#button-crossroads')
+            .css({
+                opacity: 1,
+                'pointer-events': 'auto'
+            });
+    }, 1000);
 };
 
 $('#rules div.slider').each(function() {
@@ -59,14 +87,29 @@ $('#rules div.slider').each(function() {
 });
 
 //Scroll to the section about scoring when a space type is clicked
-$('#rules div.space-type')
-    .click(function() {
-        $(`#rules div.rule[name='${$(this).attr('name').replace(/(paddy|mountain|sea)/, 'panorama').replace(/(farm|temple)/,'coins')}']`)[0]
-            .scrollIntoView();
-    });
+$('#rules .container').each(function() {
+    $(this).children('div.space-type')
+        .click(function() {
+            console.log($(this).parent().parent().parent()
+                    .children(`div.rule[name='${$(this).attr('name').replace(/(paddy|mountain|sea)/, 'panorama')}']`)
+                    .position().top);
+            $('#rules>.container').animate({
+                scrollTop: $('#rules>.container').scrollTop() + $(this).parent().parent().parent()
+                        .children(`div.rule[name='${$(this).attr('name').replace(/(paddy|mountain|sea)/, 'panorama')}']`)
+                        .position().top
+            }, 1500);
+        });
+});
 
-//Close the rules when close is clicked
-$('#rules div#button-rules')
+// Actions for various buttons
+
+//Open the crossroads expansion
+$('#button-crossroads')
+    .click(() => {
+        showRules({crossroads: true});
+    });
+// Close the rules
+$('#button-rules')
     .click(() => {
         hideRules();
     });

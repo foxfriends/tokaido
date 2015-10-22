@@ -12,6 +12,50 @@ section#rules {
     pointer-events: none;
     &>div.container {
         overflow-y: scroll;
+
+        .expansion {
+            max-height: 0px;
+            overflow: hidden;
+        }
+        &>div.container {
+            overflow: visible;
+            height: 70px;
+
+            div#button-crossroads {
+                position: absolute;
+                left: 50px;
+                z-index: 3;
+                width: 350px;
+                height: 70px;
+
+                color: $title-color;
+                font-size: 50pt;
+                overflow: visible;
+                white-space: nowrap;
+
+                @include floating-box();
+
+                @include transition(opacity 0.5s);
+
+                .en, .hover {
+                    position: absolute;
+                    top: 0;
+                    left: 0;
+                    width: 100%;
+
+                    line-height: 70px;
+                    text-align: center;
+                    @include transition(opacity 0.7s);
+                }
+                .jp {
+                    font-size: 32pt;
+                    letter-spacing: -3px;
+                    vertical-align: text-bottom;
+                }
+                .en, &:hover .hover { opacity: 1; }
+                .hover, &:hover .en { opacity: 0; }
+            }
+        }
     }
     hgroup {
         position: relative;
@@ -54,7 +98,6 @@ section#rules {
         &, * {
             font-family: "Advent",sans-serif;
             font-size: 17pt;
-            font-weight: 200;
         }
 
         p {
@@ -137,12 +180,7 @@ section#rules {
                 line-height: 225px;
                 vertical-align: middle;
 
-                -moz-user-select: -moz-none;
-                -khtml-user-select: none;
-                -webkit-user-select: none;
-                -o-user-select: none;
-                user-select: none;
-                cursor: pointer;
+                @include buttonlike();
 
                 box-shadow: 0 0 20px 15px white;
 
@@ -183,8 +221,8 @@ section#rules {
                 box-shadow: 0 0 10px 0 $title-color;
 
                 @include transition(box-shadow 0.5s);
+                @include buttonlike();
 
-                cursor: pointer;
                 h2 {
                     position: absolute;
                     left: -100%;
@@ -213,7 +251,6 @@ section#rules {
                 }
             }
         }
-
     }
 
     div#button-rules {
@@ -232,8 +269,6 @@ section#rules {
         @include floating-box();
 
         @include transition(top 1.2s, right 2s);
-
-        cursor: pointer;
 
         .en, .hover {
             position: absolute;
