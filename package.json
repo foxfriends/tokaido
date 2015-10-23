@@ -24,6 +24,7 @@
   "license": "ISC",
   "dependencies": {
     "babel": "^5.8.23",
+    "ejs": "^2.3.4",
     "express": "^4.13.3",
     "jquery": "^2.1.4",
     "pg": "^4.4.3",

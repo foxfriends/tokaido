@@ -29,7 +29,7 @@ module.exports = (id) => {
     socket.on('color:ready', (x, res) => {
         data.setPlayer(player.game(), player.name(), 'position', 0);
         updateData(player.game());
-        res();
+        res(data.get(player.game()).expansions);
     });
 };
 module.exports.alertAvailableColors = alertAvailableColors;

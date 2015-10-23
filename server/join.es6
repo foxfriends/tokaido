@@ -30,33 +30,45 @@ module.exports = (id) => {
     socket.on('disconnect', () => leave(id));
     socket.on('game:leave', () => leave(id));
     socket.on('game:join', ({game, name}, res) => {
+        let action = {
+            colors: 'skip',
+            options: 'skip'
+        };
         if(data.get(game) === undefined) { data.make(game); }
         if(data.getPlayer(game, name) === undefined) {
             //Check if the player joining is able to join
             if(data.get(game).state !== 0) {
                 //Started already
-                return res(`The game ${game} has left without you`, []);
-            } else if(data.players(game) >= 5) {
+                return res(`The game ${game} has left without you`, {});
+            } else if(data.get(game).playerCount === 1 && data.players(game) >= 1) {
+                //Not set up yet
+                return res(`Please wait while ${data.getName(game, 0)} plans your journey`, {});
+            } else if(data.players(game) >= data.get(game).playerCount) {
                 //Full
-                return res(`The game ${game} is full`, []);
+                return res(`The game ${game} is full`, {});
+            }
+            if(data.get(game).playerCount === 1) {
+                //Not set up yet, so set up now
+                action.options = 'set';
             }
             //Success!
             data.makePlayer(game, name);
+            action.colors = alertAvailableColors(game);
         } else if(data.getPlayer(game, name).connected) {
             //Already joined in another tab
             game = undefined;
-            return res(`${name} is already in this game`, []);
+            return res(`${name} is already in this game`, {});
         }
         //Join room, set session values, and begin
         player.set('name', name);
         player.set('game', game);
         socket.join(game);
         data.setPlayer(game, name, 'connected', true);
-        let colors = "skip";
-        if(data.get(game).state === 0) {
-            //Skip the colour chooser if the game has already started
-            colors = alertAvailableColors(game);
-        }
-        return res(null, colors);
+        return res(null, action);
+    });
+    socket.on('options:set', (opts, res) => {
+        data.set(player.game(), 'playerCount', parseInt(opts.playerCount));
+        data.set(player.game(), 'expansions', { crossroads: opts.crossroads });
+        res();
     });
 };

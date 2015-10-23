@@ -44,7 +44,7 @@ let updateColors = (colors) => {
 
 //Move around the menu pieces
 export let runner = function*(runner) {
-    let $h2, $game, $name, $namesButton;
+    let $h2, $game, $name, $namesButton, rules, expansions;
     open_page: {
         //fade in everything when the page opens
         $('#title').css('opacity', 1);
@@ -97,7 +97,7 @@ export let runner = function*(runner) {
             let name = $name.val();
             if(game === '' || game.length > 80) { $game.addClass('error').focus(); error('Game name is invalid'); continue; }
             if(name === '' || name.length > 80) { $name.addClass('error').focus(); error('Your name is invalid'); continue; }
-            let [err, colors] = yield socket.emit('game:join', {game: game, name: name}, (err, colors) => runner.next([err, colors]));
+            let [err, action] = yield socket.emit('game:join', {game: game, name: name}, (err, action) => runner.next([err, action]));
             if(err !== null) { error(err); continue; }
             //Slide away the menu
             $game.css('left', '-75%').attr('tabindex', -1);
@@ -106,25 +106,53 @@ export let runner = function*(runner) {
             $name.css('left', '-75%');
             yield window.setTimeout(() => runner.next(), 200);
             $namesButton.css('right', '125%');
-            //If colors have not been chosen yet, choose them now
-            if(colors !== 'skip') {
-                updateColors(colors);
-                moveShadow();
-                $('#title div#color-form').css('left', '25%');
-                let $colorsButton = $('#title div#button-colors')
+            //If the game has just been created, deal with settings
+            if(action.options !== 'skip') {
+                //Set the settings if you are the game creator
+                let $optionsForm = $('#options-form').css('left', '25%');
+                let $optionsButton = $('#button-options')
                     .css('right', '25%');
-                $('#title div#color-form .disc.shadow').css('position', 'absolute');
+                let $playerCountOptions = $('#player-count .select-option')
+                    .click(function() {
+                        $(this).parent()
+                            .attr('data-value', $(this).text());
+                    });
+                let $useCrossroads = $('#use-crossroads')
+                    .click(function() {
+                        $(this).toggleClass('checked');
+                    });
+                yield $optionsButton.click(() => {
+                    $useCrossroads.off('click');
+                    $playerCountOptions.off('click');
+                    $optionsButton.off('click');
+                    socket.emit('options:set', {
+                        playerCount: $('#player-count').attr('data-value'),
+                        crossroads: $useCrossroads.hasClass('checked')
+                    }, () => runner.next());
+                });
+                $optionsForm.css('left', '-75%');
+                $optionsButton.css('right', '125%');
+            }
+            //If colors have not been set yet, set them
+            if(action.colors !== 'skip') {
+                updateColors(action.colors);
+                moveShadow();
+                $('#color-form').css('left', '25%');
+                let $colorsButton = $('#button-colors')
+                    .css('right', '25%');
+                $('#color-form .disc.shadow').css('position', 'absolute');
                 socket.on('color:update', (updatedColors) => {
                     updateColors(updatedColors);
                 });
-                yield $colorsButton.click(() => {
-                    if($('#title div#color-form .disc.shadow').css('opacity') === '0') { error('Please select a colour'); return; }
-                    socket.emit('color:ready', {}, () => runner.next());
+                expansions = yield $colorsButton.click(() => {
+                    if($('#color-form .disc.shadow').css('opacity') === '0') { error('Please select a colour'); return; }
+                    //Get the expansions so the rules can be show correctly
+                    socket.emit('color:ready', {}, (expansions) => runner.next(expansions));
                 });
                 $colorsButton.off('click');
                 socket.removeAllListeners('color:update');
                 //Show the rules after choosing color
-                showRules();
+                rules = true;
             }
             break;
         }
@@ -134,5 +162,11 @@ export let runner = function*(runner) {
         'opacity': 0,
         'pointer-events': 'none'
     });
+    //Wait for the rules to be closed (if they are open)
+    if(rules) {
+        showRules(expansions);
+        yield $('#button-rules').one('click', () => runner.next());
+    }
+    socket.emit('game:ready');
     return;
 };

@@ -4,8 +4,14 @@ let app = express();
 let server = app.listen(8888, () => {
     console.log('Server started at 8888');
 });
-app.use('', express.static('public_html'));
 
+//Run files through ejs
+app.set('view engine', 'ejs');
+app.set('views', './');
+
+app.use('/', express.static('./public_html'));
+//If not calling for a specific file, only page is index.html.ejs
+app.use((req, res) => { res.render('./public_html/index.html.ejs'); });
 let io = require('socket.io')(server);
 
 let data = require('./server/data');

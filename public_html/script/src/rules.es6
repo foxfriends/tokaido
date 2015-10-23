@@ -1,14 +1,14 @@
 'use strict';
 import {default as $} from 'jquery';
 
-export let showRules = (expansion) => {
+export let showRules = (expansions) => {
     $('#rules').css({
         top: 0,
         opacity: 1,
         'pointer-events': 'auto'
     });
-    if(expansion !== undefined) {
-        if(expansion.crossroads) {
+    if(expansions !== undefined) {
+        if(expansions.crossroads) {
             $('#rules>.container').animate({
                 scrollTop: $('#rules>.container')[0].scrollHeight
             }, 3000);
@@ -39,9 +39,9 @@ export let hideRules = () => {
         $('#button-crossroads')
             .css({
                 opacity: 1,
-                'pointer-events': 'auto'
+                'pointer-events': 'inherit'
             });
-    }, 1000);
+    }, 2000);
 };
 
 $('#rules div.slider').each(function() {
@@ -49,8 +49,12 @@ $('#rules div.slider').each(function() {
     let pos = 0;
     let hoverLeft = () => pos - 10;
     let hoverRight = () => pos + 10;
-    let nextLeft = () => pos = Math.max(Math.min(0, $(this).outerWidth() - (1 + $(this).children('.inner').children('div').length) * 170), pos - 170);
-    let nextRight = () => pos = Math.min(0, pos + 170);
+    let nextLeft = () => pos =
+            Math.max(Math.min(0,
+                            $(this).outerWidth() - (1 + $(this).children('.inner').children('div').length) *
+                                                        $(this).children('.inner').children('div').outerWidth(true)),
+                    pos - $(this).children('.inner').children('div').outerWidth(true));
+    let nextRight = () => pos = Math.min(0, pos + $(this).children('.inner').children('div').outerWidth(true));
     let $movers = $(this).children('.mover');
     $movers.eq(0)
         .mouseover(() => {

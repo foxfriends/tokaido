@@ -2,7 +2,8 @@
 let data = require('./data');
 let io;
 export let updateData = (game) => {
-    io.to(game).emit('data:update', JSON.stringify(data.get(game)));
+    let d = data.get(game);
+    io.to(game).emit('data:update', JSON.stringify(d));
 };
 module.exports = (socketio) => {
     if (socketio !== undefined) { io = socketio; }

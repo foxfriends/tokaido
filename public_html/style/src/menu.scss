@@ -125,10 +125,13 @@ section#title {
             right: 25%;
             width: 300px;
         }
-        &#button-colors {
+        &#button-colors, &#button-options {
             top: 400px;
             right: -75%;
             width: 250px;
+        }
+        &#button-options {
+            top: 450px;
         }
 
         .en, .hover {
@@ -147,14 +150,14 @@ section#title {
         .hover, &:hover .en { opacity: 0; }
     }
 
-    div#color-form {
+    div#color-form, div#options-form {
         position: absolute;
         top: 250px;
         left: 125%;
         z-index: 3;
 
         width: 50%;
-        padding-left: 32px;
+        padding: 0 32px;
 
         font-size: 40pt;
 
@@ -163,5 +166,60 @@ section#title {
         @include transition(left 2s, opacity 0.2s);
 
         .container { overflow: visible; }
+        @for $i from 1 through 5 {
+            .select[data-value="#{$i}"] .select-option:nth-child(#{$i - 1}) {
+                background-color: rgba(150, 150, 150, 0.3);
+                box-shadow: 0 0 10px 1px rgba(150, 150, 150, 0.3);
+            }
+        }
+        .select {
+            position: relative;
+            width: 100%;
+            height: 48px;
+            .select-option {
+                display: inline-block;
+                width: 25%;
+                height: 48px;
+
+                text-align: center;
+
+                background-color: transparent;
+                box-shadow: none;
+
+                @include transition(background-color 0.5s, box-shadow 0.5s);
+                @include buttonlike();
+            }
+        }
+        .checkbox {
+            position: relative;
+            display: inline-block;
+            width: 24px;
+            height: 24px;
+
+            vertical-align: middle;
+            margin-left: 32px;
+
+            box-shadow: 0 0 3px 0 $title-color;
+
+            @include border-radius(100%);
+            @include buttonlike();
+
+            .inner {
+                display: inline-block;
+
+                position: absolute;
+                top: -3px;
+                left: 4px;
+                width: 16px;
+                height: 16px;
+
+                font-size: 30px;
+                @include border-radius(100%);
+            }
+            &.checked .inner::before {
+                content: "\2713";
+                color: rgba(79, 228, 108, 0.7);
+            }
+        }
     }
 }
