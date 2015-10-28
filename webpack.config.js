@@ -8,7 +8,7 @@ module.exports = {
     },
     module: {
         loaders: [
-            { test: /\.scss$/, loader: ExtractTextPlugin.extract('style', 'css!sass') },
+            { test: /\.scss$/, loader: ExtractTextPlugin.extract('style', 'css!autoprefixer!sass') },
             { test: /\.es6$/, loader: 'babel' },
             { test: /\.(otf|ttf|png|jpg)$/, loader: 'url' }
         ]

@@ -7,7 +7,7 @@ import {showRules, hideRules} from './rules.es6';
 
 let moveShadow = (where) => {
     //Place the shadow behind the selected color
-    let $shadow = $('#title div#color-form .disc.shadow');
+    const $shadow = $('#title div#color-form .disc.shadow');
     if(where === undefined) { return $shadow.css('opacity', 0); }
     $shadow
         .css({
@@ -20,14 +20,14 @@ let moveShadow = (where) => {
 
 let updateColors = (colors) => {
     //Change which colors are available as players pick new ones
-    $(`#title div#color-form .disc:not(.shadow)`)
+    $(`#color-form .disc:not(.shadow)`)
         .css({
             opacity: 0.5,
             cursor: 'default'
         })
         .off('click');
     colors.forEach((col) => {
-        $(`#title div#color-form .disc.${col}`)
+        $(`#color-form .disc.${col}`)
             .css({
                 opacity: 1,
                 cursor: 'pointer'
@@ -44,15 +44,15 @@ let updateColors = (colors) => {
 
 //Move around the menu pieces
 export let runner = function*(runner) {
-    let $h2, $game, $name, $namesButton, rules, expansions;
+    const [$h2, $game, $name, $namesButton] = [$('#title h2'), $('#game'), $('#name'), $('#button-names')];
+    let rules, expansions;
     open_page: {
         //fade in everything when the page opens
         $('#title').css('opacity', 1);
         yield window.setTimeout(() => runner.next(), 1000);
         $('#title h1,#title h3').css('opacity', 1);
         yield window.setTimeout(() => runner.next(), 1000);
-        $h2 = $('#title h2')
-            .css({
+        $h2.css({
                 opacity: 1,
                 cursor: 'pointer'
             });
@@ -67,8 +67,7 @@ export let runner = function*(runner) {
         $('#title input').on('input', function() {
             $(this).removeClass('error');
         });
-        $game = $('#title input#game')
-            .css('top', '200px')
+        $game.css('top', '200px')
             .attr('tabindex', 1)
             .focus()
             .keydown((ev) => {
@@ -77,8 +76,7 @@ export let runner = function*(runner) {
                 }
             });
         yield window.setTimeout(() => runner.next(), 700);
-        $name = $('#title input#name')
-            .css('top', '300px')
+        $name.css('top', '300px')
             .attr('tabindex', 2)
             .keydown((ev) => {
                 if(ev.keyCode == 13) {
@@ -86,18 +84,17 @@ export let runner = function*(runner) {
                 }
             });
         yield window.setTimeout(() => runner.next(), 700);
-        $namesButton = $('#title div#button-names')
-            .css('top', '400px');
+        $namesButton.css('top', '400px');
     }
     join_game: {
         //When submit is clicked, attempt to join the game, repeating until it works
         for(;;) {
             yield $namesButton.one('click', () => runner.next());
-            let game = $game.val();
-            let name = $name.val();
+            const game = $game.val();
+            const name = $name.val();
             if(game === '' || game.length > 80) { $game.addClass('error').focus(); error('Game name is invalid'); continue; }
             if(name === '' || name.length > 80) { $name.addClass('error').focus(); error('Your name is invalid'); continue; }
-            let [err, action] = yield socket.emit('game:join', {game: game, name: name}, (err, action) => runner.next([err, action]));
+            const [err, action] = yield socket.emit('game:join', {game: game, name: name}, (err, action) => runner.next([err, action]));
             if(err !== null) { error(err); continue; }
             //Slide away the menu
             $game.css('left', '-75%').attr('tabindex', -1);
@@ -109,15 +106,15 @@ export let runner = function*(runner) {
             //If the game has just been created, deal with settings
             if(action.options !== 'skip') {
                 //Set the settings if you are the game creator
-                let $optionsForm = $('#options-form').css('left', '25%');
-                let $optionsButton = $('#button-options')
+                const $optionsForm = $('#options-form').css('left', '25%');
+                const $optionsButton = $('#button-options')
                     .css('right', '25%');
-                let $playerCountOptions = $('#player-count .select-option')
+                const $playerCountOptions = $('#player-count .select-option')
                     .click(function() {
                         $(this).parent()
                             .attr('data-value', $(this).text());
                     });
-                let $useCrossroads = $('#use-crossroads')
+                const $useCrossroads = $('#use-crossroads')
                     .click(function() {
                         $(this).toggleClass('checked');
                     });
@@ -138,7 +135,7 @@ export let runner = function*(runner) {
                 updateColors(action.colors);
                 moveShadow();
                 $('#color-form').css('left', '25%');
-                let $colorsButton = $('#button-colors')
+                const $colorsButton = $('#button-colors')
                     .css('right', '25%');
                 $('#color-form .disc.shadow').css('position', 'absolute');
                 socket.on('color:update', (updatedColors) => {

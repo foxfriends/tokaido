@@ -1,5 +1,5 @@
 'use strict';
-let data = require('./data.es6');
+let data = require('./data');
 let players = require('./players');
 let {io} = require('./common')();
 let {alertAvailableColors} = require('./colorPhase');
@@ -69,6 +69,13 @@ module.exports = (id) => {
     socket.on('options:set', (opts, res) => {
         data.set(player.game(), 'playerCount', parseInt(opts.playerCount));
         data.set(player.game(), 'expansions', { crossroads: opts.crossroads });
+        if(data.get(player.game()).expansions.crossroads) {
+            //Add the crossroads traveller cards
+            let cards = data.get(player.game()).cards;
+            cards.traveller = cards.traveller.concat(cards.cr_traveller);
+            data.set(player.game(), 'cards', cards);
+            data.shuffleCards(player.game(), 'traveller');
+        }
         res();
     });
 };

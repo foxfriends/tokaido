@@ -1,10 +1,23 @@
 'use strict';
 let games = {};
 
+let shuffle = (a) => {
+    let n = a.length;
+    while(0 <-- n) {
+        let r = Math.floor(Math.random() * (n + 1));
+        [a[0], a[r]] = [a[r], a[0]];
+    }
+    return a;
+};
+
 module.exports = {
     get: (g) => games[g],
     set: (g,f,d) => d !== undefined ? games[g][f] = d : games[g] = f,
     remove: (g) => delete games[g],
+    getCard: (g,t) => games[g].cards[t][0],
+    addCard: (g,t,c) => games[g].cards[t].push(c),
+    removeCard: (g,t) => games[g].cards[t].splice(0,1),
+    shuffleCards: (g,t) => games[g].cards[t] = shuffle(games[g].cards[t]),
     iPlayer: function*(g) {
         for(let name of Object.keys(games[g].players)) {
             yield games[g].players[name];
@@ -23,20 +36,23 @@ module.exports = {
             crossroads: false
         },
         cards: {
-            traveller: ['hiroshige', 'chuubei', 'kinko', 'yoshiyasu', 'satsuki',
-                        'mitsukuni', 'sasayakko', 'hirotada', 'umegae', 'zen-emon'],
-            cr_traveller: ['jirocho', 'daigoro', 'nampo', 'gotozaemon', 'miyataka', 'kita'],
-            encounter: ['shokunin', 'shokunin', 'annaibito-p', 'annaibito-p', 'annaibito-m',
-                        'annaibito-m', 'annaibito-s', 'annaibito-s', 'samurai', 'samurai',
-                        'kuge', 'kuge', 'miko', 'miko'],
-            souvenir: ['haori', 'koma', 'manju', 'shanisen'],
-            meal: ['dango'],
-            hot_springs: [2,2,2,2,2,2,3,3,3,3,3,3],
-            bathouse: 6,
-            cherry_tree: 6,
-            legendary: ['shodo', 'emaki', 'buppatsu', 'ema', 'murasame', 'masamune'],
-            calligraphy: ['foresight', 'contemplation', 'nostalgia', 'patience', 'perfection', 'fasting'],
-            amulet: ['vitality', 'fortune', 'health', 'friendship', 'hospitality', 'devotion']
+            traveller:          ['hiroshige','chuubei','kinko','yoshiyasu',
+                                'satsuki','mitsukuni','sasayakko','hirotada',
+                                'umegae','zen-emon'],
+            cr_traveller:       ['jirocho','daigoro','nampo','gotozaemon',
+                                'miyataka','kita'],
+            encounter:          shuffle(['shokunin','shokunin','annaibito-p',
+                                        'annaibito-p','annaibito-m','annaibito-m',
+                                        'annaibito-s','annaibito-s','samurai',
+                                        'samurai','kuge','kuge','miko','miko']),
+            souvenir:           shuffle(['haori', 'koma', 'manju', 'shanisen']),
+            meal:               shuffle(['dango']),
+            hot_springs:        shuffle([2,2,2,2,2,2,3,3,3,3,3,3]),
+            bathouse:           [0,0,0,0,0,0],
+            cherry_tree:        [0,0,0,0,0,0],
+            legendary:          ['shodo', 'emaki', 'buppatsu', 'ema', 'murasame', 'masamune'],
+            calligraphy:        ['foresight', 'contemplation', 'nostalgia', 'patience', 'perfection', 'fasting'],
+            amulet:             ['vitality', 'fortune', 'health', 'friendship', 'hospitality', 'devotion']
         },
         mealset: [],
         extra: {
@@ -48,8 +64,8 @@ module.exports = {
     },
     makePlayer: (g, p) => games[g].players[p] = {
         color: '',
-        character: '',
-        money: 0,
+        traveller: '',
+        coins: 0,
         donations: 0,
         cards: {
             encounter: [],

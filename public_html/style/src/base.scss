@@ -15,7 +15,7 @@
 }
 
 div.button {
-    @include buttonlike();
+    @include buttonlike;
 }
 
 .jp {

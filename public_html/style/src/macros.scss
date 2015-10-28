@@ -15,34 +15,11 @@
     font-family: "Kozuka Gothic";
 }
 
-@mixin transition($transitions...) {
-    -webkit-transition: $transitions;
-    -moz-transition: $transitions;
-    -ms-transition: $transitions;
-    -o-transition: $transitions;
-    transition: $transitions;
-}
-@mixin border-radius($radius) {
-    -webkit-border-radius: $radius;
-    -moz-border-radius: $radius;
-    border-radius: $radius;
-}
-@mixin transform-origin($x, $y) {
-    -webkit-transform-origin: $x $y;
-    -moz-transform-origin: $x $y;
-    -ms-transform-origin: $x $y;
-    -o-transform-origin: $x $y;
-    transform-origin: $x $y;
-}
-@mixin floating-box() {
+@mixin floating-box {
     background-color: rgba(255, 255, 255, 0.9);
     box-shadow: 0 0 5px 5px rgba(255, 255, 255, 0.9);
 }
-@mixin buttonlike() {
-    -moz-user-select: -moz-none;
-    -khtml-user-select: none;
-    -webkit-user-select: none;
-    -o-user-select: none;
+@mixin buttonlike {
     user-select: none;
     cursor: pointer;
 }

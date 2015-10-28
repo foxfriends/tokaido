@@ -9,7 +9,7 @@ section#rules {
 
     opacity: 0;
     background-color: white;
-    @include transition(opacity 2s, top 2s ease-out);
+    transition: opacity 2s, top 2s ease-out;
 
     pointer-events: none;
     &>div.container {
@@ -35,9 +35,9 @@ section#rules {
                 overflow: visible;
                 white-space: nowrap;
 
-                @include floating-box();
+                @include floating-box;
 
-                @include transition(opacity 0.5s);
+                transition: opacity 0.5s;
 
                 .en, .hover {
                     position: absolute;
@@ -47,7 +47,7 @@ section#rules {
 
                     line-height: 70px;
                     text-align: center;
-                    @include transition(opacity 0.7s);
+                    transition: opacity 0.7s;
                 }
                 .jp {
                     font-size: 32pt;
@@ -128,7 +128,7 @@ section#rules {
             div.inner {
                 position: relative;
                 left: 0;
-                @include transition(left 1s);
+                transition: left 1s;
             }
             div.traveller-card {
                 width: 167px;
@@ -146,7 +146,7 @@ section#rules {
                 white-space: normal;
 
                 box-shadow: 0 0 10px 0 $title-color;
-                @include transition(box-shadow 0.5s);
+                transition: box-shadow 0.5s;
                 overflow: visible;
                 h2 {
                     position: absolute;
@@ -167,10 +167,10 @@ section#rules {
                     font-size: 14pt;
 
                     opacity: 0;
-                    @include floating-box();
+                    @include floating-box;
 
                     pointer-events: none;
-                    @include transition(opacity 0.5s);
+                    transition: opacity 0.5s;
                 }
                 &:hover {
                     box-shadow: 0 0 15px 0 lighten($title-color, 30%);
@@ -187,11 +187,11 @@ section#rules {
                 line-height: 225px;
                 vertical-align: middle;
 
-                @include buttonlike();
+                @include buttonlike;
 
                 box-shadow: 0 0 20px 15px white;
 
-                @include transition(transform 1s, width 1s);
+                transition: transform 1s, width 1s;
                 transform: translateX(0);
                 &:nth-last-of-type(2) {
                     left: 0;
@@ -224,11 +224,11 @@ section#rules {
                 height: 75px;
                 margin: 0 10px;
 
-                @include border-radius(100%);
+                border-radius: 100%;
                 box-shadow: 0 0 10px 0 $title-color;
 
-                @include transition(box-shadow 0.5s);
-                @include buttonlike();
+                transition: box-shadow 0.5s;
+                @include buttonlike;
 
                 h2 {
                     position: absolute;
@@ -246,11 +246,11 @@ section#rules {
                     opacity: 0;
                     font-size: 14pt;
 
-                    @include floating-box();
+                    @include floating-box;
 
                     white-space: normal;
                     pointer-events: none;
-                    @include transition(opacity 0.5s);
+                    transition: opacity 0.5s;
                 }
                 &:hover {
                     box-shadow: 0 0 15px 0 lighten($title-color, 30%);
@@ -273,9 +273,9 @@ section#rules {
         overflow: visible;
         white-space: nowrap;
 
-        @include floating-box();
+        @include floating-box;
 
-        @include transition(top 1.2s, right 2s);
+        transition: top 1.2s, right 2s;
 
         .en, .hover {
             position: absolute;
@@ -285,7 +285,7 @@ section#rules {
 
             line-height: 70px;
             text-align: center;
-            @include transition(opacity 0.7s);
+            transition: opacity 0.7s;
         }
         .jp {
             font-size: 32pt;

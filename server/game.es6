@@ -2,6 +2,7 @@
 let data = require('./data');
 let {updateData, io} = require('./common')();
 let players = require('./players');
+let travellers = require('./cards');
 
 module.exports = (id) => {
     let player = players(id);
@@ -16,6 +17,13 @@ module.exports = (id) => {
         }
     });
     socket.on('request:travellers', (x, res) => {
-        
+        let cards = [   travellers(data.removeCard(player.game(), 'traveller')[0]).name,
+                        travellers(data.removeCard(player.game(), 'traveller')[0]).name  ];
+        res(cards);
+    });
+    socket.on('submit:traveller', (name, res) => {
+        data.setPlayer(player.game(), player.name(), 'traveller', name);
+        data.setPlayer(player.game(), player.name(), 'coins', travellers(name).coins);
+        updateData(player.game());
     });
 };
