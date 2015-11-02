@@ -1,13 +1,13 @@
 'use strict';
-let traveller = require('./traveller');
-let souvenir = require('./souvenir');
-let encounter = require('./encounter');
-let meal = require('./meal');
-let legendary = require('./legendary');
-let calligraphy = require('./calligraphy');
-let amulet = require('./amulet');
+const traveller = require('./traveller');
+const souvenir = require('./souvenir');
+const encounter = require('./encounter');
+const meal = require('./meal');
+const legendary = require('./legendary');
+const calligraphy = require('./calligraphy');
+const amulet = require('./amulet');
 
-let get = (name) => traveller[name] || souvenir[name] || encounter[name] || meal[name] ||
+const get = (name) => traveller[name] || souvenir[name] || encounter[name] || meal[name] ||
                     legendary[name] || calligraphy[name] || amulet[name];
 
 module.exports = {

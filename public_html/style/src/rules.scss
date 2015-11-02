@@ -130,16 +130,11 @@ section#rules {
                 left: 0;
                 transition: left 1s;
             }
-            div.traveller-card {
-                width: 167px;
-            }
             div.card {
-                width: 143px;
-            }
-            div.traveller-card, div.card {
                 display: inline-block;
 
                 position: relative;
+                width: 147px;
                 height: 225px;
                 margin: 10px;
 
@@ -148,6 +143,10 @@ section#rules {
                 box-shadow: 0 0 10px 0 $title-color;
                 transition: box-shadow 0.5s;
                 overflow: visible;
+
+                &.traveller {
+                    width: 167px;
+                }
                 h2 {
                     position: absolute;
                     top: 100%;

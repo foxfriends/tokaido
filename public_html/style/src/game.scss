@@ -7,7 +7,7 @@ section#board {
 
     background-color: white;
 
-    $scoreboard-height: 64px;
+    $scoreboard-height: 96px;
     #scoreboard {
         position: fixed;
         top: -$scoreboard-height - 10px;
@@ -18,19 +18,25 @@ section#board {
         width: 100%;
 
         background-color: white;
+        background-image: url('../../image/scoreboard.png');
+        background-size: cover;
+        background-repeat: no-repeat;
 
         box-shadow: 0 0 10px 0 $title-color;
         transition: top 8s linear;
     }
     #gameboard {
         position: absolute;
-        top: 64px;
-        left: 300%;
+        top: $scoreboard-height;
         z-index: 1;
+        height: 100%;
 
-        width: 400%;
         background-color: white;
-        background-size: cover;
-        transition: left 8s ease-out;
+        background-image: url('../../image/board.jpg');
+        background-size: auto 100%;
+        background-repeat: no-repeat;
+
+        transform-origin: 0 0;
+        transition: left 8s ease, top 8s ease;
     }
 }

@@ -74,8 +74,8 @@ module.exports = (id) => {
             let cards = data.get(player.game()).cards;
             cards.traveller = cards.traveller.concat(cards.cr_traveller);
             data.set(player.game(), 'cards', cards);
-            data.shuffleCards(player.game(), 'traveller');
         }
+        data.shuffleCards(player.game(), 'traveller');
         res();
     });
 };

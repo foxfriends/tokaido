@@ -4,6 +4,8 @@ import {default as $} from 'jquery';
 import {socket} from './socket.es6';
 import {error} from './notification.es6';
 import {showRules, hideRules} from './rules.es6';
+import {BOARD_WIDTH, BOARD_HEIGHT, SCOREBOARD_HEIGHT} from './const.es6';
+import * as data from './data.es6';
 
 let moveShadow = (where) => {
     //Place the shadow behind the selected color
@@ -56,6 +58,15 @@ export let runner = function*(runner) {
                 opacity: 1,
                 cursor: 'pointer'
             });
+        //Position the board in the right starting location
+        $('#gameboard')
+            .css({
+                left: -(BOARD_WIDTH - window.innerWidth),
+                width: BOARD_WIDTH,
+                height: BOARD_HEIGHT,
+                top: SCOREBOARD_HEIGHT,
+                opacity: 0
+            });
     }
     click_play: {
         //When the user clicks play, display the game/name boxes
@@ -95,6 +106,7 @@ export let runner = function*(runner) {
             if(game === '' || game.length > 80) { $game.addClass('error').focus(); error('Game name is invalid'); continue; }
             if(name === '' || name.length > 80) { $name.addClass('error').focus(); error('Your name is invalid'); continue; }
             const [err, action] = yield socket.emit('game:join', {game: game, name: name}, (err, action) => runner.next([err, action]));
+            data.me(name);
             if(err !== null) { error(err); continue; }
             //Slide away the menu
             $game.css('left', '-75%').attr('tabindex', -1);
@@ -164,6 +176,5 @@ export let runner = function*(runner) {
         showRules(expansions);
         yield $('#button-rules').one('click', () => runner.next());
     }
-    socket.emit('game:ready');
     return;
 };
