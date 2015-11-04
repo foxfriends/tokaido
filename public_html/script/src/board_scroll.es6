@@ -43,7 +43,8 @@ export let activate = () => {
     $board
         .mousedown((e) => {
             [followMouse, x, y] = [true, e.pageX, e.pageY];
-        })
+        });
+    $('#board')
         .mouseup(() => {
             followMouse = false;
         })
@@ -62,7 +63,8 @@ export let activate = () => {
 };
 export let deactivate = () => {
     $board
-        .off('mousedown')
+        .off('mousedown');
+    $('#board')
         .off('mouseup')
         .off('mousemove')
         .off('mousewheel');

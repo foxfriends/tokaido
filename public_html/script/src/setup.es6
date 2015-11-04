@@ -45,14 +45,14 @@ let setCardTray = (i, player) => {
                                     .css({
                                         top: '100%',
                                         cursor: 'pointer',
-                                        'z-index': 3,
                                         'box-shadow': `0 0 0 0 ${TITLE_COLOR}`
                                     })
                                     .children('.handle')
                                         .css('top', -48)
                                         .mouseover(function() { $(this).css('top', -$(this).children('.card.traveller').height()); })
                                         .mouseout(function() { $(this).css('top', -48); });
-                                });
+                                window.setTimeout(() => $(this).css('z-index', 3), 1000);
+                            });
                         });
             })
             .mouseover(function() { $(this).css('top', -$(this).children('.card.traveller').height()); })
@@ -72,7 +72,7 @@ export let runner = function*(runner) {
     yield window.setTimeout(() => runner.next(), 8000);
     $('#gameboard').css('transition', 'all 0s ease 0s');
     drag.activate();
-    socket.emit('game:ready');
+    socket.emit('game:ready', SETUP);
     yield socket.once('game:ready', () => runner.next());
     if(data.get().state !== SETUP) { return; }
     const travellers = yield socket.emit('request:travellers', null, (travellers) => runner.next(travellers));
@@ -94,19 +94,31 @@ export let runner = function*(runner) {
     card.show(...cards);
     yield window.setTimeout(() => runner.next(), 200);
     cards.forEach(($card) => $card.css('transform', `translateY(${window.innerHeight}px)`));
-    const traveller = (yield card.confirm(runner, 1)).attr('name');
+    const traveller = (yield card.confirm(($s) => $s.length === 1, (c) => runner.next(c))).attr('name');
     cards.forEach(($card) => $card.css('transform', `translateY(${$card.attr('name') === traveller ? window.innerHeight * 2 : 0}px)`));
     window.setTimeout(() => card.remove(...cards), 700);
     yield socket.emit('submit:traveller', traveller, () => runner.next());
     //Wait for other players to choose
     socket.emit('game:ready');
-    yield socket.once('game:ready', (d) => runner.next());
+    yield socket.once('game:ready', () => runner.next());
     //Position gameboard elements correctly
-    console.log(data.me());
     setCardTray(0, data.me());
     for(let i = 1; i < data.players(); i++) {
-        console.log(data.player(i), i);
         setCardTray(5 - i, data.player(i));
     }
-    yield;
+    for(let player of data.iPlayers()) {
+        $('#scoreboard')
+            .append($('<div></div>')
+                .css({
+                    left: -12,
+                    top: -12
+                })
+                .addClass(`disc ${player.color}`)
+                .attr('name', player.name));
+        $('#gameboard')
+            .append($('<div></div>')
+                .addClass(`player ${player.color}`)
+                .attr('name', player.name));
+    }
+    data.arrange();
 };

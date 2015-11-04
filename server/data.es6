@@ -14,9 +14,10 @@ module.exports = {
     get: (g) => games[g],
     set: (g,f,d) => d !== undefined ? games[g][f] = d : games[g] = f,
     remove: (g) => delete games[g],
-    getCard: (g,t) => games[g].cards[t][0],
-    addCard: (g,t,c) => games[g].cards[t].push(c),
-    removeCard: (g,t) => games[g].cards[t].splice(0,1),
+    getCard: (g,t,i = 0,n = 1) => games[g].cards[t].slice(i, n),
+    addCard: (g,t,...c) => games[g].cards[t].push(...c),
+    giveCard: (g,p,...c) => games[g].players[p].cards.push(...c),
+    removeCard: (g,t,n=1) => games[g].cards[t].splice(0, n),
     shuffleCards: (g,t) => games[g].cards[t] = shuffle(games[g].cards[t]),
     iPlayer: function*(g) {
         for(let name of Object.keys(games[g].players)) {
@@ -59,12 +60,14 @@ module.exports = {
                                         'sushi', 'sushi', 'soba', 'soba',
                                         'yakitori', 'yakitori', 'unagi', 'udon',
                                         'fugu', 'tai meshi', 'sashimi', 'donburi']),
-            hot_springs:        shuffle([2,2,2,2,2,2,3,3,3,3,3,3]),
-            bathouse:           [0,0,0,0,0,0],
-            cherry_tree:        [0,0,0,0,0,0],
+            hot_springs:        shuffle(['hotsprings2','hotsprings2','hotsprings2','hotsprings2','hotsprings2','hotsprings2',
+                                        'hotsprings3','hotsprings3','hotsprings3','hotsprings3','hotsprings3','hotsprings3']),
+            bathouse:           ['bathouse', 'bathouse', 'bathouse', 'bathouse', 'bathouse', 'bathouse'],
+            cherry_tree:        ['cherry', 'cherry', 'cherry', 'cherry', 'cherry', 'cherry'],
             legendary:          ['shodo', 'emaki', 'buppatsu', 'ema', 'murasame', 'masamune'],
             calligraphy:        ['foresight', 'contemplation', 'nostalgia', 'patience', 'perfection', 'fasting'],
-            amulet:             ['vitality', 'fortune', 'health', 'friendship', 'hospitality', 'devotion']
+            amulet:             ['vitality', 'fortune', 'health', 'friendship', 'hospitality', 'devotion'],
+            achievement:        ['paddy', 'mountain', 'sea', 'gourmet', 'chatterbox', 'collector', 'bather']
         },
         mealset: [],
         extra: {
@@ -80,17 +83,7 @@ module.exports = {
         traveller: '',
         coins: 0,
         donations: 0,
-        cards: {
-            encounter: [],
-            souvenir: [],
-            meal: [],
-            hot_springs: [],
-            bathouse: 0,
-            cherry_tree: 0,
-            legendary: [],
-            calligraphy: [],
-            amulet: []
-        },
+        cards: [],
         position: -1,
         connected: true
     }

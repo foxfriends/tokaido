@@ -3,38 +3,49 @@
 module.exports = {
     'vitality': {
         name: 'Vitality',
-        play: () => {
+        type: 'amulet',
+        price: 1,
+        play() {
             //Move again (if in the lead)
         }
     },
     'fortune': {
         name: 'Fortune',
-        play: () => {
+        type: 'amulet',
+        price: 1,
+        play() {
             //Roll the fortune die and receive that many coins
         }
     },
     'health': {
         name: 'Health',
-        points: 3,
-        play: () => {
+        type: 'amulet',
+        price: 1,
+        play() {
             //Take both actions on a space
         }
     },
     'friendship': {
         name: 'Friendship',
-        play: () => {
+        type: 'amulet',
+        price: 1,
+        play() {
             //You may share a space
         }
     },
     'hospitality': {
         name: 'Hospitality',
-        play: () => {
+        type: 'amulet',
+        price: 1,
+        play() {
             //Take your meal card for free
         }
     },
     'devotion': {
         name: 'Devotion',
-        play: () => {
+        type: 'amulet',
+        price: 1,
+        play() {
             //Coins spent on a purchase go to the Temple
         }
     }

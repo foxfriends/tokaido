@@ -147,6 +147,11 @@ section#rules {
                 &.traveller {
                     width: 167px;
                 }
+                &.panorama:not([name="cherry"]) {
+                    width: 146px;
+                    margin: 10px 0;
+                    box-shadow: none;
+                }
                 h2 {
                     position: absolute;
                     top: 100%;
@@ -224,7 +229,10 @@ section#rules {
                 margin: 0 10px;
 
                 border-radius: 100%;
-                box-shadow: 0 0 10px 0 $title-color;
+
+                background-size: contain;
+                background-position: 50% 50%;
+                background-repeat: no-repeat;
 
                 transition: box-shadow 0.5s;
                 @include buttonlike;
@@ -251,10 +259,16 @@ section#rules {
                     pointer-events: none;
                     transition: opacity 0.5s;
                 }
-                &:hover {
-                    box-shadow: 0 0 15px 0 lighten($title-color, 30%);
-                    span { opacity: 1; }
-                }
+                &:hover span { opacity: 1; }
+                &[name="village"] { background-image: url('../../image/space/village.png'); }
+                &[name="temple"] { background-image: url('../../image/space/temple.png'); }
+                &[name="farm"] { background-image: url('../../image/space/farm.png'); }
+                &[name="hot spring"] { background-image: url('../../image/space/springs.png'); }
+                &[name="encounter"] { background-image: url('../../image/space/encounter.png'); }
+                &[name="paddy"] { background-image: url('../../image/space/paddy.png'); }
+                &[name="mountain"] { background-image: url('../../image/space/mountain.png'); }
+                &[name="sea"] { background-image: url('../../image/space/sea.png'); }
+                &[name="inn"] { background-image: url('../../image/space/inn.png'); }
             }
         }
     }

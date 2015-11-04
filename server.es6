@@ -22,6 +22,6 @@ io.on('connection', (socket) => {
     addPlayer(socket);
     // socket.on('error', (err) => console.error(`Error on socket ${socket.id}: ${err}`));
     require('./server/join')(socket.id);
-    require('./server/colorPhase')(socket.id);
+    require('./server/setup')(socket.id);
     require('./server/game')(socket.id);
 });

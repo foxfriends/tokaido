@@ -3,6 +3,7 @@
 module.exports = {
     'hiroshige': {
         name: 'Hiroshige',
+        type: 'traveller',
         coins: 3,
         special: () => {
             //Choose a Panorama at an Inn
@@ -10,6 +11,7 @@ module.exports = {
     },
     'chuubei': {
         name: 'Chuubei',
+        type: 'traveller',
         coins: 4,
         special: () => {
             //Draw an Encounter at an Inn
@@ -17,6 +19,7 @@ module.exports = {
     },
     'kinko': {
         name: 'Kinko',
+        type: 'traveller',
         coins: 7,
         special: () => {
             //Save 1 coin on Meals
@@ -24,6 +27,7 @@ module.exports = {
     },
     'yoshiyasu': {
         name: 'Yoshiyasu',
+        type: 'traveller',
         coins: 9,
         special: () => {
             //Choose one of two Encounters
@@ -31,6 +35,7 @@ module.exports = {
     },
     'satsuki': {
         name: 'Satsuki',
+        type: 'traveller',
         coins: 2,
         special: () => {
             //One meal is offered for free at an Inn
@@ -38,6 +43,7 @@ module.exports = {
     },
     'mitsukuni': {
         name: 'Mitsukuni',
+        type: 'traveller',
         coins: 6,
         special: () => {
             //Hot Springs / Achievement cards are worth 1 point more
@@ -45,6 +51,7 @@ module.exports = {
     },
     'sasayakko': {
         name: 'Sasayakko',
+        type: 'traveller',
         coins: 5,
         special: () => {
             //Cheapest of multiple Souvenirs is free
@@ -52,6 +59,7 @@ module.exports = {
     },
     'hirotada': {
         name: 'Hirotada',
+        type: 'traveller',
         coins: 8,
         special: () => {
             //Reserve donates 1 extra coin
@@ -59,6 +67,7 @@ module.exports = {
     },
     'umegae': {
         name: 'Umegae',
+        type: 'traveller',
         coins: 5,
         special: () => {
             //Earn 1 coin and 1 point per Encounter
@@ -66,6 +75,7 @@ module.exports = {
     },
     'zen-emon': {
         name: 'Zen-emon',
+        type: 'traveller',
         coins: 6,
         special: () => {
             //One Souvenir costs only 1 coin
@@ -73,6 +83,7 @@ module.exports = {
     },
     'jirocho': {
         name: 'Jirocho',
+        type: 'traveller',
         coins: 5,
         special: () => {
             //Bet 1 coin in the Gaming room at Inns
@@ -80,6 +91,7 @@ module.exports = {
     },
     'daigoro': {
         name: 'Daigoro',
+        type: 'traveller',
         coins: 3,
         special: () => {
             //Receive one Souvenir at each Inn
@@ -87,6 +99,7 @@ module.exports = {
     },
     'nampo': {
         name: 'Nampo',
+        type: 'traveller',
         coins: 2,
         special: () => {
             //Each Meal is worth 1 point more per coin
@@ -94,6 +107,7 @@ module.exports = {
     },
     'gotozaemon': {
         name: 'Gotozaemon',
+        type: 'traveller',
         coins: 0,
         special: () => {
             //Gain 1 coin at each Panorama space
@@ -101,6 +115,7 @@ module.exports = {
     },
     'miyataka': {
         name: 'Miyataka',
+        type: 'traveller',
         coins: 4,
         special: () => {
             //Donate and buy an Amulet card at the same time
@@ -108,9 +123,18 @@ module.exports = {
     },
     'kita': {
         name: 'Kita',
+        type: 'traveller',
         coins: 4,
         special: () => {
             //Draw an Encounter and buy a Calligraphy card
+        }
+    },
+    'eriku': {
+        name: 'Eriku',
+        type: 'traveller',
+        coins: 5,
+        special: () => {
+            //Check the top card of the meal pile at each inn, and buy it wanted
         }
     }
 };

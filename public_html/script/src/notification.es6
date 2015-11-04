@@ -7,6 +7,7 @@ export let error = (err) => {
     $box.children('#error-message')
         .text(err);
     window.setTimeout(() => $box.css('opacity', 0), 6000);
+    return false;
 };
 
 export let success = (msg) => {
@@ -15,6 +16,7 @@ export let success = (msg) => {
     $box.children('#success-message')
         .text(msg);
     window.setTimeout(() => $box.css('opacity', 0), 6000);
+    return true;
 };
 
 export let news = (msg) => {

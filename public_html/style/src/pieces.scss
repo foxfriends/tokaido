@@ -1,12 +1,14 @@
 .disc {
+    position: absolute;
     box-sizing: padding-box;
     display: inline-block;
 
     width: 24px;
     height: 24px;
     border-radius: 100%;
+    transform: translate(0, 0);
 
-    transition: opacity 0.3s, left 0.3s, top 0.3s;
+    transition: opacity 0.3s, left 0.3s, top 0.3s, transform 0.5s;
 
     &.white {
         background-color: #a29f98;
@@ -60,6 +62,7 @@
     height: 80px;
 
     background-size: cover;
+    transition: left 0.3s, top 0.3s, transform 0.5s;
     &.white {
         background-image: url('../../image/pieces/white_player.svg');
     }
@@ -84,6 +87,7 @@
     height: 86px;
 
     background-size: cover;
+    transition: transform 0.7s, opacity 0.1s;
     &.white {
         background-image: url('../../image/pieces/white_bag.png');
     }
@@ -117,12 +121,15 @@
     transform-origin: center middle;
 
     transition: transform 0.7s, box-shadow 0.5s;
-    box-shadow: 0 0 10px 0 $title-color;
-
-    border-radius: 8px;
+    &:not(.panorama), &.panorama[name="cherry"] {
+        box-shadow: 0 0 10px 0 $title-color;
+        border-radius: 8px;
+    }
     &.selected, &:hover {
         box-shadow: 0 0 15px lighten($title-color, 30%);
     }
+
+    // TRAVELLERS
 
     &[name="hiroshige"] { background-image: url('../../image/cards/traveller/hiroshige.png'); }
     &[name="chuubei"] { background-image: url('../../image/cards/traveller/chuubei.png'); }
@@ -142,41 +149,44 @@
     // &[name="miyataka"] { background-image: url('../../image/cards/traveller/miyataka.jpg'); }
     // &[name="kita"] { background-image: url('../../image/cards/traveller/kita.jpg'); }
 
-    // // ENCOUNTERS
-    // &[name="shokunin"] { background-image: url('../../image/cards/encounter/shokunin.jpg'); }
-    // &[name="annaibito-p"] { background-image: url('../../image/cards/encounter/annaibito-p.jpg'); }
-    // &[name="annaibito-m"] { background-image: url('../../image/cards/encounter/annaibito-m.jpg'); }
-    // &[name="annaibito-s"] { background-image: url('../../image/cards/encounter/annaibito-s.jpg'); }
-    // &[name="samurai"] { background-image: url('../../image/cards/encounter/samurai.jpg'); }
-    // &[name="kuge"] { background-image: url('../../image/cards/encounter/kuge.jpg'); }
-    // &[name="miko"] { background-image: url('../../image/cards/encounter/miko.jpg'); }
-    //
+    &[name="eriku"] { background-image: url('../../image/cards/traveller/eriku.png'); }
+
+    // ENCOUNTERS
+    &[name="shokunin"] { background-image: url('../../image/cards/encounter/shokunin.jpg'); }
+    &[name="annaibito-p"] { background-image: url('../../image/cards/encounter/annaibito-p.jpg'); }
+    &[name="annaibito-m"] { background-image: url('../../image/cards/encounter/annaibito-m.jpg'); }
+    &[name="annaibito-s"] { background-image: url('../../image/cards/encounter/annaibito-s.jpg'); }
+    &[name="samurai"] { background-image: url('../../image/cards/encounter/samurai.jpg'); }
+    &[name="kuge"] { background-image: url('../../image/cards/encounter/kuge.jpg'); }
+    &[name="miko"] { background-image: url('../../image/cards/encounter/miko.jpg'); }
+
     // // PANORAMAS
-    //
-    // &[name="paddy1"] { background-image: url('../../image/cards/panorama/paddy1.jpg'); }
+
+    &[name="paddy1"] { background-image: url('../../image/cards/panorama/paddy1.jpg'); }
     // &[name="paddy2"] { background-image: url('../../image/cards/panorama/paddy2.jpg'); }
-    // &[name="paddy3"] { background-image: url('../../image/cards/panorama/paddy3.jpg'); }
-    //
-    // &[name="mountain1"] { background-image: url('../../image/cards/panorama/mountain1.jpg'); }
+    &[name="paddy3"] { background-image: url('../../image/cards/panorama/paddy3.jpg'); }
+
+    &[name="mountain1"] { background-image: url('../../image/cards/panorama/mountain1.jpg'); }
     // &[name="mountain2"] { background-image: url('../../image/cards/panorama/mountain2.jpg'); }
-    // &[name="mountain3"] { background-image: url('../../image/cards/panorama/mountain3.jpg'); }
-    // &[name="mountain4"] { background-image: url('../../image/cards/panorama/mountain4.jpg'); }
-    //
-    // &[name="sea1"] { background-image: url('../../image/cards/panorama/sea1.jpg'); }
-    // &[name="sea2"] { background-image: url('../../image/cards/panorama/sea2.jpg'); }
-    // &[name="sea3"] { background-image: url('../../image/cards/panorama/sea3.jpg'); }
+    &[name="mountain3"] { background-image: url('../../image/cards/panorama/mountain3.jpg'); }
+    &[name="mountain4"] { background-image: url('../../image/cards/panorama/mountain4.jpg'); }
+
+    &[name="sea1"] { background-image: url('../../image/cards/panorama/sea1.jpg'); }
+    &[name="sea2"] { background-image: url('../../image/cards/panorama/sea2.jpg'); }
+    &[name="sea3"] { background-image: url('../../image/cards/panorama/sea3.jpg'); }
     // &[name="sea4"] { background-image: url('../../image/cards/panorama/sea4.jpg'); }
-    // &[name="sea5"] { background-image: url('../../image/cards/panorama/sea5.jpg'); }
-    //
+    &[name="sea5"] { background-image: url('../../image/cards/panorama/sea5.jpg'); }
+
     // &[name="cherry"] { background-image: url('../../image/cards/cherry/front.jpg'); }
-    //
+
     // // HOT SPRINGS
-    //
-    // &[name="hotsprings2"] { background-image: url('../../image/cards/hot_springs/2.jpg'); }
-    // &[name="hotsprings3"] { background-image: url('../../image/cards/hot_springs/3.jpg'); }
+
+    &[name="hotsprings2"] { background-image: url('../../image/cards/springs/2.jpg'); }
+    &[name="hotsprings3"] { background-image: url('../../image/cards/springs/3.jpg'); }
     // &[name="bathouse"] { background-image: url('../../image/cards/bathouse/front.jpg'); }
-    //
+
     // ACHIEVEMENTS
+
     &[name="collector"] { background-image: url('../../image/cards/achievement/collector.jpg'); }
     &[name="chatterbox"] { background-image: url('../../image/cards/achievement/chatterbox.jpg'); }
     &[name="gourmet"] { background-image: url('../../image/cards/achievement/gourmet.jpg'); }
@@ -186,6 +196,32 @@
     &[name="sea"] { background-image: url('../../image/cards/achievement/sea.jpg'); }
 
     // SOUVENIRS
+
+    &[name="daifuku"] {background-image: url('../../image/cards/souvenir/daifuku.jpg'); }
+    &[name="furoshiki"] {background-image: url('../../image/cards/souvenir/furoshiki.jpg'); }
+    &[name="geta"] {background-image: url('../../image/cards/souvenir/geta.jpg'); }
+    &[name="gofu"] {background-image: url('../../image/cards/souvenir/gofu.jpg'); }
+    &[name="haori"] {background-image: url('../../image/cards/souvenir/haori.jpg'); }
+    &[name="hashi"] {background-image: url('../../image/cards/souvenir/hashi.jpg'); }
+    &[name="jubako"] {background-image: url('../../image/cards/souvenir/jubako.jpg'); }
+    &[name="kamaboko"] {background-image: url('../../image/cards/souvenir/kamaboko.jpg'); }
+    &[name="kan zashi"] {background-image: url('../../image/cards/souvenir/kan_zashi.jpg'); }
+    &[name="koma"] {background-image: url('../../image/cards/souvenir/koma.jpg'); }
+    &[name="konpeito"] {background-image: url('../../image/cards/souvenir/konpeito.jpg'); }
+    &[name="manju"] {background-image: url('../../image/cards/souvenir/manju.jpg'); }
+    &[name="netsuke"] {background-image: url('../../image/cards/souvenir/netsuke.jpg'); }
+    &[name="ocha"] {background-image: url('../../image/cards/souvenir/ocha.jpg'); }
+    &[name="sake"] {background-image: url('../../image/cards/souvenir/sake.jpg'); }
+    &[name="sandogasa"] {background-image: url('../../image/cards/souvenir/sandogasa.jpg'); }
+    &[name="shamisen"] {background-image: url('../../image/cards/souvenir/shamisen.jpg'); }
+    &[name="shikki"] {background-image: url('../../image/cards/souvenir/shikki.jpg'); }
+    &[name="sumie"] {background-image: url('../../image/cards/souvenir/sumie.jpg'); }
+    &[name="uchiwa"] {background-image: url('../../image/cards/souvenir/uchiwa.jpg'); }
+    &[name="ukiyoe"] {background-image: url('../../image/cards/souvenir/ukiyoe.jpg'); }
+    &[name="washi"] {background-image: url('../../image/cards/souvenir/washi.jpg'); }
+    &[name="yukata"] {background-image: url('../../image/cards/souvenir/yukata.jpg'); }
+    &[name="yunomi"] {background-image: url('../../image/cards/souvenir/yunomi.jpg'); }
+
     // MEALS
     &[name="dango"] { background-image: url('../../image/cards/meal/dango.jpg'); }
     &[name="donburi"] { background-image: url('../../image/cards/meal/donburi.jpg'); }
@@ -217,11 +253,13 @@
         background-size: cover;
     }
 
-    // &.meal::after { background-image: url('../../image/cards/meal/back.jpg'); }
-    // &.encounter::after { background-image: url('../../image/cards/encounter/back.jpg'); }
-    // &.souvenir::after { background-image: url('../../image/cards/souvenir/back.jpg'); }
-    // &.springs::after { background-image: url('../../image/cards/hot_springs/back.jpg'); }
-    // &.panorama::after { background-image: url('../../image/cards/panorama/back.jpg'); }
+    &.meal::after { background-image: url('../../image/cards/meal/back.jpg'); }
+    &.encounter::after { background-image: url('../../image/cards/encounter/back.jpg'); }
+    &.souvenir::after { background-image: url('../../image/cards/souvenir/back.jpg'); }
+    &.springs::after { background-image: url('../../image/cards/springs/back.jpg'); }
+    &.panorama.paddy::after { background-image: url('../../image/cards/panorama/paddy_back.jpg'); }
+    &.panorama.mountain::after { background-image: url('../../image/cards/panorama/mountain_back.jpg'); }
+    // &.panorama.sea::after { background-image: url('../../image/cards/panorama/sea_back.jpg'); }
 
     &.achievement-blue::after { background-image: url('../../image/cards/achievement/back_blue.jpg'); }
     &.achievement-gold::after { background-image: url('../../image/cards/achievement/back_gold.jpg'); }

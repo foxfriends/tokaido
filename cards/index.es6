@@ -1,11 +1,11 @@
 'use strict';
-const traveller = require('./traveller');
-const souvenir = require('./souvenir');
-const encounter = require('./encounter');
-const meal = require('./meal');
-const legendary = require('./legendary');
-const calligraphy = require('./calligraphy');
-const amulet = require('./amulet');
+const traveller = require('./traveller.es6');
+const souvenir = require('./souvenir.es6');
+const encounter = require('./encounter.es6');
+const meal = require('./meal.es6');
+const legendary = require('./legendary.es6');
+const calligraphy = require('./calligraphy.es6');
+const amulet = require('./amulet.es6');
 
 const get = (name) => traveller[name] || souvenir[name] || encounter[name] || meal[name] ||
                     legendary[name] || calligraphy[name] || amulet[name];

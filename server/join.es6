@@ -2,7 +2,8 @@
 let data = require('./data');
 let players = require('./players');
 let {io} = require('./common')();
-let {alertAvailableColors} = require('./colorPhase');
+let {alertAvailableColors} = require('./setup');
+const {JOIN, SETUP} = require('./const');
 
 let leave = (id) => {
     let player = players(id);
@@ -10,12 +11,15 @@ let leave = (id) => {
     if(game !== undefined) {
         data.setPlayer(game, name, 'connected', false);
         socket.leave(game);
-        if(data.get(game).state === 0) {
+        if(data.get(game).state === SETUP) {
+            io.to(game).emit('error', `${name} has abandoned this journey. Please reload the page.`);
+        }
+        if(data.get(game).state <= SETUP) {
             //Remove the player if they back out before the game starts
             data.removePlayer(game, name);
             if(data.players(game) === 0) {
                 data.remove(game);
-            } else {
+            } else if(data.get(game).state === JOIN) {
                 alertAvailableColors(game);
             }
         }
@@ -62,6 +66,7 @@ module.exports = (id) => {
         //Join room, set session values, and begin
         player.set('name', name);
         player.set('game', game);
+        io.to(game).emit('success', `${name} has arrived.`);
         socket.join(game);
         data.setPlayer(game, name, 'connected', true);
         return res(null, action);
@@ -73,6 +78,11 @@ module.exports = (id) => {
             //Add the crossroads traveller cards
             let cards = data.get(player.game()).cards;
             cards.traveller = cards.traveller.concat(cards.cr_traveller);
+            data.set(player.game(), 'cards', cards);
+        }
+        if(data.get(player.game()).expansions.eriku) {
+            let cards = data.get(player.game()).cards;
+            cards.traveller = cards.traveller.push('eriku');
             data.set(player.game(), 'cards', cards);
         }
         data.shuffleCards(player.game(), 'traveller');

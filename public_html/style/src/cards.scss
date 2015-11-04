@@ -83,6 +83,9 @@ section#cards {
             width: 350px;
             height: 469px;
         }
+        &.panorama {
+            height: 463px;
+        }
         &:hover, &.selected {
             box-shadow: 0 0 25px 5px lighten($title-color, 30%);
         }

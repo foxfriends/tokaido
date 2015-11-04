@@ -1,5 +1,6 @@
 'use strict';
 import {default as $} from 'jquery';
+import {CARD_WIDTH, CARD_HEIGHT} from './const.es6';
 
 const $cards = $('#cards');
 
@@ -16,8 +17,8 @@ export let create = (opts) => {
         .addClass('card')
         .addClass(opts.type)
         .css({
-            top: opts.top || 0,
-            left: opts.left || 0,
+            top: opts.top || (-CARD_WIDTH / 2),
+            left: opts.left || (-CARD_HEIGHT / 2),
             transform: opts.transform
         })
         .attr('name', opts.name)
@@ -28,18 +29,48 @@ export let selectOne = function() {
     $cards.children('.card').removeClass('selected');
     $(this).addClass('selected');
 };
+export let select = function() {
+    $(this).toggleClass('selected');
+};
 
-export let confirm = (runner, n = -1) => {
+export let confirm = (valid, cb) => {
+    if(cb === undefined) { cb = valid; valid = () => true; }
     $cards.append($(`<div class="button"><span class="en">Confirm &gt;&gt;</span><span class="hover"><span class="jp">確認します</span>&#8202;&#8202;&gt;&gt;</span></div>`)
-        .addClass('button')
         .css('right', '50px')
         .click(function() {
             const $selected = $cards.children('.selected');
-            if(n == -1 || $selected.length === n) {
+            if(valid($selected)) {
+                $cards.children('.card').off('click');
                 $(this).css('right', '-75%');
                 window.setTimeout(() => $(this).remove(), 2000);
-                runner.next($cards.children('.selected'));
+                cb($cards.children('.selected'));
             }
         })
     );
+};
+
+export let coin = (n) => {
+    let coinSpawner = (function*() {
+        while(n !== 0) {
+            const $coin = $(`<div class='coin'></div>`)
+                .css({
+                    opacity: (n > 0 ? 1 : 0),
+                    left: `10%`,
+                    top: window.innerHeight - (n > 0 ? 400 : 0)
+                });
+            $cards.append($coin);
+            window.setTimeout(() => $coin.css({
+                opacity: 1,
+                transform: `translate(0, ${n > 0 ? '' : '-'}400px)`
+            }), 100);
+            if(n < 0) {
+                // Fade out if losing money
+                window.setTimeout(() => $coin.css('opacity', 0), 600);
+            }
+            window.setTimeout(() => $coin.remove(), 700);
+            n -= n / Math.abs(n);
+            yield window.setTimeout(() => coinSpawner.next(), 100);
+        }
+    })();
+    coinSpawner.next();
 };

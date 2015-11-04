@@ -168,7 +168,7 @@ section#title {
         @include floating-box;
 
         transition: left 2s, opacity 0.2s;
-
+        .disc { position: static; }
         .container { overflow: visible; }
         @for $i from 1 through 5 {
             .select[data-value="#{$i}"] .select-option:nth-child(#{$i - 1}) {
