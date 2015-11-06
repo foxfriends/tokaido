@@ -1,4 +1,5 @@
 'use strict';
+require('babel/polyfill');
 import {default as $} from 'jquery';
 
 import {socket} from './socket.es6';
@@ -13,11 +14,11 @@ import {
     CARD_WIDTH, CARD_HEIGHT
 } from './const.es6';
 
-const [UP, DOWN] = [0, 1];
+const [UP, DOWN] = [-1, 1];
 
 class Space {
     constructor(x, y, dir = UP, len = 1, spa = 88) {
-        [this.x, this.y, this.dir, this.len, this.spacing] = [x, y, dir, len, spa];
+        [this.x, this.y, this.direction, this.length, this.spacing] = [x, y, dir, len, spa];
     }
     //Continue by default
     *land(runner) { yield window.setTimeout(() => runner.next(), 0); }
@@ -270,3 +271,28 @@ export let board = [
     new Village(3505, 220, DOWN),
     new Inn(3606, 197, DOWN, 5)
 ];
+
+const $board = $('#gameboard');
+for(let i = 0; i < board.length; i++) {
+    for(let j = 0; j < board[i].length; j++) {
+        $board.append(
+            $('<div></div>')
+                .addClass('space')
+                .attr('data-index', `${i}-${j}`)
+                .css({
+                    transform: `translate(${board[i].x}px, ${board[i].y + board[i].direction * j * board[i].spacing}px)`,
+                    opacity: 0
+                })
+        );
+    }
+}
+
+export let spaceType = {
+    Inn: Inn,
+    Village: Village,
+    Spring: Spring,
+    Encounter: Encounter,
+    Farm: Farm,
+    Temple: Temple,
+    Panorama: Panorama,
+};

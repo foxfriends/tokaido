@@ -11,13 +11,26 @@ module.exports = (id) => {
     socket.on('game:ready', (state) => {
         data.set(player.game(), 'readystate', data.get(player.game()).readystate + 1);
         if(data.get(player.game()).readystate == data.get(player.game()).playerCount) {
-            if(state) {
+            if(state > data.get(player.game()).state) {
                 data.set(player.game(), 'state', state);
             }
             updateData(player.game());
             data.set(player.game(), 'readystate', 0);
             io.to(player.game()).emit('game:ready');
         }
+    });
+    socket.on('turn:move', ([who, where], res) => {
+        if(who !== 'extra') {
+            data.setPlayer(player.game(), who, 'position', where);
+        } else {
+            data.set(player.game(), 'extra', 'position', where);
+        }
+        updateData(player.game());
+        res();
+    });
+    socket.on('turn:end', () => {
+        updateData(player.game());
+        io.to(player.game()).emit('turn:end');
     });
     socket.on('acquire:coins', (n, res) => {
         data.setPlayer(player.game(), player.name(), 'coins', data.getPlayer(player.game(), player.name()).coins + n);

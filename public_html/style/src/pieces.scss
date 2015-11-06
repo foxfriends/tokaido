@@ -58,11 +58,14 @@
     display: inline-block;
 
     position: absolute;
+    left: -25px;
+    top: -60px;
     width: 50px;
     height: 80px;
 
     background-size: cover;
-    transition: left 0.3s, top 0.3s, transform 0.5s;
+    transform-origin: center bottom;
+    transition: left 0.3s, top 0.3s, transform 1s;
     &.white {
         background-image: url('../../image/pieces/white_player.svg');
     }

@@ -35,8 +35,7 @@ export let select = function() {
 
 export let confirm = (valid, cb) => {
     if(cb === undefined) { cb = valid; valid = () => true; }
-    $cards.append($(`<div class="button"><span class="en">Confirm &gt;&gt;</span><span class="hover"><span class="jp">確認します</span>&#8202;&#8202;&gt;&gt;</span></div>`)
-        .css('right', '50px')
+    const $button = $(`<div class="button"><span class="en">Confirm &gt;&gt;</span><span class="hover"><span class="jp">確認します</span>&#8202;&#8202;&gt;&gt;</span></div>`)
         .click(function() {
             const $selected = $cards.children('.selected');
             if(valid($selected)) {
@@ -45,8 +44,9 @@ export let confirm = (valid, cb) => {
                 window.setTimeout(() => $(this).remove(), 2000);
                 cb($cards.children('.selected'));
             }
-        })
-    );
+        });
+    $cards.append($button);
+    window.setTimeout(() => $button.css('right', '50px'), 100);
 };
 
 export let coin = (n) => {

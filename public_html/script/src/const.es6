@@ -29,4 +29,6 @@ export const PANO_PILE_Y = 700;
 export const PILE_WIDTH = 200;
 export const PILE_HEIGHT = PILE_WIDTH * CARD_WH_RATIO;
 
+export const JOIN = 0;
 export const SETUP = 1;
+export const PLAY = 2;

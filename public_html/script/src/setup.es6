@@ -7,7 +7,7 @@ import * as card from './cards.es6';
 import * as data from './data.es6';
 import * as drag from './board_scroll.es6';
 
-import {SCOREBOARD_HEIGHT, BOARD_HEIGHT, TITLE_COLOR, TC_WH_RATIO, CARD_WH_RATIO, TC_WIDTH, TC_HEIGHT, SETUP} from './const.es6';
+import {SCOREBOARD_HEIGHT, BOARD_HEIGHT, TITLE_COLOR, TC_WH_RATIO, CARD_WH_RATIO, TC_WIDTH, TC_HEIGHT, SETUP, PLAY} from './const.es6';
 
 let setCardTray = (i, player) => {
     $('.card-tray').eq(i)
@@ -61,64 +61,90 @@ let setCardTray = (i, player) => {
 };
 
 export let runner = function*(runner) {
-    //Scroll the view to the beginning
-    $('#scoreboard').css('top', 0);
-    $('#gameboard').css({
-        left: 0,
-        top: window.innerHeight - BOARD_HEIGHT + 100,
-        opacity: 1
-    });
-    //Wait for everyone to be ready
-    yield window.setTimeout(() => runner.next(), 8000);
-    $('#gameboard').css('transition', 'all 0s ease 0s');
-    drag.activate();
-    socket.emit('game:ready', SETUP);
-    yield socket.once('game:ready', () => runner.next());
-    if(data.get().state !== SETUP) { return; }
-    const travellers = yield socket.emit('request:travellers', null, (travellers) => runner.next(travellers));
-    const cards = [
-        card.create({
-            name: travellers[0],
-            type: 'traveller',
-            click: card.selectOne,
-            top: -((window.innerHeight + TC_HEIGHT) / 2),
-            left: (window.innerWidth / 2) - TC_WIDTH - 50
-        }), card.create({
-            name: travellers[1],
-            type: 'traveller',
-            click: card.selectOne,
-            top: -((window.innerHeight + TC_HEIGHT) / 2),
-            left: (window.innerWidth / 2) + 50
-        })
-    ];
-    card.show(...cards);
-    yield window.setTimeout(() => runner.next(), 200);
-    cards.forEach(($card) => $card.css('transform', `translateY(${window.innerHeight}px)`));
-    const traveller = (yield card.confirm(($s) => $s.length === 1, (c) => runner.next(c))).attr('name');
-    cards.forEach(($card) => $card.css('transform', `translateY(${$card.attr('name') === traveller ? window.innerHeight * 2 : 0}px)`));
-    window.setTimeout(() => card.remove(...cards), 700);
-    yield socket.emit('submit:traveller', traveller, () => runner.next());
-    //Wait for other players to choose
-    socket.emit('game:ready');
-    yield socket.once('game:ready', () => runner.next());
-    //Position gameboard elements correctly
-    setCardTray(0, data.me());
-    for(let i = 1; i < data.players(); i++) {
-        setCardTray(5 - i, data.player(i));
+    let delayArrange = false;
+    align_board: {
+        //Scroll the view to the beginning
+        $('#scoreboard').css('top', 0);
+        $('#gameboard').css({
+            left: 0,
+            top: window.innerHeight - BOARD_HEIGHT + 100,
+            opacity: 1
+        });
+        window.setTimeout(() => {
+            $('#gameboard').css('transition', 'all 0s ease 0s');
+            drag.activate();
+        }, 8000);
     }
-    for(let player of data.iPlayers()) {
-        $('#scoreboard')
-            .append($('<div></div>')
-                .css({
-                    left: -12,
-                    top: -12
-                })
-                .addClass(`disc ${player.color}`)
-                .attr('name', player.name));
-        $('#gameboard')
-            .append($('<div></div>')
-                .addClass(`player ${player.color}`)
-                .attr('name', player.name));
+    choose_traveller: {
+        if(data.get().state > SETUP) {
+            break choose_traveller; //jshint ignore:line
+        } else {
+            //Wait for the board to finish scrolling
+            yield window.setTimeout(() => runner.next(), 8000);
+        }
+        //Wait for everyone to be ready
+        socket.emit('game:ready', SETUP);
+        yield socket.once('game:ready', () => runner.next());
+        const travellers = yield socket.emit('request:travellers', null, (travellers) => runner.next(travellers));
+        const cards = [
+            card.create({
+                name: travellers[0],
+                type: 'traveller',
+                click: card.selectOne,
+                top: -((window.innerHeight + TC_HEIGHT) / 2),
+                left: (window.innerWidth / 2) - TC_WIDTH - 50
+            }), card.create({
+                name: travellers[1],
+                type: 'traveller',
+                click: card.selectOne,
+                top: -((window.innerHeight + TC_HEIGHT) / 2),
+                left: (window.innerWidth / 2) + 50
+            })
+        ];
+        card.show(...cards);
+        yield window.setTimeout(() => runner.next(), 200);
+        cards.forEach(($card) => $card.css('transform', `translateY(${window.innerHeight}px)`));
+        const traveller = (yield card.confirm(($s) => $s.length === 1, (c) => runner.next(c))).attr('name');
+        cards.forEach(($card) => $card.css('transform', `translateY(${$card.attr('name') === traveller ? window.innerHeight * 2 : 0}px)`));
+        window.setTimeout(() => card.remove(...cards), 700);
+        yield socket.emit('submit:traveller', traveller, () => runner.next());
+        //Wait for other players to choose
+        socket.emit('game:ready', PLAY);
+        yield socket.once('game:ready', () => runner.next());
+        delayArrange = true;
     }
-    data.arrange();
+    populate_board: {
+        //Position gameboard elements correctly
+        setCardTray(0, data.me());
+        for(let i = 1; i < data.players(); i++) {
+            setCardTray(5 - i, data.player(i));
+        }
+        for(let player of data.iPlayers()) {
+            $('#scoreboard')
+                .append($('<div></div>')
+                    .css({
+                        left: -12,
+                        top: -12
+                    })
+                    .addClass(`disc ${player.color}`)
+                    .attr('name', player.name)
+                );
+            $('#gameboard')
+                .append($('<div></div>')
+                    .addClass(`player ${player.color}`)
+                    .attr('name', player.name)
+                );
+        }
+        if(data.players() === 2) {
+            $('#gameboard')
+                .append($('<div></div>')
+                    .addClass(`player ${data.get().extra.color}`)
+                    .attr('name', 'extra')
+                );
+        }
+        if(delayArrange) {
+            yield window.setTimeout(() => runner.next(), 10);
+        }
+        data.arrange();
+    }
 };

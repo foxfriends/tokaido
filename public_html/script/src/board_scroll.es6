@@ -65,7 +65,7 @@ export let deactivate = () => {
     $board
         .off('mousedown');
     $('#board')
-        .off('mouseup')
-        .off('mousemove')
-        .off('mousewheel');
+        .off('mouseup mousemove mousewheel');
 };
+export let currentZoom = () => zoom;
+export let boardRelPos = (xx, yy) => [xx / zoom - $board.position().left, yy / zoom - $board.position().top];

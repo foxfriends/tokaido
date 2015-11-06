@@ -12,14 +12,14 @@ let shuffle = (a) => {
 
 module.exports = {
     get: (g) => games[g],
-    set: (g,f,d) => d !== undefined ? games[g][f] = d : games[g] = f,
+    set: (g,f,d,e) => d !== undefined ? (e !== undefined ? games[g][f][d] = e : games[g][f] = d) : games[g] = f,
     remove: (g) => delete games[g],
     getCard: (g,t,i = 0,n = 1) => games[g].cards[t].slice(i, n),
     addCard: (g,t,...c) => games[g].cards[t].push(...c),
     giveCard: (g,p,...c) => games[g].players[p].cards.push(...c),
     removeCard: (g,t,n=1) => games[g].cards[t].splice(0, n),
     shuffleCards: (g,t) => games[g].cards[t] = shuffle(games[g].cards[t]),
-    iPlayer: function*(g) {
+    iPlayers: function*(g) {
         for(let name of Object.keys(games[g].players)) {
             yield games[g].players[name];
         }
@@ -72,8 +72,8 @@ module.exports = {
         mealset: [],
         extra: {
             //Extra character for 2 player mode
-            turn: 0,
-            position: 0
+            color: '',
+            position: -1
         },
         players: {}
     },

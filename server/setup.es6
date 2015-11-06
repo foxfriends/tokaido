@@ -7,7 +7,7 @@ let {traveller} = require('../cards');
 let alertAvailableColors = (game) => {
     //Update the colours available for choosing (before the game starts)
     let colors = ["white", "yellow", "blue", "green", "purple"];
-    for(let player of data.iPlayer(game)) {
+    for(let player of data.iPlayers(game)) {
         for(let i in colors) {
             if(colors[i] == player.color) {
                 colors.splice(i, 1);
@@ -25,25 +25,37 @@ module.exports = (id) => {
 
     socket.on('color:change', (newColor, res) => {
         data.setPlayer(player.game(), player.name(), 'color', newColor);
+        if(data.players(player.game()) === 2) {
+            let colors = ['yellow','white','blue','green','purple'];
+            for(let p of data.iPlayers(player.game())) {
+                if(p.color !== '') {
+                    colors.splice(colors.indexOf(p.color), 1);
+                }
+            }
+            data.set(player.game(), 'extra', 'color', colors[Math.floor(Math.random() * 3)]);
+        }
         let colors = alertAvailableColors(player.game());
         res(null, colors);
     });
     socket.on('color:ready', (x, res) => {
-        data.setPlayer(player.game(), player.name(), 'position', 0);
         updateData(player.game());
         res(data.get(player.game()).expansions);
     });
     socket.on('request:travellers', (x, res) => {
         let openPositions = [];
-        for(let i = 0; i < data.players(player.game()); i++) {
+        for(let i = 0; i < Math.max(3, data.players(player.game())); i++) {
             openPositions.push(i);
         }
-        for(let i of data.iPlayer(player.game())) {
-            if(i.position !== -1) {
-                openPositions.splice(openPositions.indexOf(i.position[1]), 1);
+        for(let p of data.iPlayers(player.game())) {
+            if(p.position !== -1) {
+                openPositions.splice(openPositions.indexOf(p.position[1]), 1);
             }
         }
-        data.setPlayer(player.game(), player.name(), 'position', [0, openPositions[Math.floor(Math.random() * openPositions.length)]]);
+        data.setPlayer(player.game(), player.name(), 'position', [0, openPositions.splice(Math.floor(Math.random() * openPositions.length), 1)[0]]);
+        if(data.players(player.game()) === 2) {
+            data.set(player.game(), 'extra', 'position', [0, openPositions[0]]);
+        }
+        updateData(player.game());
         res(data.removeCard(player.game(), 'traveller', 2));
     });
     socket.on('submit:traveller', (name, res) => {

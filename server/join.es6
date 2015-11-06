@@ -1,7 +1,7 @@
 'use strict';
 let data = require('./data');
 let players = require('./players');
-let {io} = require('./common')();
+let {io, updateData} = require('./common')();
 let {alertAvailableColors} = require('./setup');
 const {JOIN, SETUP} = require('./const');
 
@@ -41,7 +41,7 @@ module.exports = (id) => {
         if(data.get(game) === undefined) { data.make(game); }
         if(data.getPlayer(game, name) === undefined) {
             //Check if the player joining is able to join
-            if(data.get(game).state !== 0) {
+            if(data.get(game).state !== JOIN) {
                 //Started already
                 return res(`The game ${game} has left without you`, {});
             } else if(data.get(game).playerCount === 1 && data.players(game) >= 1) {
@@ -69,6 +69,7 @@ module.exports = (id) => {
         io.to(game).emit('success', `${name} has arrived.`);
         socket.join(game);
         data.setPlayer(game, name, 'connected', true);
+        updateData(game);
         return res(null, action);
     });
     socket.on('options:set', (opts, res) => {
