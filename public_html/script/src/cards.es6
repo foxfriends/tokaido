@@ -3,6 +3,17 @@ import {default as $} from 'jquery';
 import {CARD_WIDTH, CARD_HEIGHT} from './const.es6';
 
 const $cards = $('#cards');
+let flipCards = window.setInterval(() =>{
+    $cards.children('.card').each(function() {
+        let seg = $(this).css('transform').split(',')[0];
+        const angle = Math.acos(parseFloat(seg.substr(seg.indexOf('(') + 1)));
+        if(angle * 180 / Math.PI > 90) {
+            $(this).css('backface-visibility', 'visible');
+        } else {
+            $(this).css('backface-visibility', 'hidden');
+        }
+    });
+}, 1000/30);
 
 export let show = (...cards) => {
     cards.forEach(($card) => $cards.append($card));
@@ -17,8 +28,8 @@ export let create = (opts) => {
         .addClass('card')
         .addClass(opts.type)
         .css({
-            top: opts.top || (-CARD_WIDTH / 2),
-            left: opts.left || (-CARD_HEIGHT / 2),
+            left: opts.left || (-CARD_WIDTH / 2),
+            top: opts.top || (-CARD_HEIGHT / 2),
             transform: opts.transform
         })
         .attr('name', opts.name)

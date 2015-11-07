@@ -61,7 +61,7 @@ let clearDrag = ([$e, pulse]) => {
     window.clearInterval(pulse());
 };
 
-let highlightSpace = (who) => ($e, oldPos, newPos) => {
+let highlightSpace = (who) => ($e, newPos) => {
     let i;
     if(who === 'extra') {
         i = data.get().extra.position[0] + 1;

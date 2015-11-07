@@ -22,7 +22,7 @@ export let iPlayers = function*(extra) {
     for(let i of Object.keys(data.players)) {
         yield data.players[i];
     }
-    if(extra) { yield data.extra; }
+    if(extra && players() === 2) { yield data.extra; }
 };
 export let playerOrder = () => {
     let order = [];

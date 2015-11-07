@@ -5,6 +5,7 @@ import {socket} from './socket.es6';
 import {PLAY} from './const.es6';
 import * as action from './action.es6';
 import * as evt from './event.es6';
+import {activate, deactivate} from './board_scroll.es6';
 
 export let runner = function*(runner) {
     socket.on('game:event', ([which, d]) => {
@@ -28,9 +29,11 @@ export let runner = function*(runner) {
             }
         }
         if(order[0].name === data.me().name) {
-            const space = yield* action.move(runner, order[0].name);
+            const space = yield* action.move(runner, data.me().name);
             yield socket.emit('turn:move', [data.me().name, space], () => runner.next());
-            //yield* board[space[0]].land(runner);
+            deactivate();
+            yield* board[space[0]].land(runner);
+            activate();
             socket.emit('turn:end');
         }
         yield socket.once('turn:end', () => runner.next());

@@ -7,6 +7,7 @@ import * as cards from '../../../cards/index.es6';
 import * as card from './cards.es6';
 import {me as my} from './data.es6';
 import {error} from './notification.es6';
+import {currentZoom, windowRelPos} from './board_scroll.es6';
 
 import {
     SPRINGS_PILE_X, SOUVENIR_PILE_X, ENCOUNTER_PILE_X, MEAL_PILE_X, MEALSET_PILE_X,
@@ -30,42 +31,43 @@ class Inn extends Space {
 class Village extends Space {
     *land(runner) {
         const souvenirs = yield socket.emit('request:souvenirs', 3, (souvenirs) => runner.next(souvenirs));
-        const [boardX, boardY] = [$('#gameboard').css('left'), $('#gameboard').css('right')];
+        const [startX, startY] = windowRelPos(SOUVENIR_PILE_X, PILE_Y);
         let $cards = [
             card.create({
                 name: souvenirs[0],
                 type: 'souvenir',
                 click: card.select,
-                transform: `translate(${boardX + SOUVENIR_PILE_X}px, ${boardY + PILE_Y}px) scale(${PILE_WIDTH / CARD_WIDTH}) rotateY(180deg)`
+                transform: `translate(${startX}px, ${startY}px) scale(${PILE_WIDTH / CARD_WIDTH * currentZoom()}) rotateY(180deg)`
             }),
             card.create({
                 name: souvenirs[1],
                 type: 'souvenir',
                 click: card.select,
-                transform: `translate(${boardX + SOUVENIR_PILE_X}px, ${boardY + PILE_Y}px) scale(${PILE_WIDTH / CARD_WIDTH}) rotateY(180deg)`
+                transform: `translate(${startX}px, ${startY}px) scale(${PILE_WIDTH / CARD_WIDTH * currentZoom()}) rotateY(180deg)`
             }),
             card.create({
                 name: souvenirs[2],
                 type: 'souvenir',
                 click: card.select,
-                transform: `translate(${boardX + SOUVENIR_PILE_X}px, ${boardY + PILE_Y}px) scale(${PILE_WIDTH / CARD_WIDTH}) rotateY(180deg)`
+                transform: `translate(${startX}px, ${startY}px) scale(${PILE_WIDTH / CARD_WIDTH * currentZoom()}) rotateY(180deg)`,
             })
         ];
         card.show(...$cards);
         yield window.setTimeout(() => runner.next(), 400);
         $cards.forEach(($card, i) => {
-            $card.css('transform', `translate(${window.innerWidth / 2 - CARD_WIDTH * (1 - i)}px, ${window.innerHeight / 2}px) scale(1) rotateY(0)`);
+            $card.css('transform', `translate(${window.innerWidth / 2 - (CARD_WIDTH + 50) * (1 - i)}px, ${window.innerHeight / 2}px) scale(1) rotateY(0)`);
+            window.setTimeout(() => $card.css('backface-visibility', 'hidden'), 350);
         });
         let which, min = 3, max = 0, price;
         const $chosen = yield card.confirm(($s) => {
             price = $s.toArray()
-                            .map(($el) => {
-                                const p = cards.get($el.attr('name')).price;
-                                max = Math.max(max, p);
-                                min = Math.min(min, p);
-                                return p;
-                            })
-                            .reduce((p, c) => p + c, 0);
+                .map((el) => {
+                    const p = cards.get($(el).attr('name')).price;
+                    max = Math.max(max, p);
+                    min = Math.min(min, p);
+                    return p;
+                })
+                .reduce((p, c) => p + c, 0);
             let discount = 0;
             if(my().traveller === 'zen-emon') {
                 discount = (max - 1);
@@ -74,8 +76,9 @@ class Village extends Space {
             return true;
         }, (c) => runner.next(c));
         $cards.forEach(($card) => {
-            if($chosen.map(($c) => cards.get($c.attr('name'))).indexOf($card.attr('name')) === -1) {
-                $card.css('transform', `translate(${boardX + SOUVENIR_PILE_X}px, ${boardY + PILE_Y}px) scale(${PILE_WIDTH / CARD_WIDTH}) rotateY(180deg)`);
+            if($chosen.map((c) => cards.get($(c).attr('name'))).indexOf($card.attr('name')) === -1) {
+                $card.css('transform', `translate(${startX}px, ${startY}px) scale(${PILE_WIDTH / CARD_WIDTH * currentZoom()}) rotateY(180deg)`);
+                window.setTimeout(() => $card.css('backface-visibility', 'visible'), 350);
                 window.setTimeout(() => $card.remove(), 700);
             }
         });

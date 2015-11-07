@@ -68,4 +68,5 @@ export let deactivate = () => {
         .off('mouseup mousemove mousewheel');
 };
 export let currentZoom = () => zoom;
-export let boardRelPos = (xx, yy) => [xx / zoom - $board.position().left, yy / zoom - $board.position().top];
+export let boardRelPos = (xx, yy) => [(xx - $board.position().left) / zoom, (yy - $board.position().top) / zoom];
+export let windowRelPos = (xx, yy) => [(xx + $board.position().left) * zoom, (yy + $board.position().top) * zoom];
