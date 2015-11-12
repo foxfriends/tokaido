@@ -1,117 +1,135 @@
 'use strict';
+import * as encounters from './encounter.es6';
+const CARD_WIDTH = 300;
+const CARD_HEIGHT = 461;
 
 module.exports = {
     'hiroshige': {
         name: 'Hiroshige',
         type: 'traveller',
         coins: 3,
-        special: () => {
+        *atInn(runner, socket, player, card) {
             //Choose a Panorama at an Inn
+            let which = 'paddy', opts = [];
+            if(player.cards.indexOf('paddy3') === -1) {
+                opts.push('paddy');
+            }
+            if(player.cards.indexOf('mountain4') === -1) {
+                opts.push('mountain');
+            }
+            if(player.cards.indexOf('sea5') === -1) {
+                opts.push('sea');
+            }
+            if(opts.length === 1) {
+                which = opts[0];
+            } else {
+                let [$cards, startX] = [[], []];
+                opts.forEach((opt, i) => {
+                    const xx = window.innerWidth / 2 + (i - (($cards.length - 1) / 2)) * (CARD_WIDTH + 50);
+                    startX.push(xx);
+                    $cards = [
+                        card.create({
+                            name: opt,
+                            type: `panorama ${opt}`,
+                            transform: `translate(${xx}px, ${-window.innerHeight / 2}px) scale(1) rotateY(180deg)`,
+                            click: card.selectOne
+                        }),
+                        ...$cards
+                    ];
+                });
+                card.show(...$cards);
+                yield window.setTimeout(() => runner.next(), 400);
+                $cards.forEach(($card, i) => {
+                    $card.css('transform', `translate(${startX[i]}px, ${window.innerHeight / 2}px) scale(1) rotateY(180deg)`);
+                });
+                const $chosen = yield card.confirm(($s) => {
+                    return $s.length === 1;
+                }, (c) => runner.next(c));
+                $cards.forEach(($card, i) => {
+                    $card.css('transform', `translate(${startX[i]}px, ${-window.innerHeight / 2}px) scale(1) rotateY(180deg)`);
+                    window.setTimeout(() => $card.remove(), 700);
+                });
+                which = $chosen.attr('name');
+            }
+            return yield socket.emit('acquire:panorama', which, (p) => runner.next(p));
         }
     },
     'chuubei': {
         name: 'Chuubei',
         type: 'traveller',
         coins: 4,
-        special: () => {
+        *atInn(runner, socket) {
             //Draw an Encounter at an Inn
+            return yield socket.emit('acquire:encounter', null, (e) => runner.next(e));
         }
     },
     'kinko': {
         name: 'Kinko',
         type: 'traveller',
-        coins: 7,
-        special: () => {
-            //Save 1 coin on Meals
-        }
+        coins: 7
     },
     'yoshiyasu': {
         name: 'Yoshiyasu',
         type: 'traveller',
-        coins: 9,
-        special: () => {
-            //Choose one of two Encounters
-        }
+        coins: 9
     },
     'satsuki': {
         name: 'Satsuki',
         type: 'traveller',
-        coins: 2,
-        special: () => {
-            //One meal is offered for free at an Inn
-        }
+        coins: 2
     },
     'mitsukuni': {
         name: 'Mitsukuni',
         type: 'traveller',
-        coins: 6,
-        special: () => {
-            //Hot Springs / Achievement cards are worth 1 point more
-        }
+        coins: 6
     },
     'sasayakko': {
         name: 'Sasayakko',
         type: 'traveller',
-        coins: 5,
-        special: () => {
-            //Cheapest of multiple Souvenirs is free
-        }
+        coins: 5
     },
     'hirotada': {
         name: 'Hirotada',
         type: 'traveller',
-        coins: 8,
-        special: () => {
-            //Reserve donates 1 extra coin
-        }
+        coins: 8
     },
     'umegae': {
         name: 'Umegae',
         type: 'traveller',
-        coins: 5,
-        special: () => {
-            //Earn 1 coin and 1 point per Encounter
-        }
+        coins: 5
     },
     'zen-emon': {
         name: 'Zen-emon',
         type: 'traveller',
-        coins: 6,
-        special: () => {
-            //One Souvenir costs only 1 coin
-        }
+        coins: 6
     },
     'jirocho': {
         name: 'Jirocho',
         type: 'traveller',
-        coins: 5,
-        special: () => {
+        coins: 5/*,
+        *atInn: () => {
             //Bet 1 coin in the Gaming room at Inns
-        }
+
+        }*/
     },
     'daigoro': {
         name: 'Daigoro',
         type: 'traveller',
         coins: 3,
-        special: () => {
-            //Receive one Souvenir at each Inn
+        *atInn(runner, socket) {
+            //Draw an Encounter at an Inn
+            return yield socket.emit('acquire:souvenir', null, (e) => runner.next(e));
         }
     },
     'nampo': {
         name: 'Nampo',
         type: 'traveller',
-        coins: 2,
-        special: () => {
-            //Each Meal is worth 1 point more per coin
-        }
+        coins: 2
     },
     'gotozaemon': {
         name: 'Gotozaemon',
         type: 'traveller',
-        coins: 0,
-        special: () => {
-            //Gain 1 coin at each Panorama space
-        }
+        coins: 0
     },
     'miyataka': {
         name: 'Miyataka',
@@ -132,9 +150,6 @@ module.exports = {
     'eriku': {
         name: 'Eriku',
         type: 'traveller',
-        coins: 5,
-        special: () => {
-            //Check the top card of the meal pile at each inn, and buy it wanted
-        }
+        coins: 5
     }
 };

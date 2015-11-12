@@ -1,4 +1,6 @@
 'use strict';
+import * as cards from '../cards/index.es6';
+import {SMALL_OBJECT, FOOD, CLOTHING, ART, LEGENDARY} from './const.es6';
 let games = {};
 
 let shuffle = (a) => {
@@ -10,15 +12,46 @@ let shuffle = (a) => {
     return a;
 };
 
+let insert = (g,p,c,...rest) => {
+    const order = {
+        'encounter': 0,
+        'springs': 1,
+        'meal': 2,
+        'souvenir': 3,
+        'panorama paddy': 4,
+        'panorama mountain': 5,
+        'panorama sea': 6,
+        'achievement': 7
+    };
+    let family = [false, false, false, false, false];
+    games[g].players[p].cards = (function ins(c, f, ...rest) {
+        if(f === undefined) { return [c]; }
+        if(cards.get(c).type === 'souvenir') {
+            if(order[cards.get(f).type] === 'souvenir') {
+                if(!family[cards.get(f).family]) {
+                    family[cards.get(f).family] = true;
+                } else {
+                    family = [false, false, false, false, false];
+                    return [c, f, ...rest];
+                }
+            }
+        }
+        if(order[cards.get(c).type] < order[cards.get(f).type]) { return [c, f, ...rest]; }
+        return [f, ...ins(c, ...rest)];
+    })(c, ...games[g].players[p].cards);
+    if(rest.length > 0) { insert(g, p, ...rest); }
+};
+
 module.exports = {
     get: (g) => games[g],
     set: (g,f,d,e) => d !== undefined ? (e !== undefined ? games[g][f][d] = e : games[g][f] = d) : games[g] = f,
     remove: (g) => delete games[g],
     getCard: (g,t,i = 0,n = 1) => games[g].cards[t].slice(i, n),
     addCard: (g,t,...c) => games[g].cards[t].push(...c),
-    giveCard: (g,p,...c) => games[g].players[p].cards.push(...c),
+    giveCard: (g,p,...c) => insert(g,p,...c),
     removeCard: (g,t,n=1) => games[g].cards[t].splice(0, n),
     shuffleCards: (g,t) => games[g].cards[t] = shuffle(games[g].cards[t]),
+    discardMeal: (g,m) => games[g].mealset.splice(games[g].mealset.indexOf(m), 1),
     iPlayers: function*(g) {
         for(let name of Object.keys(games[g].players)) {
             yield games[g].players[name];
@@ -28,7 +61,7 @@ module.exports = {
     getPlayer: (g,p) => games[g].players[p],
     setPlayer: (g,p,f,d) => games[g].players[p][f] = d,
     removePlayer: (g, p) => delete games[g].players[p],
-    players: (g) => Object.keys(games[g].players).length,
+    players: (g,e=false) => Object.keys(games[g].players).length + ((e && Object.keys(games[g].players).length === 2) ? 1 : 0),
     make: (g) => games[g] = {
         name: g,
         state: 0,
@@ -60,8 +93,8 @@ module.exports = {
                                         'sushi', 'sushi', 'soba', 'soba',
                                         'yakitori', 'yakitori', 'unagi', 'udon',
                                         'fugu', 'tai meshi', 'sashimi', 'donburi']),
-            hot_springs:        shuffle(['hotsprings2','hotsprings2','hotsprings2','hotsprings2','hotsprings2','hotsprings2',
-                                        'hotsprings3','hotsprings3','hotsprings3','hotsprings3','hotsprings3','hotsprings3']),
+            hot_springs:        shuffle(['springs2','springs2','springs2','springs2','springs2','springs2',
+                                        'springs3','springs3','springs3','springs3','springs3','springs3']),
             bathouse:           ['bathouse', 'bathouse', 'bathouse', 'bathouse', 'bathouse', 'bathouse'],
             cherry_tree:        ['cherry', 'cherry', 'cherry', 'cherry', 'cherry', 'cherry'],
             legendary:          ['shodo', 'emaki', 'buppatsu', 'ema', 'murasame', 'masamune'],

@@ -64,5 +64,16 @@ module.exports = (id) => {
         updateData(player.game());
         res();
     });
+    socket.on('game:ready', (state) => {
+        data.set(player.game(), 'readystate', data.get(player.game()).readystate + 1);
+        if(data.get(player.game()).readystate == data.get(player.game()).playerCount) {
+            if(state > data.get(player.game()).state) {
+                data.set(player.game(), 'state', state);
+            }
+            updateData(player.game());
+            data.set(player.game(), 'readystate', 0);
+            io.to(player.game()).emit('game:ready');
+        }
+    });
 };
 module.exports.alertAvailableColors = alertAvailableColors;

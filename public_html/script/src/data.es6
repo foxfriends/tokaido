@@ -3,7 +3,11 @@ require('babel/polyfill');
 import {default as $} from 'jquery';
 import {score} from './scoring.es6';
 import {board} from './board.es6';
-import {SCOREBOARD_SPACE_WIDTH, SCOREBOARD_SPACE_HEIGHT} from './const.es6';
+import {
+    SCOREBOARD_SPACE_WIDTH, SCOREBOARD_SPACE_HEIGHT, SCOREBOARD_HEIGHT,
+    CARD_HEIGHT, CARD_WIDTH
+} from './const.es6';
+import * as cards from '../../../cards/index.es6';
 
 let data, name;
 export let get = () => data;
@@ -45,14 +49,15 @@ export let playerOrder = () => {
 export let me = (n) => data ? data.players[name = (n ? n : name)] : name = (n ? n : name);
 export let arrange = () => {
     let scorePos = (s = 0) => {
-        return [Math.round(((s + (s % 2)) / 2 + 1/2) * SCOREBOARD_SPACE_WIDTH),
+        return [Math.round((s / 2 + 1/2) * SCOREBOARD_SPACE_WIDTH),
                 ((s % 2) ? 6 : 49) + SCOREBOARD_SPACE_HEIGHT / 2];
     };
     let scores = [];
     for(let p in data.players) {
         if(data.players[p].position === -1) { continue; }
-        const [s, sx, sy] = [ score(p),  ...scorePos(s)];
-        scores[s] = scores[s] ? [...scores[s], p] : [p];
+        const s = score(p);
+        const [sx, sy] = scorePos(s);
+        scores[s] = (scores[s] && scores[s].length) ? [...scores[s], p] : [p];
         $(`#scoreboard .disc[name="${p}"]`)
             .css('transform', `translate(${sx}px, ${sy}px)`);
         const {x, y, spacing: spa, direction: dir} = board[data.players[p].position[0]];
@@ -62,6 +67,52 @@ export let arrange = () => {
                 'transform': `translate(${px}px, ${py}px)`,
                 'z-index': dir * data.players[p].position[1] + 5
             });
+        if($(`.card-tray[name="${p}"] .card:not(.traveller)`).length !== data.players[p].cards.length) {
+            $(`.card-tray[name="${p}"] .card:not(.traveller)`).remove();
+            data.players[p].cards.forEach((c, i) => {
+                let type = cards.get(c).type;
+                if(type.indexOf('panorama') === -1) {
+                    $(`.card-tray[name="${p}"]`).append(
+                        $('<div></div>')
+                            .addClass(`card ${type}`)
+                            .attr('name', c)
+                            .css({
+                                left: 10 + 160 * (i % Math.floor(window.innerWidth * 0.8 / 160)),
+                                top: 10 + 240 * Math.floor(i / Math.floor(window.innerWidth * 0.8 / 160))
+                            })
+                    );
+                } else {
+                    const offset =  (150 * 3 + 10) * (type.indexOf('paddy') === -1 ? 1 : 0) +
+                                    (150 * 4 + 10) * (type.indexOf('sea') !== -1 ? 1 : 0);
+                    const xx = 10 + (CARD_WIDTH / 2) * (parseInt(c[c.length - 1]) - 1) + offset;
+                    $(`.card-tray[name="${p}"]`).append(
+                        $('<div></div>')
+                            .addClass(`card ${type}`)
+                            .attr('name', c)
+                            .css({
+                                left: xx,
+                                top: window.innerHeight - SCOREBOARD_HEIGHT - 20 - CARD_HEIGHT / 2
+                            })
+                    );
+                }
+            });
+        }
+        let n = $(`.card-tray[name="${p}"] .coin`).length;
+        while(data.players[p].coins > n) {
+            $(`.card-tray[name="${p}"]`).append(
+                $('<div></div>')
+                    .addClass('coin')
+                    .css({
+                        left: `${95 - Math.random() * 10}%`,
+                        top: `${Math.random() * 30 + 3}%`
+                    })
+            );
+            n++;
+        }
+        while(data.players[p].coins < n) {
+            $(`.card-tray[name="${p}"] .coin:eq(0)`).remove();
+            n--;
+        }
     }
     for(let s in scores) {
         if(scores[s] && scores[s].length > 1) {
@@ -89,4 +140,4 @@ export let arrange = () => {
         }
     }
 };
-export let set = (d) => { console.log(d); data = d; arrange(); };
+export let set = (d) => { data = d; arrange(); };

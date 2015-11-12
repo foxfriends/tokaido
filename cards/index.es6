@@ -1,14 +1,42 @@
 'use strict';
-const traveller = require('./traveller.es6');
-const souvenir = require('./souvenir.es6');
-const encounter = require('./encounter.es6');
-const meal = require('./meal.es6');
-const legendary = require('./legendary.es6');
-const calligraphy = require('./calligraphy.es6');
-const amulet = require('./amulet.es6');
+export const traveller = require('./traveller.es6');
+export const souvenir = require('./souvenir.es6');
+export const encounter = require('./encounter.es6');
+export const meal = require('./meal.es6');
+export const legendary = require('./legendary.es6');
+export const calligraphy = require('./calligraphy.es6');
+export const amulet = require('./amulet.es6');
 
-const get = (name) => traveller[name] || souvenir[name] || encounter[name] || meal[name] ||
-                    legendary[name] || calligraphy[name] || amulet[name];
+let capitalize = (s) => s[0].toUpperCase() + s.substr(1);
+
+let other = (n) => {
+    const last = parseInt(n.substr(-1));
+    if(!isNaN(last)) {
+        n = n.substr(0, n.length - 1);
+        if(n === 'springs') {
+            return {
+                name: 'Hot Springs',
+                type: 'springs',
+                score(player) { return last + (player.traveller === 'mitsukuni'); }
+            };
+        } else if(n === 'paddy' || n === 'mountain' || n === 'sea') {
+            return {
+                name: `${capitalize(n)} Panorama`,
+                type: `panorama ${n}`,
+                score() { return last; }
+            };
+        }
+    } else {
+        return {
+            name: n,
+            type: 'achievement',
+            score() { return 3; }
+        };
+    }
+};
+
+export const get = (name) => traveller[name] || souvenir[name] || encounter[name] || meal[name] ||
+                    legendary[name] || calligraphy[name] || amulet[name] || other(name);
 
 module.exports = {
     traveller: traveller,

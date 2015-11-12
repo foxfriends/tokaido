@@ -166,26 +166,26 @@
     // // PANORAMAS
 
     &[name="paddy1"] { background-image: url('../../image/cards/panorama/paddy1.jpg'); }
-    // &[name="paddy2"] { background-image: url('../../image/cards/panorama/paddy2.jpg'); }
+    &[name="paddy2"] { background-image: url('../../image/cards/panorama/paddy2.jpg'); }
     &[name="paddy3"] { background-image: url('../../image/cards/panorama/paddy3.jpg'); }
 
     &[name="mountain1"] { background-image: url('../../image/cards/panorama/mountain1.jpg'); }
-    // &[name="mountain2"] { background-image: url('../../image/cards/panorama/mountain2.jpg'); }
+    &[name="mountain2"] { background-image: url('../../image/cards/panorama/mountain2.jpg'); }
     &[name="mountain3"] { background-image: url('../../image/cards/panorama/mountain3.jpg'); }
     &[name="mountain4"] { background-image: url('../../image/cards/panorama/mountain4.jpg'); }
 
     &[name="sea1"] { background-image: url('../../image/cards/panorama/sea1.jpg'); }
     &[name="sea2"] { background-image: url('../../image/cards/panorama/sea2.jpg'); }
     &[name="sea3"] { background-image: url('../../image/cards/panorama/sea3.jpg'); }
-    // &[name="sea4"] { background-image: url('../../image/cards/panorama/sea4.jpg'); }
+    &[name="sea4"] { background-image: url('../../image/cards/panorama/sea4.jpg'); }
     &[name="sea5"] { background-image: url('../../image/cards/panorama/sea5.jpg'); }
 
     // &[name="cherry"] { background-image: url('../../image/cards/cherry/front.jpg'); }
 
     // // HOT SPRINGS
 
-    &[name="hotsprings2"] { background-image: url('../../image/cards/springs/2.jpg'); }
-    &[name="hotsprings3"] { background-image: url('../../image/cards/springs/3.jpg'); }
+    &[name="springs2"] { background-image: url('../../image/cards/springs/2.jpg'); }
+    &[name="springs3"] { background-image: url('../../image/cards/springs/3.jpg'); }
     // &[name="bathouse"] { background-image: url('../../image/cards/bathouse/front.jpg'); }
 
     // ACHIEVEMENTS
@@ -263,7 +263,7 @@
     &.springs::after { background-image: url('../../image/cards/springs/back.jpg'); }
     &.panorama.paddy::after { background-image: url('../../image/cards/panorama/paddy_back.jpg'); }
     &.panorama.mountain::after { background-image: url('../../image/cards/panorama/mountain_back.jpg'); }
-    // &.panorama.sea::after { background-image: url('../../image/cards/panorama/sea_back.jpg'); }
+    &.panorama.sea::after { background-image: url('../../image/cards/panorama/sea_back.jpg'); }
 
     &.achievement-blue::after { background-image: url('../../image/cards/achievement/back_blue.jpg'); }
     &.achievement-gold::after { background-image: url('../../image/cards/achievement/back_gold.jpg'); }

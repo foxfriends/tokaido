@@ -26,7 +26,7 @@ let setCardTray = (i, player) => {
                     $(this).parent().css('height', $(this).width() * TC_WH_RATIO - 10);
                     $(this).children().addClass(player.color);
                 });
-    window.setTimeout(() => {
+    window.setTimeout(() =>
         $('.card-tray').eq(i).children('.handle')
             .click(function() {
                 $(this)
@@ -34,7 +34,7 @@ let setCardTray = (i, player) => {
                     .off('mouseout')
                     .parent()
                         .css({
-                            top: '10%',
+                            top: '96px',
                             cursor: 'default',
                             'z-index': 5,
                             'box-shadow': `0 0 10px 0 ${TITLE_COLOR}`
@@ -56,8 +56,7 @@ let setCardTray = (i, player) => {
                         });
             })
             .mouseover(function() { $(this).css('top', -$(this).children('.card.traveller').height()); })
-            .mouseout(function() { $(this).css('top', -48); });
-    }, 1000);
+            .mouseout(function() { $(this).css('top', -48); }), 1000);
 };
 
 export let runner = function*(runner) {

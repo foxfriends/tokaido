@@ -1,11 +1,12 @@
 'use strict';
 import {player} from './data.es6';
-import {default as cards} from '../../../cards/index.es6';
+import * as cards from '../../../cards/index.es6';
+
 let souvenirPoints = (p) => {
     let counts = [0, 0, 0, 0, 0];
     for(let card of p.cards) {
-        if(p.cards.family !== undefined) {
-            counts[p.cards.family]++;
+        if(cards.get(card) && cards.get(card).family !== undefined) {
+            counts[cards.get(card).family]++;
         }
     }
     let s = 0;
@@ -25,7 +26,7 @@ export let score = (p) => {
     if(typeof p !== 'object') { p = player(p); }
     let s = 0;
     for(let card of p.cards) {
-        if(cards.get(card).score) {
+        if(cards.get(card) && cards.get(card).score) {
             s += cards.get(card).score(p);
         }
     }

@@ -8,17 +8,6 @@ module.exports = (id) => {
     let player = players(id);
     let socket = player.socket();
 
-    socket.on('game:ready', (state) => {
-        data.set(player.game(), 'readystate', data.get(player.game()).readystate + 1);
-        if(data.get(player.game()).readystate == data.get(player.game()).playerCount) {
-            if(state > data.get(player.game()).state) {
-                data.set(player.game(), 'state', state);
-            }
-            updateData(player.game());
-            data.set(player.game(), 'readystate', 0);
-            io.to(player.game()).emit('game:ready');
-        }
-    });
     socket.on('turn:move', ([who, where], res) => {
         if(who !== 'extra') {
             data.setPlayer(player.game(), who, 'position', where);
@@ -45,6 +34,9 @@ module.exports = (id) => {
     });
     socket.on('acquire:encounter', (x, res) => {
         const c = data.removeCard(player.game(), 'encounter');
+        if(data.getPlayer(player.game(), player.name()).traveller === 'umegae') {
+            data.setPlayer(player.game(), player.name(), 'coins', data.getPlayer(player.game(), player.name()).coins + 1);
+        }
         data.giveCard(player.game(), player.name(), ...c);
         updateData(player.game());
         res(c);
@@ -91,11 +83,17 @@ module.exports = (id) => {
                         .reduce((p, c) => p + c, 0);
         let coins = data.getPlayer(player.game(), player.name()).coins - price;
         if(coins < 0) { return res('You can\'t afford all that'); }
+        for(let i = 0; i < 3; i++) {
+            const card = data.removeCard(player.game(), 'souvenir');
+            if(souvenirs.indexOf(card) === -1) {
+                data.addCard(player.game(), 'souvenir', card);
+            }
+        }
         data.giveCard(player.game(), player.name(), ...souvenirs);
-        if(souvenirs.length >= 2 && data.player(player.game(), player.name()).traveller === 'sasayakko') {
+        if(souvenirs.length >= 2 && data.getPlayer(player.game(), player.name()).traveller === 'sasayakko') {
             //Sasayakko does not pay for the cheapest souvenir
             coins += min;
-        } else if(data.player(player.game(), player.name()).traveller === 'zen-emon') {
+        } else if(data.getPlayer(player.game(), player.name()).traveller === 'zen-emon') {
             //Zen-emon pays only 1 coin for one of the souvenirs
             coins += cards.get(which).price - 1;
         }
@@ -108,5 +106,46 @@ module.exports = (id) => {
         data.giveCard(player.game(), player.name(), ...card);
         updateData(player.game());
         res(card);
+    });
+    socket.on('request:meals', (first, res) => {
+        if(first) {
+            data.set(player.game(), 'mealset', data.removeCard(player.game(), 'meal', data.players(player.game(), true) + 1));
+        }
+        res(data.get(player.game()).mealset);
+    });
+    socket.on('discard:meal', (x, res) => {
+        data.discardMeal(player.game(), data.get(player.game()).mealset[Math.floor(Math.random() * data.get(player.game()).mealset.length)]);
+        res();
+    });
+    socket.on('submit:meal', ([which, special], res) => {
+        if(which !== null) {
+            const {price} = cards.get(which);
+            const {coins} = data.getPlayer(player.game(), player.name());
+            if(price <= coins || special === 'satsuki') {
+                if(special !== 'eriku') {
+                    data.discardMeal(player.game(), which);
+                }
+                data.giveCard(player.game(), player.name(), which);
+                if(special !== 'satsuki') {
+                    data.setPlayer(player.game(), player.name(), 'coins', coins - price);
+                }
+            } else {
+                return res('You can\'t afford this meal');
+            }
+        }
+        updateData(player.game());
+        res();
+    });
+    socket.on('request:eriku_meal', (x, res) => {
+        res(data.removeCard(player.game(), 'meal'));
+    });
+    socket.on('donate', ([amt, free], res) => {
+        const {coins, donations} = data.getPlayeR(player.game(), player.name());
+        data.setPlayer(player.game(), player.name(), 'donations', donations + amt);
+        if(!free) {
+            data.setPlayer(player.game(), player.name(), 'coins', coins - amt);
+        }
+        updateData(player.game());
+        res();
     });
 };

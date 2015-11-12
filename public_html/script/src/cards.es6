@@ -37,8 +37,12 @@ export let create = (opts) => {
 };
 
 export let selectOne = function() {
+    let dont = false;
+    if($(this).hasClass('selected')) { dont = true; }
     $cards.children('.card').removeClass('selected');
-    $(this).addClass('selected');
+    if(!dont) {
+        $(this).addClass('selected');
+    }
 };
 export let select = function() {
     $(this).toggleClass('selected');
@@ -66,21 +70,22 @@ export let coin = (n) => {
             const $coin = $(`<div class='coin'></div>`)
                 .css({
                     opacity: (n > 0 ? 1 : 0),
-                    left: `10%`,
-                    top: window.innerHeight - (n > 0 ? 400 : 0)
+                    left: -43,
+                    top: window.innerHeight - (n > 0 ? 400 : 0),
+                    transform: `translate(${window.innerWidth / 10}px, 0)`
                 });
             $cards.append($coin);
             window.setTimeout(() => $coin.css({
                 opacity: 1,
-                transform: `translate(0, ${n > 0 ? '' : '-'}400px)`
+                transform: `translate(${window.innerWidth / 10}px, ${n > 0 ? '' : '-'}400px) rotateY(720deg)`
             }), 100);
             if(n < 0) {
                 // Fade out if losing money
                 window.setTimeout(() => $coin.css('opacity', 0), 600);
             }
             window.setTimeout(() => $coin.remove(), 700);
+            yield window.setTimeout(() => coinSpawner.next(), 250);
             n -= n / Math.abs(n);
-            yield window.setTimeout(() => coinSpawner.next(), 100);
         }
     })();
     coinSpawner.next();
