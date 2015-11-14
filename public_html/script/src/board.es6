@@ -57,6 +57,10 @@ class Inn extends Space {
                 if(e !== undefined) {
                     error(e);
                 } else {
+                    $chosen.each(function() {
+                        $(this).css('transform', `translate(${window.innerWidth / 10}px, ${window.innerHeight + CARD_HEIGHT}px)`);
+                        window.setTimeout(() => $(this).remove(), 700);
+                    });
                     return;
                 }
             }
@@ -75,15 +79,9 @@ class Inn extends Space {
                 }), ...$cards
             ];
         }
+        card.show(...$cards);
         if(my().traveller === 'satsuki') {
-            const meal = meals[Math.floor(Math.random() * meals.length)];
-            let $card = card.create({
-                name: meal,
-                type: 'meal',
-                click: card.select,
-                transform: `translate(${startX}px, ${startY}px) scale(${PILE_WIDTH / CARD_WIDTH * currentZoom()}) rotateY(180deg)`
-            });
-            card.show($card);
+            let $card = $cards[0];
             yield window.setTimeout(() => runner.next(), 400);
             $card.css('transform', `translate(${window.innerWidth / 2}px, ${window.innerHeight / 2}px) scale(${1}) rotateY(0)`);
             const $chosen = yield card.confirm(($s) => {
@@ -91,10 +89,13 @@ class Inn extends Space {
                 return true;
             }, (c) => runner.next(c));
             if($chosen.length) {
+                $cards.forEach(($card) => {
+                    window.setTimeout(() => $card.remove(), 700);
+                });
+                $chosen.css('transform', `translate(${window.innerWidth / 10}px, ${window.innerHeight + CARD_HEIGHT}px)`);
                 return yield socket.emit('submit:meal', [$chosen.attr('name'), 'satsuki'], () => runner.next());
             }
         }
-        card.show(...$cards);
         yield window.setTimeout(() => runner.next(), 400);
         $cards.forEach(($card, i) => {
             const w = (window.innerWidth - 50) / $cards.length;
@@ -117,21 +118,16 @@ class Inn extends Space {
             return true;
         }, (c) => runner.next(c));
         $cards.forEach(($card) => {
-            if($chosen.toArray().map((c) => $(c).attr('name')).indexOf($card.attr('name')) === -1) {
-                $card.css('transform', `translate(${startX}px, ${startY}px) scale(${PILE_WIDTH / CARD_WIDTH * currentZoom()}) rotateY(180deg)`);
-                window.setTimeout(() => $card.remove(), 700);
-            }
+            $card.css('transform', `translate(${startX}px, ${startY}px) scale(${PILE_WIDTH / CARD_WIDTH * currentZoom()}) rotateY(180deg)`);
+            window.setTimeout(() => $card.remove(), 700);
         });
         if($chosen.length) {
             const [price, discount] = [
                 cards.get($chosen.attr('name')).price,
-                (my().traveller.name === 'kinko' ? 1 : 0)
+                (my().traveller === 'kinko' ? 1 : 0)
             ];
             card.coin(- price + discount);
-            $chosen.each(function() {
-                $(this).css('transform', `translate(${window.innerWidth / 10}px, ${window.innerHeight + CARD_HEIGHT}px)`);
-                window.setTimeout(() => $(this).remove(), 700);
-            });
+            $chosen.css('transform', `translate(${window.innerWidth / 10}px, ${window.innerHeight + CARD_HEIGHT}px)`);
             const e = yield socket.emit('submit:meal', [$chosen.attr('name')], (e) => runner.next(e));
             if(e !== undefined) {
                 error(e);

@@ -119,7 +119,7 @@ module.exports = (id) => {
     });
     socket.on('submit:meal', ([which, special], res) => {
         if(which !== null) {
-            const {price} = cards.get(which);
+            const {price} = cards.get(which) - (data.getPlayer(player.game(), player.name()).traveller === 'kinko' ? 1 : 0);
             const {coins} = data.getPlayer(player.game(), player.name());
             if(price <= coins || special === 'satsuki') {
                 if(special !== 'eriku') {

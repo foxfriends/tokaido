@@ -25,7 +25,7 @@ module.exports = {
             } else {
                 let [$cards, startX] = [[], []];
                 opts.forEach((opt, i) => {
-                    const xx = window.innerWidth / 2 + (i - (($cards.length - 1) / 2)) * (CARD_WIDTH + 50);
+                    const xx = (window.innerWidth / 2) - (i - (opts.length - 1) / 2) * (CARD_WIDTH + 50);
                     startX.push(xx);
                     $cards = [
                         card.create({

@@ -8,6 +8,10 @@
     line-height: 1;
 }
 
+*:not(input[type="text"]) {
+    user-select: none;
+}
+
 .container {
     position: relative;
     width: 100%;
