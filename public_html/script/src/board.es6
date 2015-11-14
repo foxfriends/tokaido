@@ -69,6 +69,7 @@ class Inn extends Space {
         const meals = yield socket.emit('request:meals', first, (meals) => runner.next(meals));
         let $cards = [];
         const [startX, startY] = windowRelPos(first ? MEAL_PILE_X : MEALSET_PILE_X, PILE_Y);
+        const [endX] = windowRelPos(MEALSET_PILE_X, 0);
         for(let meal of meals) {
             $cards = [
                 card.create({
@@ -95,6 +96,9 @@ class Inn extends Space {
                 $chosen.css('transform', `translate(${window.innerWidth / 10}px, ${window.innerHeight + CARD_HEIGHT}px)`);
                 return yield socket.emit('submit:meal', [$chosen.attr('name'), 'satsuki'], () => runner.next());
             }
+            $cards.forEach(($card) => {
+                $card.click(card.selectOne);
+            });
         }
         yield window.setTimeout(() => runner.next(), 400);
         $cards.forEach(($card, i) => {
@@ -118,7 +122,7 @@ class Inn extends Space {
             return true;
         }, (c) => runner.next(c));
         $cards.forEach(($card) => {
-            $card.css('transform', `translate(${startX}px, ${startY}px) scale(${PILE_WIDTH / CARD_WIDTH * currentZoom()}) rotateY(180deg)`);
+            $card.css('transform', `translate(${endX}px, ${startY}px) scale(${PILE_WIDTH / CARD_WIDTH * currentZoom()}) rotateY(180deg)`);
             window.setTimeout(() => $card.remove(), 700);
         });
         if($chosen.length) {
@@ -187,6 +191,8 @@ class Village extends Space {
             if($chosen.toArray().map((c) => $(c).attr('name')).indexOf($card.attr('name')) === -1) {
                 $card.css('transform', `translate(${startX}px, ${startY}px) scale(${PILE_WIDTH / CARD_WIDTH * currentZoom()}) rotateY(180deg)`);
                 window.setTimeout(() => $card.remove(), 700);
+            } else {
+                $card.removeClass('selected');
             }
         });
         let discount = 0;

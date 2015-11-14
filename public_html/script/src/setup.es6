@@ -6,8 +6,11 @@ import {error} from './notification.es6';
 import * as card from './cards.es6';
 import * as data from './data.es6';
 import * as drag from './board_scroll.es6';
-
-import {SCOREBOARD_HEIGHT, BOARD_HEIGHT, TITLE_COLOR, TC_WH_RATIO, CARD_WH_RATIO, TC_WIDTH, TC_HEIGHT, SETUP, PLAY} from './const.es6';
+import {board} from './board.es6';
+import {
+    SCOREBOARD_HEIGHT, BOARD_WIDTH, BOARD_HEIGHT, TITLE_COLOR, TC_WH_RATIO,
+    CARD_WH_RATIO, TC_WIDTH, TC_HEIGHT, SETUP, PLAY
+} from './const.es6';
 
 let setCardTray = (i, player) => {
     $('.card-tray').eq(i)
@@ -62,10 +65,11 @@ let setCardTray = (i, player) => {
 export let runner = function*(runner) {
     let delayArrange = false;
     align_board: {
+        const xx = data.get().state > SETUP ? Math.min(0, Math.max(-(BOARD_WIDTH - window.innerWidth), -(board[data.playerOrder()[0].position[0]].x - board[0].x))) : 0;
         //Scroll the view to the beginning
         $('#scoreboard').css('top', 0);
         $('#gameboard').css({
-            left: 0,
+            left: xx,
             top: window.innerHeight - BOARD_HEIGHT + 100,
             opacity: 1
         });

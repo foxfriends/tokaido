@@ -93,7 +93,7 @@ module.exports = {
                                         'sushi', 'sushi', 'soba', 'soba',
                                         'yakitori', 'yakitori', 'unagi', 'udon',
                                         'fugu', 'tai meshi', 'sashimi', 'donburi']),
-            hot_springs:        shuffle(['springs2','springs2','springs2','springs2','springs2','springs2',
+            springs:            shuffle(['springs2','springs2','springs2','springs2','springs2','springs2',
                                         'springs3','springs3','springs3','springs3','springs3','springs3']),
             bathouse:           ['bathouse', 'bathouse', 'bathouse', 'bathouse', 'bathouse', 'bathouse'],
             cherry_tree:        ['cherry', 'cherry', 'cherry', 'cherry', 'cherry', 'cherry'],

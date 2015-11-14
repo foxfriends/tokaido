@@ -5,13 +5,16 @@ import {score} from './scoring.es6';
 import {board} from './board.es6';
 import {
     SCOREBOARD_SPACE_WIDTH, SCOREBOARD_SPACE_HEIGHT, SCOREBOARD_HEIGHT,
-    CARD_HEIGHT, CARD_WIDTH
+    CARD_HEIGHT, CARD_WIDTH,
+    SPRINGS_PILE_X, SOUVENIR_PILE_X, ENCOUNTER_PILE_X, MEAL_PILE_X, MEALSET_PILE_X,
+    PADDY_PILE_X, MOUNTAIN_PILE_X, SEA_PILE_X, PILE_Y, PANO_PILE_Y, PILE_WIDTH,
 } from './const.es6';
 import * as cards from '../../../cards/index.es6';
 
 let data, name;
 export let get = () => data;
 export let player = (i) => {
+    if(i === 'extra') { return data.extra; }
     if(typeof i === 'string') { return data.players[i]; }
     if(i === 0) { return data.players[name]; }
     let n, names = Object.keys(data.players);
@@ -138,6 +141,41 @@ export let arrange = () => {
                     'z-index': dir * data.extra.position[1] + 5
                 });
         }
+    }
+    const xx = {
+        souvenir: SOUVENIR_PILE_X,
+        springs: SPRINGS_PILE_X,
+        encounter: ENCOUNTER_PILE_X,
+        meal: MEAL_PILE_X
+    };
+    for(let type of Object.keys(data.cards)) {
+        if(xx[type] !== undefined) {
+            let shadow = '0 0 0 0px #778574';
+            for(let i = 1; i < data.cards[type].length; i++) {
+                shadow += `, 0 ${i}px 0 0px #778574`;
+            }
+            $(`#gameboard .stacks .card.${type}:eq(0)`)
+                .css({
+                    display: 'block',
+                    transform: `translate(${xx[type]}px, ${PILE_Y - data.cards[type].length}px) scale(${PILE_WIDTH / CARD_WIDTH}) rotateY(180deg)`,
+                    'box-shadow': shadow
+                });
+        }
+    }
+    if(data.mealset.length) {
+        let shadow = '0 0 0 1px #778574';
+        for(let i = 1; i < data.mealset.length; i++) {
+            shadow += ', 0 2px 0 1px #778574';
+        }
+        $('#gameboard .stacks .card.meal:eq(1)')
+            .css({
+                display: 'block',
+                transform: `translate(${MEALSET_PILE_X}px, ${PILE_Y}px) scale(${PILE_WIDTH / CARD_WIDTH}) rotate(180deg)`,
+                'box-shadow': shadow
+            });
+    } else {
+        $('#gameboard .stacks .card.meal:eq(1)')
+            .css('display', 'none');
     }
 };
 export let set = (d) => { data = d; arrange(); };

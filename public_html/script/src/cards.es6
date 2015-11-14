@@ -3,8 +3,8 @@ import {default as $} from 'jquery';
 import {CARD_WIDTH, CARD_HEIGHT} from './const.es6';
 
 const $cards = $('#cards');
-let flipCards = window.setInterval(() =>{
-    $cards.children('.card').each(function() {
+let flipCards = window.setInterval(() => {
+    $('.card').each(function() {
         let seg = $(this).css('transform').split(',')[0];
         const angle = Math.acos(parseFloat(seg.substr(seg.indexOf('(') + 1)));
         if(angle * 180 / Math.PI > 90) {

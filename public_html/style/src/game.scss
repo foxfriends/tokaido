@@ -52,5 +52,18 @@ section#board {
             z-index: 0;
             border-radius: 100%;
         }
+        .stacks .card {
+            display: none;
+            position: absolute;
+            left: -150px;
+            top: -230px;
+            backface-visibility: visible;
+            
+            width: 300px;
+            height: 461px;
+            &.panorama {
+                height: 463px;
+            }
+        }
     }
 }
