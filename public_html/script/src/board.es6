@@ -214,7 +214,36 @@ class Village extends Space {
         }
     }
 }
-class Temple extends Space {}
+class Temple extends Space {
+    *land(runner) {
+        if(my().traveller === 'hirotada') {
+            yield socket.emit('donate', [1, true], () => runner.next());
+        }
+        let [donations, max] = [0, Math.min(3, my().coins)];
+        const $coin = $(`<div class="coin"></div>`)
+            .css({
+                left: -43,
+                top: -43,
+                transform: `translate(${window.innerWidth / 2}px, -100px)`,
+                cursor: 'pointer'
+            })
+            .click(function() {
+                card.coin(-1);
+                socket.emit('donate', [1, false], ()=>{});
+                if(++donations >= max) {
+                    $(this)
+                        .off('click')
+                        .css('transform', `translate(${window.innerWidth / 2}px, -100px)`);
+                }
+            });
+        $('#cards').append($coin);
+        yield window.setTimeout(() => runner.next(), 400);
+        $coin.css('transform', `translate(${window.innerWidth / 2}px, ${window.innerHeight / 2}px)`);
+        yield card.confirm(() => donations >= 1, () => runner.next());
+        $coin.css('transform', `translate(${window.innerWidth / 2}px, -100px)`);
+        window.setTimeout(() => $coin.remove(), 700);
+    }
+}
 class Encounter extends Space {
     *land(runner) {
         const [startX, startY] = windowRelPos(ENCOUNTER_PILE_X, PILE_Y);

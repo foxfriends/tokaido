@@ -74,30 +74,33 @@ module.exports = (id) => {
     });
     socket.on('submit:souvenirs', ([souvenirs, which], res) => {
         let min = 3;
-        const price = souvenirs
-                        .map((name) => {
-                            const p = cards.get(name).price;
-                            min = Math.min(min, p);
-                            return p;
-                        })
-                        .reduce((p, c) => p + c, 0);
-        let coins = data.getPlayer(player.game(), player.name()).coins - price;
-        if(coins < 0) { return res('You can\'t afford all that'); }
-        for(let i = 0; i < 3; i++) {
-            const card = data.removeCard(player.game(), 'souvenir');
-            if(souvenirs.indexOf(card) === -1) {
-                data.addCard(player.game(), 'souvenir', card);
+        console.log(souvenirs);
+        if(souvenirs.length) {
+            const price = souvenirs
+                            .map((name) => {
+                                const p = cards.get(name).price;
+                                min = Math.min(min, p);
+                                return p;
+                            })
+                            .reduce((p, c) => p + c, 0);
+            let coins = data.getPlayer(player.game(), player.name()).coins - price;
+            if(coins < 0) { return res('You can\'t afford all that'); }
+            for(let i = 0; i < 3; i++) {
+                const card = data.removeCard(player.game(), 'souvenir');
+                if(souvenirs.indexOf(card) === -1) {
+                    data.addCard(player.game(), 'souvenir', card);
+                }
             }
+            data.giveCard(player.game(), player.name(), ...souvenirs);
+            if(souvenirs.length >= 2 && data.getPlayer(player.game(), player.name()).traveller === 'sasayakko') {
+                //Sasayakko does not pay for the cheapest souvenir
+                coins += min;
+            } else if(data.getPlayer(player.game(), player.name()).traveller === 'zen-emon') {
+                //Zen-emon pays only 1 coin for one of the souvenirs
+                coins += cards.get(which).price - 1;
+            }
+            data.setPlayer(player.game(), player.name(), 'coins', coins);
         }
-        data.giveCard(player.game(), player.name(), ...souvenirs);
-        if(souvenirs.length >= 2 && data.getPlayer(player.game(), player.name()).traveller === 'sasayakko') {
-            //Sasayakko does not pay for the cheapest souvenir
-            coins += min;
-        } else if(data.getPlayer(player.game(), player.name()).traveller === 'zen-emon') {
-            //Zen-emon pays only 1 coin for one of the souvenirs
-            coins += cards.get(which).price - 1;
-        }
-        data.setPlayer(player.game(), player.name(), 'coins', coins);
         updateData(player.game());
         res();
     });
@@ -140,12 +143,14 @@ module.exports = (id) => {
         res(data.removeCard(player.game(), 'meal'));
     });
     socket.on('donate', ([amt, free], res) => {
-        const {coins, donations} = data.getPlayeR(player.game(), player.name());
-        data.setPlayer(player.game(), player.name(), 'donations', donations + amt);
-        if(!free) {
-            data.setPlayer(player.game(), player.name(), 'coins', coins - amt);
+        const {coins, donations} = data.getPlayer(player.game(), player.name());
+        if(free || coins >= amt) {
+            data.setPlayer(player.game(), player.name(), 'donations', donations + amt);
+            if(!free) {
+                data.setPlayer(player.game(), player.name(), 'coins', coins - amt);
+            }
+            updateData(player.game());
         }
-        updateData(player.game());
         res();
     });
 };

@@ -8,6 +8,8 @@ import {
     CARD_HEIGHT, CARD_WIDTH,
     SPRINGS_PILE_X, SOUVENIR_PILE_X, ENCOUNTER_PILE_X, MEAL_PILE_X, MEALSET_PILE_X,
     PADDY_PILE_X, MOUNTAIN_PILE_X, SEA_PILE_X, PILE_Y, PANO_PILE_Y, PILE_WIDTH,
+    PURPLE_DONATION_PILE, YELLOW_DONATION_PILE, GREEN_DONATION_PILE, WHITE_DONATION_PILE,
+    BLUE_DONATION_PILE, DONATION_PILE_Y, DONATION_PILE_ANGLE
 } from './const.es6';
 import * as cards from '../../../cards/index.es6';
 
@@ -116,6 +118,26 @@ export let arrange = () => {
             $(`.card-tray[name="${p}"] .coin:eq(0)`).remove();
             n--;
         }
+        const color = {
+            'purple': PURPLE_DONATION_PILE,
+            'yellow': YELLOW_DONATION_PILE,
+            'green': GREEN_DONATION_PILE,
+            'white': WHITE_DONATION_PILE,
+            'blue': BLUE_DONATION_PILE
+        };
+        let shadow = `0 ${3}px 0 0 #9b7946, 0 ${3}px 0 1px #dca64f`;
+        for(let i = 1; i < data.players[p].donations; i++) {
+            shadow += `,0 ${3 * (i + 1)}px 0 0 #9b7946, 0 ${3 * (i + 1)}px 0 1px #dca64f`;
+        }
+        $(`#gameboard .coin[name='${p}']`)
+            .css({
+                left: -43,
+                top: -43,
+                transform: `translate(${color[data.players[p].color]}px, ${DONATION_PILE_Y - 3 * data.players[p].donations}px)`,
+                opacity: data.players[p].donations > 0 ? 1 : 0,
+                'box-shadow': shadow
+            })
+            .html(`<span>${data.players[p].donations}</span>`);
     }
     for(let s in scores) {
         if(scores[s] && scores[s].length > 1) {
@@ -150,9 +172,10 @@ export let arrange = () => {
     };
     for(let type of Object.keys(data.cards)) {
         if(xx[type] !== undefined) {
-            let shadow = '0 0 0 0px #778574';
+            let shadow = '0 0 0 0px #E6E7E1';
+            const color = ['E6E7E1', '778574'];
             for(let i = 1; i < data.cards[type].length; i++) {
-                shadow += `, 0 ${i}px 0 0px #778574`;
+                shadow += `, 0 ${i}px 0 0px #${color[i%2]}`;
             }
             $(`#gameboard .stacks .card.${type}:eq(0)`)
                 .css({

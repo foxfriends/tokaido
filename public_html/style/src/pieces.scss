@@ -90,7 +90,10 @@
     height: 86px;
 
     background-size: cover;
+    border-radius: 100%;
+    
     transition: transform 0.7s, opacity 0.1s;
+
     &.white {
         background-image: url('../../image/pieces/white_bag.png');
     }

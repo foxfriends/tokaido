@@ -73,7 +73,29 @@ let highlightSpace = (who) => ($e, newPos) => {
         const playersOnSpace = (function count(first, ...rest) {
             return ((first && first.position[0] === i) ? 1 : 0) + (rest.length ? count(...rest) : 0);
         })(...data.iPlayers(true));
-        if(playersOnSpace < board[i].length) {
+        let max = board[i].length;
+        if(!(board[i] instanceof spaceType.Inn) && data.players() <= 3) {
+            max = 1;
+        }
+        if(who !== 'extra') {
+            if(board[i] instanceof spaceType.Village || board[i] instanceof spaceType.Temple) {
+                if(data.me().coins === 0) {
+                    max = 0;
+                }
+            }
+            if(board[i] instanceof spaceType.Panorama) {
+                let last;
+                switch(board[i].type) {
+                    case 'paddy':       last = 'paddy3'; break;
+                    case 'mountain':    last = 'mountain4'; break;
+                    case 'sea':         last = 'sea5'; break;
+                }
+                if(data.me().cards.indexOf(last) !== -1) {
+                    max = 0;
+                }
+            }
+        }
+        if(playersOnSpace < max) {
             const [xx, yy] = [board[i].x, board[i].y + board[i].direction * board[i].spacing * playersOnSpace];
             if(Math.abs(xx - newPos[0]) <= 50 && (Math.abs(yy - newPos[1]) <= 50)) {
                 $(`#gameboard .space[data-index="${i}-${playersOnSpace}"]`)

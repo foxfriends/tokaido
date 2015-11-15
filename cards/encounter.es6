@@ -206,6 +206,7 @@ module.exports = {
         *draw(runner, socket) {
             //Donate 1 coin to the Temple from the reserve
             yield socket.emit('donate', [1, true], () => runner.next());
+            return [null];
         }
     }
 };

@@ -130,20 +130,20 @@ export let runner = function*(runner) {
                         top: -12
                     })
                     .addClass(`disc ${player.color}`)
-                    .attr('name', player.name)
-                );
+                    .attr('name', player.name));
             $('#gameboard')
                 .append($('<div></div>')
                     .addClass(`player ${player.color}`)
-                    .attr('name', player.name)
-                );
+                    .attr('name', player.name))
+                .append($('<div></div>')
+                    .addClass('coin')
+                    .attr('name', player.name));
         }
         if(data.players() === 2) {
             $('#gameboard')
                 .append($('<div></div>')
                     .addClass(`player ${data.get().extra.color}`)
-                    .attr('name', 'extra')
-                );
+                    .attr('name', 'extra'));
         }
         if(delayArrange) {
             yield window.setTimeout(() => runner.next(), 10);

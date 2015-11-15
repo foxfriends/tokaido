@@ -69,7 +69,7 @@ export let coin = (n) => {
         while(n !== 0) {
             const $coin = $(`<div class='coin'></div>`)
                 .css({
-                    opacity: (n > 0 ? 1 : 0),
+                    opacity: (n > 0 ? 0 : 1),
                     left: -43,
                     top: window.innerHeight - (n > 0 ? 400 : 0),
                     transform: `translate(${window.innerWidth / 10}px, 0)`

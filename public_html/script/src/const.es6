@@ -35,3 +35,10 @@ export const JOIN = 0;
 export const SETUP = 1;
 export const PLAY = 2;
 export const [SMALL_OBJECT, FOOD, CLOTHING, ART, LEGENDARY] = [1,2,3,4,5];
+
+export const PURPLE_DONATION_PILE = 180;
+export const YELLOW_DONATION_PILE = 304;
+export const GREEN_DONATION_PILE = 428;
+export const WHITE_DONATION_PILE = 551;
+export const BLUE_DONATION_PILE = 674;
+export const DONATION_PILE_Y = 250;
