@@ -49,7 +49,7 @@ class Inn extends Space {
                     discount = 1;
                 }
                 if(price - discount > my().coins) { return error('You can\'t afford that meal'); }
-                if(my().cards.indexOf($.attr('name')) !== -1) { return error('You have already eaten this meal'); }
+                if(my().cards.indexOf($s.attr('name')) !== -1) { return error('You have already eaten this meal'); }
                 return true;
             }, (c) => runner.next(c));
             if($chosen.length) {
@@ -86,7 +86,7 @@ class Inn extends Space {
             yield window.setTimeout(() => runner.next(), 400);
             $card.css('transform', `translate(${window.innerWidth / 2}px, ${window.innerHeight / 2}px) scale(${1}) rotateY(0)`);
             const $chosen = yield card.confirm(($s) => {
-                if(my().cards.indexOf($.attr('name')) !== -1) { return error('You have already eaten this meal'); }
+                if(my().cards.indexOf($s.attr('name')) !== -1) { return error('You have already eaten this meal'); }
                 return true;
             }, (c) => runner.next(c));
             if($chosen.length) {
@@ -118,7 +118,7 @@ class Inn extends Space {
                 discount = 1;
             }
             if(price - discount > my().coins) { return error('You can\'t afford that meal'); }
-            if(my().cards.indexOf($.attr('name')) !== -1) { return error('You have already eaten this meal'); }
+            if(my().cards.indexOf($s.attr('name')) !== -1) { return error('You have already eaten this meal'); }
             return true;
         }, (c) => runner.next(c));
         $cards.forEach(($card) => {
@@ -197,9 +197,9 @@ class Village extends Space {
         });
         let discount = 0;
         if(my().traveller === 'zen-emon') {
-            $chosen.click(card.chooseOne);
-            [which] = yield card.confirm(($s) => $s.length === 1, (w) => runner.next(w));
-            discount = card.get(which.attr('name')).price - 1;
+            $chosen.click(card.selectOne);
+            which = yield card.confirm(($s) => $s.length === 1, (w) => runner.next(w));
+            discount = cards.get(which.attr('name')).price - 1;
         } else if($cards.length >= 2 && my().traveller === 'sasayakko') {
             discount = min;
         }
@@ -208,7 +208,7 @@ class Village extends Space {
             $(this).css('transform', `translate(${window.innerWidth / 10}px, ${window.innerHeight + CARD_HEIGHT}px)`);
             window.setTimeout(() => $(this).remove(), 700);
         });
-        const e = yield socket.emit('submit:souvenirs', [$chosen.toArray().map((c) => $(c).attr('name')), which], (e) => runner.next(e));
+        const e = yield socket.emit('submit:souvenirs', [$chosen.toArray().map((c) => $(c).attr('name')), which ? which.attr('name') : undefined], (e) => runner.next(e));
         if(e !== undefined) {
             error(e);
         }
@@ -289,7 +289,7 @@ class Encounter extends Space {
                 type: 'encounter',
                 transform: `translate(${startX}px, ${startY}px) scale(${PILE_WIDTH / CARD_WIDTH * currentZoom()}) rotateY(180deg)`
             });
-            card.show([$card]);
+            card.show($card);
             yield window.setTimeout(() => runner.next(), 400);
             $card.css('transform', `translate(${window.innerWidth / 2}px, ${window.innerHeight / 2}px) scale(1) rotateY(0)`);
             // Umegae gets a coin for each Encounter
@@ -320,7 +320,7 @@ class Encounter extends Space {
                 type: type,
                 transform: `translate(${startX}px, ${startY}px) scale(${PILE_WIDTH / CARD_WIDTH * currentZoom()}) rotateY(180deg)`
             });
-            card.show([$card]);
+            card.show($card);
             yield window.setTimeout(() => runner.next(), 400);
             $card.css('transform', `translate(${window.innerWidth / 2}px, ${window.innerHeight / 2}px) scale(1) rotateY(0)`);
             yield window.setTimeout(() => {
@@ -340,28 +340,52 @@ class Panorama extends Space {
         this.type = type;
     }
     *land(runner) {
-        const [p] = yield socket.emit('acquire:panorama', this.type, (p) => runner.next(p));
+        const [p, a] = yield socket.emit('acquire:panorama', this.type, (p) => runner.next(p));
         if(p.substr(0, this.type.length) !== this.type) { return error(p); }
         const xx = {paddy:PADDY_PILE_X,mountain:MOUNTAIN_PILE_X,sea:SEA_PILE_X}[this.type];
         const [startX, startY] = windowRelPos({paddy:PADDY_PILE_X,mountain:MOUNTAIN_PILE_X,sea:SEA_PILE_X}[this.type], PANO_PILE_Y);
-        let $card = card.create({
-            name: p,
-            type: 'panorama',
-            transform: `translate(${startX}px, ${startY}px) scale(${PILE_WIDTH / CARD_WIDTH * currentZoom()}) rotateY(180deg)`
-        });
-        card.show([$card]);
-        yield window.setTimeout(() => runner.next(), 400);
-        $card.css('transform', `translate(${window.innerWidth / 2}px, ${window.innerHeight / 2}px) scale(1) rotateY(0)`);
-        // Gotozaemon gets a coin for each Panorama
-        if(my().traveller === 'gotozaemon') { card.coin(1); }
-        yield window.setTimeout(() => {
-            $card.css('transform', `translate(${window.innerWidth / 10}px, ${window.innerHeight + CARD_HEIGHT}px)`);
-            runner.next();
-        }, 1500);
-        yield window.setTimeout(() => {
-            $card.remove();
-            runner.next();
-        }, 700);
+        pano_card: {
+            const $card = card.create({
+                name: p,
+                type: `panorama ${this.type}`,
+                transform: `translate(${startX}px, ${startY}px) scale(${PILE_WIDTH / CARD_WIDTH * currentZoom()}) rotateY(180deg)`
+            });
+            card.show($card);
+            yield window.setTimeout(() => runner.next(), 400);
+            $card.css('transform', `translate(${window.innerWidth / 2}px, ${window.innerHeight / 2}px) scale(1) rotateY(0)`);
+            // Gotozaemon gets a coin for each Panorama
+            if(my().traveller === 'gotozaemon') { card.coin(1); }
+            yield window.setTimeout(() => {
+                $card.css('transform', `translate(${window.innerWidth / 10}px, ${window.innerHeight + CARD_HEIGHT}px)`);
+                runner.next();
+            }, 1500);
+            window.setTimeout(() => {
+                $card.remove();
+            }, 700);
+            if(a === undefined) {
+                yield window.setTimeout(() => {
+                    runner.next();
+                }, 700);
+            }
+        }
+        if(a) {
+            const $card = card.create({
+                name: a,
+                type: `achievement ${this.type}`,
+                transform: `translate(${window.innerWidth / 2}px, ${-window.innerHeight / 2}px) scale(${PILE_WIDTH / CARD_WIDTH * currentZoom()}) rotateY(180deg)`
+            });
+            card.show($card);
+            yield window.setTimeout(() => runner.next(), 400);
+            $card.css('transform', `translate(${window.innerWidth / 2}px, ${window.innerHeight / 2}px) scale(1) rotateY(0)`);
+            yield window.setTimeout(() => {
+                $card.css('transform', `translate(${window.innerWidth / 10}px, ${window.innerHeight + CARD_HEIGHT}px)`);
+                runner.next();
+            }, 1500);
+            yield window.setTimeout(() => {
+                $card.remove();
+                runner.next();
+            }, 700);
+        }
     }
 }
 class Spring extends Space {
@@ -373,7 +397,7 @@ class Spring extends Space {
             type: 'springs',
             transform: `translate(${startX}px, ${startY}px) scale(${PILE_WIDTH / CARD_WIDTH * currentZoom()}) rotateY(180deg)`
         });
-        card.show([$card]);
+        card.show($card);
         yield window.setTimeout(() => runner.next(), 400);
         $card.css('transform', `translate(${window.innerWidth / 2}px, ${window.innerHeight / 2}px) scale(1) rotateY(0)`);
         yield window.setTimeout(() => {

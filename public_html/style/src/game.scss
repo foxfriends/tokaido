@@ -15,7 +15,7 @@ section#board {
         z-index: 15;
 
         height: $scoreboard-height;
-        width: 100%;
+        width: 2327px;
 
         background-color: white;
         background-image: url('../../image/scoreboard.png');
@@ -23,7 +23,7 @@ section#board {
         background-repeat: no-repeat;
 
         box-shadow: 0 0 10px 0 $title-color;
-        transition: top 8s linear;
+        transition: top 8s linear, transform 1s;
     }
     #gameboard {
         position: absolute;

@@ -42,17 +42,19 @@ export let runner = function*(runner) {
             yield socket.emit('turn:move', [data.me().name, space], () => runner.next());
             deactivate();
             if(board[space[0]] instanceof spaceType.Inn && cards.get(data.me().traveller).atInn) {
-                let [effect] = yield* cards.get(data.me().traveller).atInn(runner, socket, data.me(), card);
-                while(effect !== null) {
+                let received = yield* cards.get(data.me().traveller).atInn(runner, socket, data.me(), card);
+                let effect;
+                while(!!(effect = received.splice(0, 1)[0])) {
                     const type = cards.get(effect).type;
                     const [xx, yy] = [{
                             'souvenir': SOUVENIR_PILE_X,
                             'encounter': ENCOUNTER_PILE_X,
                             'panorama paddy': PADDY_PILE_X,
                             'panorama mountain': MOUNTAIN_PILE_X,
-                            'panorama sea': SEA_PILE_X
+                            'panorama sea': SEA_PILE_X,
+                            'achievement': window.innerWidth / 2
                         }[type],
-                        type.indexOf('panorama') === -1 ? PILE_Y : PANO_PILE_Y
+                        type.indexOf('panorama') === -1 ? (type === 'achievement' ? -window.innerHeight / 2 : PILE_Y) : PANO_PILE_Y
                     ];
                     const [startX, startY] = windowRelPos(xx, yy);
                     let $card = card.create({
@@ -72,7 +74,7 @@ export let runner = function*(runner) {
                         runner.next();
                     }, 700);
                     if(type === 'encounter') {
-                        [effect] = yield* cards.get(effect).draw(runner, socket, data.me(), card);
+                        received.push(...yield* cards.get(effect).draw(runner, socket, data.me(), card));
                     } else {
                         effect = null;
                     }

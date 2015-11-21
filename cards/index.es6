@@ -17,7 +17,7 @@ let other = (n) => {
             return {
                 name: 'Hot Springs',
                 type: 'springs',
-                score(player) { return last + (player.traveller === 'mitsukuni'); }
+                score(player) { return last + (player.traveller === 'mitsukuni' ? 1 : 0); }
             };
         } else if(n === 'paddy' || n === 'mountain' || n === 'sea') {
             return {
@@ -29,8 +29,8 @@ let other = (n) => {
     } else {
         return {
             name: n,
-            type: 'achievement',
-            score() { return 3; }
+            type: `achievement-${n.substr(0, 2) === 'ac' ? 'blue' : 'gold'}`,
+            score(player) { return 3 + (player.traveller === 'mitsukuni' ? 1 : 0); }
         };
     }
 };

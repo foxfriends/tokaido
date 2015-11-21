@@ -1,6 +1,7 @@
 'use strict';
-import {player} from './data.es6';
 import * as cards from '../../../cards/index.es6';
+import {player, iPlayers} from './data.es6';
+import {board} from './board.es6';
 
 let souvenirPoints = (p) => {
     let counts = [0, 0, 0, 0, 0];
@@ -28,6 +29,29 @@ export let score = (p) => {
     for(let card of p.cards) {
         if(cards.get(card) && cards.get(card).score) {
             s += cards.get(card).score(p);
+        }
+    }
+    let done = true;
+    for(let i of iPlayers()) {
+        if(i.position[0] !== board.length - 1) {
+            done = false;
+        }
+    }
+    if(done) {
+        let donations = [];
+        for(let i of iPlayers()) {
+            donations[i.donations] = (donations[i.donations] && donations[i.donations].length) ? [...donations[i.donations], p.name] : [p.name];
+        }
+        let n = 0;
+        let bonus = [10, 7, 4, 2, 2];
+        for(let i = donations.length - 1; i >- 0; i--) {
+            if(donations[i] && donations[i].length) {
+                if(donations[i].indexOf(p.name) !== -1) {
+                    s += bonus[n];
+                } else {
+                    n++;
+                }
+            }
         }
     }
     return s + souvenirPoints(p) + p.donations;

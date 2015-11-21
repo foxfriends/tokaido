@@ -69,4 +69,4 @@ export let deactivate = () => {
 };
 export let currentZoom = () => zoom;
 export let boardRelPos = (xx, yy) => [(xx - $board.position().left) / zoom, (yy - $board.position().top) / zoom];
-export let windowRelPos = (xx, yy) => [(xx + $board.position().left) * zoom, (yy + $board.position().top) * zoom];
+export let windowRelPos = (xx, yy) => [xx * zoom + $board.position().left, yy * zoom + $board.position().top];

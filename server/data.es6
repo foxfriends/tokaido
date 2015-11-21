@@ -18,10 +18,10 @@ let insert = (g,p,c,...rest) => {
         'springs': 1,
         'meal': 2,
         'souvenir': 3,
-        'panorama paddy': 4,
-        'panorama mountain': 5,
-        'panorama sea': 6,
-        'achievement': 7
+        'achievement': 4,
+        'panorama paddy': 5,
+        'panorama mountain': 6,
+        'panorama sea': 7,
     };
     let family = [false, false, false, false, false];
     games[g].players[p].cards = (function ins(c, f, ...rest) {
@@ -49,7 +49,17 @@ module.exports = {
     getCard: (g,t,i = 0,n = 1) => games[g].cards[t].slice(i, n),
     addCard: (g,t,...c) => games[g].cards[t].push(...c),
     giveCard: (g,p,...c) => insert(g,p,...c),
-    removeCard: (g,t,n=1) => games[g].cards[t].splice(0, n),
+    removeCard: (g,t,n=1) => {
+        if(typeof n === 'string') {
+            if(games[g].cards[t].indexOf(n) !== -1) {
+                return games[g].cards[t].splice(games[g].cards[t].indexOf(n), 1);
+            } else {
+                return [];
+            }
+        } else {
+            return games[g].cards[t].splice(0, n);
+        }
+    },
     shuffleCards: (g,t) => games[g].cards[t] = shuffle(games[g].cards[t]),
     discardMeal: (g,m) => games[g].mealset.splice(games[g].mealset.indexOf(m), 1),
     iPlayers: function*(g) {
@@ -100,7 +110,7 @@ module.exports = {
             legendary:          ['shodo', 'emaki', 'buppatsu', 'ema', 'murasame', 'masamune'],
             calligraphy:        ['foresight', 'contemplation', 'nostalgia', 'patience', 'perfection', 'fasting'],
             amulet:             ['vitality', 'fortune', 'health', 'friendship', 'hospitality', 'devotion'],
-            achievement:        ['paddy', 'mountain', 'sea', 'gourmet', 'chatterbox', 'collector', 'bather']
+            achievement:        ['ac-paddy', 'ac-mountain', 'ac-sea', 'gourmet', 'chatterbox', 'collector', 'bather']
         },
         mealset: [],
         extra: {

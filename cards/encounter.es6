@@ -53,13 +53,13 @@ module.exports = {
                     card.show(...$cards);
                     yield window.setTimeout(() => runner.next(), 400);
                     $cards.forEach(($card, i) => {
-                        $card.css('transform', `translate(${window.innerWidth / 2 + 25 - (CARD_WIDTH - 50) * (i - 1)}px, ${window.innerHeight / 2}px) scale(1) rotateY(180deg)`);
+                        $card.css('transform', `translate(${(window.innerWidth / 2) - (i - 1/2) * (CARD_WIDTH + 50)}px, ${window.innerHeight / 2}px) scale(1) rotateY(180deg)`);
                     });
                     const $chosen = yield card.confirm(($s) => {
                         return $s.length === 1;
                     }, (c) => runner.next(c));
                     $cards.forEach(($card, i) => {
-                        $card.css('transform', `translate(${window.innerWidth / 2 + 25 - (CARD_WIDTH - 50) * (i - 1)}px, ${-window.innerHeight / 2}px) scale(1) rotateY(180deg)`);
+                        $card.css('transform', `translate(${(window.innerWidth / 2) - (i - 1/2) * (CARD_WIDTH + 50)}px, ${-window.innerHeight / 2}px) scale(1) rotateY(180deg)`);
                         window.setTimeout(() => $card.remove(), 700);
                     });
                     which = $chosen.attr('name');
@@ -105,13 +105,13 @@ module.exports = {
                     card.show(...$cards);
                     yield window.setTimeout(() => runner.next(), 400);
                     $cards.forEach(($card, i) => {
-                        $card.css('transform', `translate(${window.innerWidth / 2 + 25 - (CARD_WIDTH - 50) * (i - 1)}px, ${window.innerHeight / 2}px) scale(1) rotateY(180deg)`);
+                        $card.css('transform', `translate(${(window.innerWidth / 2) - (i - 1/2) * (CARD_WIDTH + 50)}px, ${window.innerHeight / 2}px) scale(1) rotateY(180deg)`);
                     });
                     const $chosen = yield card.confirm(($s) => {
                         return $s.length === 1;
                     }, (c) => runner.next(c));
                     $cards.forEach(($card, i) => {
-                        $card.css('transform', `translate(${window.innerWidth / 2 + 25 - (CARD_WIDTH - 50) * (i - 1)}px, ${-window.innerHeight / 2}px) scale(1) rotateY(180deg)`);
+                        $card.css('transform', `translate(${(window.innerWidth / 2) - (i - 1/2) * (CARD_WIDTH + 50)}px, ${-window.innerHeight / 2}px) scale(1) rotateY(180deg)`);
                         window.setTimeout(() => $card.remove(), 700);
                     });
                     which = $chosen.attr('name');
@@ -157,13 +157,13 @@ module.exports = {
                     card.show(...$cards);
                     yield window.setTimeout(() => runner.next(), 400);
                     $cards.forEach(($card, i) => {
-                        $card.css('transform', `translate(${window.innerWidth / 2 + 25 - (CARD_WIDTH - 50) * (i - 1)}px, ${window.innerHeight / 2}px) scale(1) rotateY(180deg)`);
+                        $card.css('transform', `translate(${(window.innerWidth / 2) - (i - 1/2) * (CARD_WIDTH + 50)}px, ${window.innerHeight / 2}px) scale(1) rotateY(180deg)`);
                     });
                     const $chosen = yield card.confirm(($s) => {
                         return $s.length === 1;
                     }, (c) => runner.next(c));
                     $cards.forEach(($card, i) => {
-                        $card.css('transform', `translate(${window.innerWidth / 2 + 25 - (CARD_WIDTH - 50) * (i - 1)}px, ${-window.innerHeight / 2}px) scale(1) rotateY(180deg)`);
+                        $card.css('transform', `translate(${(window.innerWidth / 2) - (i - 1/2) * (CARD_WIDTH + 50)}px, ${-window.innerHeight / 2}px) scale(1) rotateY(180deg)`);
                         window.setTimeout(() => $card.remove(), 700);
                     });
                     which = $chosen.attr('name');

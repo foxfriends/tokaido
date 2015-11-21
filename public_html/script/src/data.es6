@@ -4,7 +4,7 @@ import {default as $} from 'jquery';
 import {score} from './scoring.es6';
 import {board} from './board.es6';
 import {
-    SCOREBOARD_SPACE_WIDTH, SCOREBOARD_SPACE_HEIGHT, SCOREBOARD_HEIGHT,
+    SCOREBOARD_SPACE_WIDTH, SCOREBOARD_SPACE_HEIGHT, SCOREBOARD_HEIGHT, SCOREBOARD_WIDTH,
     CARD_HEIGHT, CARD_WIDTH,
     SPRINGS_PILE_X, SOUVENIR_PILE_X, ENCOUNTER_PILE_X, MEAL_PILE_X, MEALSET_PILE_X,
     PADDY_PILE_X, MOUNTAIN_PILE_X, SEA_PILE_X, PILE_Y, PANO_PILE_Y, PILE_WIDTH,
@@ -58,9 +58,12 @@ export let arrange = () => {
                 ((s % 2) ? 6 : 49) + SCOREBOARD_SPACE_HEIGHT / 2];
     };
     let scores = [];
+    let [min, max] = [100, 0];
     for(let p in data.players) {
         if(data.players[p].position === -1) { continue; }
-        const s = score(p);
+        const s = Math.min(100, score(p));
+        if(s < min) { min = s; }
+        if(s > max) { max = s; }
         const [sx, sy] = scorePos(s);
         scores[s] = (scores[s] && scores[s].length) ? [...scores[s], p] : [p];
         $(`#scoreboard .disc[name="${p}"]`)
@@ -153,6 +156,18 @@ export let arrange = () => {
             });
         }
     }
+    if(scores.length !== 0) {
+        if((min + max) / 2 < 25) {
+            $('#scoreboard')
+                .css('transform', 'translate(0, 0)');
+        } else if((min + max) / 2 > 75) {
+            $('#scoreboard')
+                .css('transform', `translate(${window.innerWidth - SCOREBOARD_WIDTH}px, 0)`);
+        } else {
+            $('#scoreboard')
+                .css('transform', `translate(${- (SCOREBOARD_WIDTH - window.innerWidth) * ((min + max) / 2 - 25) / 50}px, 0)`);
+        }
+    }
     if(players() === 2) {
         if(data.extra.position !== -1) {
             const {x, y, spacing: spa, direction: dir} = board[data.extra.position[0]];
@@ -185,6 +200,42 @@ export let arrange = () => {
                 });
         }
     }
+    ['paddy', 'mountain', 'sea'].forEach((type) => {
+        const taken = (function count(first, ...rest) {
+            let n = 0;
+            for(let c of first.cards) {
+                if(c.indexOf(type) === 0) {
+                    n++;
+                }
+            }
+            if(rest.length === 0) {
+                return n;
+            } else {
+                return n + count(...rest);
+            }
+        })(...iPlayers());
+        const xx = {
+            paddy: PADDY_PILE_X,
+            mountain: MOUNTAIN_PILE_X,
+            sea: SEA_PILE_X
+        };
+        const count = {
+            paddy: 15,
+            mountain: 20,
+            sea: 25
+        };
+        let shadow = '0 0 0 0px #E6E7E1';
+        const color = ['E6E7E1', '778574'];
+        for(let i = 1; i < count[type] - taken; i++) {
+            shadow += `, 0 ${i}px 0 0px #${color[i%2]}`;
+        }
+        $(`#gameboard .stacks .card.panorama.${type}:eq(0)`)
+            .css({
+                display: 'block',
+                transform: `translate(${xx[type]}px, ${PANO_PILE_Y - (count[type] - taken)}px) scale(${PILE_WIDTH / CARD_WIDTH}) rotateY(180deg)`,
+                'box-shadow': shadow
+            });
+    });
     if(data.mealset.length) {
         let shadow = '0 0 0 1px #778574';
         for(let i = 1; i < data.mealset.length; i++) {

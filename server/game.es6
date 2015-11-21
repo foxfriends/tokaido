@@ -66,21 +66,27 @@ module.exports = (id) => {
             return res([`You have already finished the ${type} panorama`]);
         }
         data.giveCard(player.game(), player.name(), `${type}${n}`);
+        let ach;
+        if(['spring3', 'mountain4', 'sea5'].indexOf(`${type}${n}`) !== -1) {
+            if(data.removeCard(player.game(), 'achievement', `ac-${type}`).length) {
+                ach = `ac-${type}`;
+                data.giveCard(player.game(), player.name(), ach);
+            }
+        }
         updateData(player.game());
-        res([`${type}${n}`]);
+        res([`${type}${n}`, ach]);
     });
     socket.on('request:souvenirs', (x, res) => {
         res(data.getCard(player.game(), 'souvenir', 0, 3));
     });
     socket.on('submit:souvenirs', ([souvenirs, which], res) => {
         let min = 3;
-        console.log(souvenirs);
         if(souvenirs.length) {
             const price = souvenirs
                             .map((name) => {
                                 const p = cards.get(name).price;
                                 min = Math.min(min, p);
-                                return p;
+                                return p - (name === which ? 1 : 0);
                             })
                             .reduce((p, c) => p + c, 0);
             let coins = data.getPlayer(player.game(), player.name()).coins - price;

@@ -91,7 +91,7 @@
 
     background-size: cover;
     border-radius: 100%;
-    
+
     transition: transform 0.7s, opacity 0.1s;
 
     &.white {
@@ -197,9 +197,9 @@
     &[name="chatterbox"] { background-image: url('../../image/cards/achievement/chatterbox.jpg'); }
     &[name="gourmet"] { background-image: url('../../image/cards/achievement/gourmet.jpg'); }
     &[name="bather"] { background-image: url('../../image/cards/achievement/bather.jpg'); }
-    &[name="ac_paddy"] { background-image: url('../../image/cards/achievement/paddy.jpg'); }
-    &[name="ac_mountain"] { background-image: url('../../image/cards/achievement/mountain.jpg'); }
-    &[name="ac_sea"] { background-image: url('../../image/cards/achievement/sea.jpg'); }
+    &[name="ac-paddy"] { background-image: url('../../image/cards/achievement/paddy.jpg'); }
+    &[name="ac-mountain"] { background-image: url('../../image/cards/achievement/mountain.jpg'); }
+    &[name="ac-sea"] { background-image: url('../../image/cards/achievement/sea.jpg'); }
 
     // SOUVENIRS
 
