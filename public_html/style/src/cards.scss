@@ -38,8 +38,11 @@ section#cards {
         &.panorama {
             height: 463px;
         }
-        &:hover, &.selected {
+        &:hover {
             box-shadow: 0 0 25px 5px lighten($title-color, 30%);
+        }
+        &.selected {
+            box-shadow: 0 0 25px 5px lighten(green, 15%);
         }
     }
     div.card-tray {

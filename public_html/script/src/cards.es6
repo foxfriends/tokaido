@@ -64,20 +64,23 @@ export let confirm = (valid, cb) => {
     window.setTimeout(() => $button.css('right', '50px'), 100);
 };
 
-export let coin = (n) => {
+export let coin = (n, who) => {
     let coinSpawner = (function*() {
         while(n !== 0) {
+            const xx =  who === undefined ?
+                            window.innerWidth / 10 :
+                            $(`.card-tray[name="${who}"] .handle`).position().left + window.innerWidth / 100 * 9;
             const $coin = $(`<div class='coin'></div>`)
                 .css({
                     opacity: (n > 0 ? 0 : 1),
                     left: -43,
                     top: window.innerHeight - (n > 0 ? 400 : 0),
-                    transform: `translate(${window.innerWidth / 10}px, 0)`
+                    transform: `translate(${xx}px, 0)`
                 });
             $cards.append($coin);
             window.setTimeout(() => $coin.css({
                 opacity: 1,
-                transform: `translate(${window.innerWidth / 10}px, ${n > 0 ? '' : '-'}400px) rotateY(720deg)`
+                transform: `translate(${xx}px, ${n > 0 ? '' : '-'}400px) rotateY(720deg)`
             }), 100);
             if(n < 0) {
                 // Fade out if losing money

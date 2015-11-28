@@ -1,13 +1,13 @@
 'use strict';
-let data = require('./data');
-let {updateData, io} = require('./common')();
-let players = require('./players');
-let cards = require('../cards');
+const data = require('./data');
+const {updateData, io} = require('./common')();
+const players = require('./players');
+const cards = require('../cards');
 
 module.exports = (id) => {
-    let player = players(id);
-    let socket = player.socket();
-
+    const player = players(id);
+    const socket = player.socket();
+    const sendEvent = (ev, data) => { socket.broadcast.to(player.game()).emit('game:event', [ev, data]); };
     socket.on('turn:move', ([who, where], res) => {
         if(who !== 'extra') {
             data.setPlayer(player.game(), who, 'position', where);
@@ -24,12 +24,18 @@ module.exports = (id) => {
     socket.on('acquire:coins', (n, res) => {
         data.setPlayer(player.game(), player.name(), 'coins', data.getPlayer(player.game(), player.name()).coins + n);
         updateData(player.game());
+        sendEvent('coins', {coins: n, name: player.name()});
         res();
     });
     socket.on('acquire:spring', (x, res) => {
         const c = data.removeCard(player.game(), 'springs');
         data.giveCard(player.game(), player.name(), ...c);
         updateData(player.game());
+        sendEvent('cards', {
+            cards: [{name: c, type: 'springs'}],
+            take: true,
+            name: player.name()
+        });
         res(c);
     });
     socket.on('acquire:encounter', (x, res) => {
@@ -39,10 +45,21 @@ module.exports = (id) => {
         }
         data.giveCard(player.game(), player.name(), ...c);
         updateData(player.game());
+        sendEvent('cards', {
+            cards: [{name: c, type: 'encounter'}],
+            take: true,
+            name: player.name()
+        });
         res(c);
     });
     socket.on('request:encounters', (x, res) => {
-        res(data.getCard(player.game(), 'encounter', 0, 2));
+        const c = data.getCard(player.game(), 'encounter', 0, 2);
+        sendEvent('cards', {
+            cards: [{name: c[0], type: 'encounter'},
+                    {name: c[1], type: 'encounter'}],
+            hide: true
+        });
+        res(c);
     });
     socket.on('submit:encounter', (which, res) => {
         const cards = data.removeCard(player.game(), 'encounter', 2);
@@ -53,6 +70,10 @@ module.exports = (id) => {
         }
         data.giveCard(player.game(), player.name(), which);
         updateData(player.game());
+        sendEvent('choose', {
+            cards: [which],
+            name: player.name()
+        });
         res();
     });
     socket.on('acquire:panorama', (type, res) => {
@@ -67,17 +88,37 @@ module.exports = (id) => {
         }
         data.giveCard(player.game(), player.name(), `${type}${n}`);
         let ach;
-        if(['spring3', 'mountain4', 'sea5'].indexOf(`${type}${n}`) !== -1) {
+        if(['paddy3', 'mountain4', 'sea5'].indexOf(`${type}${n}`) !== -1) {
             if(data.removeCard(player.game(), 'achievement', `ac-${type}`).length) {
                 ach = `ac-${type}`;
                 data.giveCard(player.game(), player.name(), ach);
             }
         }
         updateData(player.game());
+        sendEvent('cards', {
+            cards: [{name: `${type}${n}`, type: `${type} panorama`}],
+            take: true,
+            name: player.name()
+        });
+        if(ach) {
+            setTimeout(() => {
+                sendEvent('cards', {
+                    cards: [{name: ach, type: `achievement-blue`}],
+                    take: true,
+                    name: player.name()
+                });
+            }, 1600);
+        }
         res([`${type}${n}`, ach]);
     });
     socket.on('request:souvenirs', (x, res) => {
-        res(data.getCard(player.game(), 'souvenir', 0, 3));
+        const c = data.getCard(player.game(), 'souvenir', 0, 3);
+        sendEvent('cards', {
+            cards: [{name: c[0], type: `souvenir`},
+                    {name: c[1], type: `souvenir`},
+                    {name: c[2], type: `souvenir`}]
+        });
+        res(c);
     });
     socket.on('submit:souvenirs', ([souvenirs, which], res) => {
         let min = 3;
@@ -98,14 +139,20 @@ module.exports = (id) => {
                 }
             }
             data.giveCard(player.game(), player.name(), ...souvenirs);
+            let discount = 0;
             if(souvenirs.length >= 2 && data.getPlayer(player.game(), player.name()).traveller === 'sasayakko') {
                 //Sasayakko does not pay for the cheapest souvenir
-                coins += min;
+                discount = min;
             } else if(data.getPlayer(player.game(), player.name()).traveller === 'zen-emon') {
                 //Zen-emon pays only 1 coin for one of the souvenirs
-                coins += cards.get(which).price - 1;
+                discount = cards.get(which).price - 1;
             }
-            data.setPlayer(player.game(), player.name(), 'coins', coins);
+            data.setPlayer(player.game(), player.name(), 'coins', coins + discount);
+            sendEvent('choose', {
+                cards: souvenirs,
+                name: player.name(),
+                coins: -price + discount
+            });
         }
         updateData(player.game());
         res();
@@ -114,16 +161,34 @@ module.exports = (id) => {
         const card = data.removeCard(player.game(), 'souvenir');
         data.giveCard(player.game(), player.name(), ...card);
         updateData(player.game());
+        sendEvent('cards', {
+            cards: [{name: card, type: `souvenir`}],
+            take: true,
+            name: player.name()
+        });
         res(card);
     });
-    socket.on('request:meals', (first, res) => {
+    socket.on('request:meals', ([first, extra], res) => {
         if(first) {
             data.set(player.game(), 'mealset', data.removeCard(player.game(), 'meal', data.players(player.game(), true) + 1));
+        }
+        let c = [];
+        for(let card of data.get(player.game()).mealset) {
+            c = [...c, {name: card, type: 'meal'}];
+        }
+        updateData(player.game());
+        if(!extra) {
+            sendEvent('cards', {
+                cards: c,
+                hide: true,
+                firstMeal: first
+            });
         }
         res(data.get(player.game()).mealset);
     });
     socket.on('discard:meal', (x, res) => {
         data.discardMeal(player.game(), data.get(player.game()).mealset[Math.floor(Math.random() * data.get(player.game()).mealset.length)]);
+        updateData(player.game());
         res();
     });
     socket.on('submit:meal', ([which, special], res) => {
@@ -138,15 +203,28 @@ module.exports = (id) => {
                 if(special !== 'satsuki') {
                     data.setPlayer(player.game(), player.name(), 'coins', coins - price);
                 }
+                sendEvent('choose', {
+                    cards: [which],
+                    coins: special === 'satsuki' ? 0 : -price,
+                    name: player.name()
+                });
             } else {
                 return res('You can\'t afford this meal');
             }
+        } else {
+            sendEvent('clear', {});
         }
         updateData(player.game());
         res();
     });
     socket.on('request:eriku_meal', (x, res) => {
-        res(data.removeCard(player.game(), 'meal'));
+        const c = data.getCard(player.game(), 'meal');
+        sendEvent('cards', {
+            cards: [{name: c, type: 'meal'}],
+            hide: true,
+            name: player.name()
+        });
+        res(c);
     });
     socket.on('donate', ([amt, free], res) => {
         const {coins, donations} = data.getPlayer(player.game(), player.name());
@@ -154,6 +232,10 @@ module.exports = (id) => {
             data.setPlayer(player.game(), player.name(), 'donations', donations + amt);
             if(!free) {
                 data.setPlayer(player.game(), player.name(), 'coins', coins - amt);
+                sendEvent('coins', {
+                    coins: - amt,
+                    name: player.name()
+                });
             }
             updateData(player.game());
         }

@@ -18,10 +18,11 @@ let insert = (g,p,c,...rest) => {
         'springs': 1,
         'meal': 2,
         'souvenir': 3,
-        'achievement': 4,
-        'panorama paddy': 5,
-        'panorama mountain': 6,
-        'panorama sea': 7,
+        'achievement-gold': 4,
+        'achievement-blue': 5,
+        'panorama paddy': 6,
+        'panorama mountain': 7,
+        'panorama sea': 8
     };
     let family = [false, false, false, false, false];
     games[g].players[p].cards = (function ins(c, f, ...rest) {

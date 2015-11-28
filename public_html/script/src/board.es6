@@ -66,7 +66,7 @@ class Inn extends Space {
             }
         }
         const first = my().position[1] === 0;
-        const meals = yield socket.emit('request:meals', first, (meals) => runner.next(meals));
+        const meals = yield socket.emit('request:meals', [first, false], (meals) => runner.next(meals));
         let $cards = [];
         const [startX, startY] = windowRelPos(first ? MEAL_PILE_X : MEALSET_PILE_X, PILE_Y);
         const [endX] = windowRelPos(MEALSET_PILE_X, 0);
