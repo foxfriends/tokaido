@@ -11,7 +11,7 @@ module.exports = {
             { test: /\.scss$/, loader: ExtractTextPlugin.extract('style', 'css!autoprefixer!sass') },
             { test: /\.es6$/, loader: 'babel' },
             { test: /\.(otf|ttf)$/, loader: 'url' },
-            { test: /\.(svg|png|jpe?g)$/, loader: 'url!image-webpack' }
+            { test: /\.(svg|png|jpe?g)$/, loader: 'url?limit=5000&name=/image/[path][name].[ext]&context=public_html/image/src!image-webpack' }
         ]
     },
     plugins: [

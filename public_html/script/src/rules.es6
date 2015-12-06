@@ -117,3 +117,10 @@ $('#button-rules')
     .click(() => {
         hideRules();
     });
+
+const F1 = 112;
+$(window).keydown((e) => {
+    if(e.which === F1) {
+        showRules();
+    }
+});

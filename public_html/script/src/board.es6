@@ -234,6 +234,7 @@ class Temple extends Space {
                     $(this)
                         .off('click')
                         .css('transform', `translate(${window.innerWidth / 2}px, -100px)`);
+                    $('#cards div.button').click();
                 }
             });
         $('#cards').append($coin);

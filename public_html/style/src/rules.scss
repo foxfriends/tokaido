@@ -260,15 +260,15 @@ section#rules {
                     transition: opacity 0.5s;
                 }
                 &:hover span { opacity: 1; }
-                &[name="village"] { background-image: url('../../image/space/village.png'); }
-                &[name="temple"] { background-image: url('../../image/space/temple.png'); }
-                &[name="farm"] { background-image: url('../../image/space/farm.png'); }
-                &[name="hot spring"] { background-image: url('../../image/space/springs.png'); }
-                &[name="encounter"] { background-image: url('../../image/space/encounter.png'); }
-                &[name="paddy"] { background-image: url('../../image/space/paddy.png'); }
-                &[name="mountain"] { background-image: url('../../image/space/mountain.png'); }
-                &[name="sea"] { background-image: url('../../image/space/sea.png'); }
-                &[name="inn"] { background-image: url('../../image/space/inn.png'); }
+                &[name="village"] { background-image: url('../../image/src/space/village.png'); }
+                &[name="temple"] { background-image: url('../../image/src/space/temple.png'); }
+                &[name="farm"] { background-image: url('../../image/src/space/farm.png'); }
+                &[name="hot spring"] { background-image: url('../../image/src/space/springs.png'); }
+                &[name="encounter"] { background-image: url('../../image/src/space/encounter.png'); }
+                &[name="paddy"] { background-image: url('../../image/src/space/paddy.png'); }
+                &[name="mountain"] { background-image: url('../../image/src/space/mountain.png'); }
+                &[name="sea"] { background-image: url('../../image/src/space/sea.png'); }
+                &[name="inn"] { background-image: url('../../image/src/space/inn.png'); }
             }
         }
     }

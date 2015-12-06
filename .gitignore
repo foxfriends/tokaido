@@ -79,5 +79,6 @@ $RECYCLE.BIN/
 /public_html/style/main.css
 .jshintrc
 /rules/
-/public_html/image/cards/*/full/
-/public_html/image/full/
+/public_html/image/*
+!/public_html/image/src
+/public_html/image/src/**/full/

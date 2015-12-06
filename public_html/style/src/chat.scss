@@ -1,0 +1,22 @@
+#notification {
+    .container {
+        position: absolute;
+        left: -500px;
+        width: 500px;
+
+        transition: left 0.2s;
+        overflow: visible;
+        #chat {
+            list-style: none;
+            li {
+                transition: left 0.2s, top 0.2s;
+                
+                .yellow { }
+                .purple { }
+                .green { }
+                .white { }
+                .blue { }
+            }
+        }
+    }
+}

@@ -11,6 +11,7 @@ import {
     SCOREBOARD_HEIGHT, BOARD_WIDTH, BOARD_HEIGHT, TITLE_COLOR, TC_WH_RATIO,
     CARD_WH_RATIO, TC_WIDTH, TC_HEIGHT, SETUP, PLAY
 } from './const.es6';
+import {init as initChat} from './chat.es6';
 
 let setCardTray = (i, player) => {
     $('.card-tray').eq(i)
@@ -117,6 +118,7 @@ export let runner = function*(runner) {
         delayArrange = true;
     }
     populate_board: {
+        initChat();
         //Position gameboard elements correctly
         setCardTray(0, data.me());
         for(let i = 1; i < data.players(); i++) {

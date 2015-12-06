@@ -12,6 +12,7 @@ app.set('views', './');
 app.use('/', express.static('./public_html'));
 //If not calling for a specific file, only page is index.html.ejs
 app.use((req, res) => { res.render('./public_html/index.html.ejs'); });
+
 let io = require('socket.io')(server);
 
 let data = require('./server/data');
@@ -24,4 +25,5 @@ io.on('connection', (socket) => {
     require('./server/join')(socket.id);
     require('./server/setup')(socket.id);
     require('./server/game')(socket.id);
+    require('./server/chat')(socket.id);
 });
