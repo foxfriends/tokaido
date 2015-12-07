@@ -41,7 +41,17 @@ section#notification {
 
         transition: opacity 1s;
     }
-    div.instruction {
-        
+    div#instruction {
+        @include floating-box;
+        position: absolute;
+        top: 122px;
+        left: 32px;
+        height: 70px;
+        font-family: "fontasia2";
+        font-size: 50pt;
+        line-height: 70px;
+        opacity: 0;
+        color: $title-color;
+        transition: opacity 0.2s;
     }
 }

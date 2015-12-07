@@ -82,3 +82,4 @@ $RECYCLE.BIN/
 /public_html/image/*
 !/public_html/image/src
 /public_html/image/src/**/full/
+/games/

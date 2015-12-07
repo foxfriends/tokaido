@@ -26,3 +26,9 @@ export let news = (msg) => {
         .text(msg);
     window.setTimeout(() => $box.css('opacity', 0), 6000);
 };
+
+export let instruct = (msg) => {
+    $('#instruction')
+        .text(msg)
+        .css('opacity', (msg === '') ? 0 : 1);
+};

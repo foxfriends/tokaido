@@ -3,6 +3,7 @@ let data = require('./data');
 let players = require('./players');
 let {io, updateData} = require('./common')();
 let {alertAvailableColors} = require('./setup');
+
 const {JOIN, SETUP} = require('./const');
 
 let leave = (id) => {
@@ -38,7 +39,12 @@ module.exports = (id) => {
             colors: 'skip',
             options: 'skip'
         };
-        if(data.get(game) === undefined) { data.make(game); }
+        game = encodeURIComponent(game);
+        if(data.get(game) === undefined) {
+            if(!data.load(game)) {
+                data.make(game);
+            }
+        }
         if(data.getPlayer(game, name) === undefined) {
             //Check if the player joining is able to join
             if(data.get(game).state !== JOIN) {

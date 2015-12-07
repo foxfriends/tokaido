@@ -1,22 +1,45 @@
 #notification {
-    .container {
+    #chat-container {
         position: absolute;
         left: -500px;
+        bottom: 100px;
         width: 500px;
+        max-height: 600px;
 
         transition: left 0.2s;
-        overflow: visible;
+        overflow-x: visible;
+
+        border-radius: 0 20px 20px 0;
+
+        box-shadow: 0 0 5px 0 $title-color;
+
         #chat {
+            position: relative;
             list-style: none;
+            overflow-x: visible;
             li {
-                transition: left 0.2s, top 0.2s;
-                
-                .yellow { }
-                .purple { }
-                .green { }
-                .white { }
-                .blue { }
+                position: relative;
+                transition: left 0.2s;
+                min-height: 32px;
+                line-height: 32px;
+
+                * { font-family: "Advent"; }
+
+                &:first-of-type { border-radius: 0 20px 0 0; }
+                &.purple { background-color: transparentize(lighten(#6b0e65, 30%), 0.3); }
+                &.yellow { background-color: transparentize(lighten(#F3B200, 30%), 0.3); }
+                &.white { background-color: transparentize(lighten(#a29f98, 30%), 0.3); }
+                &.green { background-color: transparentize(lighten(#4F8E02, 30%), 0.3); }
+                &.blue { background-color: transparentize(lighten(#7DC1C0, 30%), 0.3); }
             }
+        }
+        input {
+            display: block;
+            font-family: "Advent";
+            width: 100%;
+            height: 32px;
+            line-height: 32px;
+            border-radius: 0 0 20px 0;
         }
     }
 }

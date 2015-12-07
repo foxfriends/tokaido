@@ -12,6 +12,7 @@ import * as evt from './event.es6';
 import {activate, deactivate, windowRelPos, currentZoom} from './board_scroll.es6';
 import * as cards from '../../../cards/index.es6';
 import * as card from './cards.es6';
+import {instruct} from './notification.es6';
 
 export let runner = function*(runner) {
     socket.on('game:event', ([which, d]) => {
@@ -125,7 +126,7 @@ export let runner = function*(runner) {
             yield socket.emit('turn:move', [data.me().name, space], () => runner.next());
             deactivate();
             if(board[space[0]] instanceof spaceType.Inn && cards.get(data.me().traveller).atInn) {
-                let received = yield* cards.get(data.me().traveller).atInn(runner, socket, data.me(), card);
+                let received = yield* cards.get(data.me().traveller).atInn(runner, socket, data.me(), card, instruct);
                 let effect;
                 while(!!(effect = received.splice(0, 1)[0])) {
                     const type = cards.get(effect).type;
@@ -157,7 +158,7 @@ export let runner = function*(runner) {
                         runner.next();
                     }, 700);
                     if(type === 'encounter') {
-                        received.push(...yield* cards.get(effect).draw(runner, socket, data.me(), card));
+                        received.push(...yield* cards.get(effect).draw(runner, socket, data.me(), card, instruct));
                     } else {
                         effect = null;
                     }

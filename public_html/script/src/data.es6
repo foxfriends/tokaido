@@ -85,14 +85,14 @@ export let arrange = () => {
                             .addClass(`card ${type}`)
                             .attr('name', c)
                             .css({
-                                left: 10 + 160 * (i % Math.floor(window.innerWidth * 0.8 / 160)),
-                                top: 10 + 240 * Math.floor(i / Math.floor(window.innerWidth * 0.8 / 160))
+                                left: 10 + 130 * (i % Math.floor(window.innerWidth * 0.8 / 130)),
+                                top: 10 + 190 * Math.floor(i / Math.floor(window.innerWidth * 0.8 / 130))
                             })
                     );
                 } else {
-                    const offset =  (150 * 3 + 10) * (type.indexOf('paddy') === -1 ? 1 : 0) +
-                                    (150 * 4 + 10) * (type.indexOf('sea') !== -1 ? 1 : 0);
-                    const xx = 10 + (CARD_WIDTH / 2) * (parseInt(c[c.length - 1]) - 1) + offset;
+                    const offset =  (120 * 3 + 10) * (type.indexOf('paddy') === -1 ? 1 : 0) +
+                                    (120 * 4 + 10) * (type.indexOf('sea') !== -1 ? 1 : 0);
+                    const xx = 10 + (120) * (parseInt(c[c.length - 1]) - 1) + offset;
                     $(`.card-tray[name="${p}"]`).append(
                         $('<div></div>')
                             .addClass(`card ${type}`)

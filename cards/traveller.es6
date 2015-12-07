@@ -8,7 +8,7 @@ module.exports = {
         name: 'Hiroshige',
         type: 'traveller',
         coins: 3,
-        *atInn(runner, socket, player, card) {
+        *atInn(runner, socket, player, card, instruct) {
             //Choose a Panorama at an Inn
             let which = 'paddy', opts = [];
             if(player.cards.indexOf('paddy3') === -1) {
@@ -42,9 +42,11 @@ module.exports = {
                 $cards.forEach(($card, i) => {
                     $card.css('transform', `translate(${startX[i]}px, ${window.innerHeight / 2}px) scale(1) rotateY(180deg)`);
                 });
+                instruct('Choose a panorama');
                 const $chosen = yield card.confirm(($s) => {
                     return $s.length === 1;
                 }, (c) => runner.next(c));
+                instruct('');
                 $cards.forEach(($card, i) => {
                     $card.css('transform', `translate(${startX[i]}px, ${-window.innerHeight / 2}px) scale(1) rotateY(180deg)`);
                     window.setTimeout(() => $card.remove(), 700);

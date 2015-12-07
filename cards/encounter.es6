@@ -22,7 +22,7 @@ module.exports = {
         score(player) {
             return player.traveller === 'umegae' ? 1 : 0;
         },
-        *draw(runner, socket, player, card) {
+        *draw(runner, socket, player, card, instruct) {
             //Receive one Paddy Panorama
             let which = 'paddy';
             if(player.cards.indexOf('paddy3') !== -1) {
@@ -55,9 +55,11 @@ module.exports = {
                     $cards.forEach(($card, i) => {
                         $card.css('transform', `translate(${(window.innerWidth / 2) - (i - 1/2) * (CARD_WIDTH + 50)}px, ${window.innerHeight / 2}px) scale(1) rotateY(180deg)`);
                     });
+                    instruct('Choose a panorama');
                     const $chosen = yield card.confirm(($s) => {
                         return $s.length === 1;
                     }, (c) => runner.next(c));
+                    instruct('');
                     $cards.forEach(($card, i) => {
                         $card.css('transform', `translate(${(window.innerWidth / 2) - (i - 1/2) * (CARD_WIDTH + 50)}px, ${-window.innerHeight / 2}px) scale(1) rotateY(180deg)`);
                         window.setTimeout(() => $card.remove(), 700);
@@ -74,7 +76,7 @@ module.exports = {
         score(player) {
             return player.traveller === 'umegae' ? 1 : 0;
         },
-        *draw(runner, socket, player, card) {
+        *draw(runner, socket, player, card, instruct) {
             //Receive one Mountain Panorama
             let which = 'mountain';
             if(player.cards.indexOf('mountain4') !== -1) {
@@ -107,9 +109,11 @@ module.exports = {
                     $cards.forEach(($card, i) => {
                         $card.css('transform', `translate(${(window.innerWidth / 2) - (i - 1/2) * (CARD_WIDTH + 50)}px, ${window.innerHeight / 2}px) scale(1) rotateY(180deg)`);
                     });
+                    instruct('Choose a panorama');
                     const $chosen = yield card.confirm(($s) => {
                         return $s.length === 1;
                     }, (c) => runner.next(c));
+                    instruct('');
                     $cards.forEach(($card, i) => {
                         $card.css('transform', `translate(${(window.innerWidth / 2) - (i - 1/2) * (CARD_WIDTH + 50)}px, ${-window.innerHeight / 2}px) scale(1) rotateY(180deg)`);
                         window.setTimeout(() => $card.remove(), 700);
@@ -126,7 +130,7 @@ module.exports = {
         score(player) {
             return player.traveller === 'umegae' ? 1 : 0;
         },
-        *draw(runner, socket, player, card) {
+        *draw(runner, socket, player, card, instruct) {
             //Receive one Sea Panorama
             let which = 'sea';
             if(player.cards.indexOf('sea5') !== -1) {
@@ -159,9 +163,11 @@ module.exports = {
                     $cards.forEach(($card, i) => {
                         $card.css('transform', `translate(${(window.innerWidth / 2) - (i - 1/2) * (CARD_WIDTH + 50)}px, ${window.innerHeight / 2}px) scale(1) rotateY(180deg)`);
                     });
+                    instruct('Choose a panorama');
                     const $chosen = yield card.confirm(($s) => {
                         return $s.length === 1;
                     }, (c) => runner.next(c));
+                    instruct('');
                     $cards.forEach(($card, i) => {
                         $card.css('transform', `translate(${(window.innerWidth / 2) - (i - 1/2) * (CARD_WIDTH + 50)}px, ${-window.innerHeight / 2}px) scale(1) rotateY(180deg)`);
                         window.setTimeout(() => $card.remove(), 700);

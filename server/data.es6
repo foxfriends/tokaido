@@ -1,6 +1,7 @@
 'use strict';
-import * as cards from '../cards/index.es6';
-import {SMALL_OBJECT, FOOD, CLOTHING, ART, LEGENDARY} from './const.es6';
+let fs = require('fs');
+
+let cards = require('../cards');
 let games = {};
 
 let shuffle = (a) => {
@@ -10,6 +11,12 @@ let shuffle = (a) => {
         [a[0], a[r]] = [a[r], a[0]];
     }
     return a;
+};
+
+let iPlayers = function*(g) {
+    for(let name of Object.keys(games[g].players)) {
+        yield games[g].players[name];
+    }
 };
 
 let insert = (g,p,c,...rest) => {
@@ -63,11 +70,7 @@ module.exports = {
     },
     shuffleCards: (g,t) => games[g].cards[t] = shuffle(games[g].cards[t]),
     discardMeal: (g,m) => games[g].mealset.splice(games[g].mealset.indexOf(m), 1),
-    iPlayers: function*(g) {
-        for(let name of Object.keys(games[g].players)) {
-            yield games[g].players[name];
-        }
-    },
+    iPlayers: iPlayers,
     getName: (g,i) => Object.keys(games[g].players)[i],
     getPlayer: (g,p) => games[g].players[p],
     setPlayer: (g,p,f,d) => games[g].players[p][f] = d,
@@ -130,5 +133,17 @@ module.exports = {
         cards: [],
         position: -1,
         connected: true
+    },
+    load: (g) => {
+        try {
+            fs.statSync(`./games/${g}.tokaido`);
+            games[g] = JSON.parse(fs.readFileSync(`./games/${g}.tokaido`, 'utf8'));
+            for(let p of iPlayers(g)) {
+                p.connected = false;
+            }
+            return true;
+        } catch(e) {
+            return false;
+        }
     }
 };

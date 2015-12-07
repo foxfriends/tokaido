@@ -6,7 +6,7 @@ import {socket} from './socket.es6';
 import * as cards from '../../../cards/index.es6';
 import * as card from './cards.es6';
 import {me as my} from './data.es6';
-import {error} from './notification.es6';
+import {error, instruct} from './notification.es6';
 import {currentZoom, windowRelPos} from './board_scroll.es6';
 
 import {
@@ -40,6 +40,7 @@ class Inn extends Space {
             card.show($card);
             yield window.setTimeout(() => runner.next(), 400);
             $card.css('transform', `translate(${window.innerWidth / 2}px, ${window.innerHeight / 2}px) scale(${1}) rotateY(0)`);
+            instruct('Take extra meal? (Select one)');
             const $chosen = yield card.confirm(($s) => {
                 let [price, discount] = [0, 0];
                 if($s.length === 1) {
@@ -52,6 +53,7 @@ class Inn extends Space {
                 if(my().cards.indexOf($s.attr('name')) !== -1) { return error('You have already eaten this meal'); }
                 return true;
             }, (c) => runner.next(c));
+            instruct('');
             if($chosen.length) {
                 const e = yield socket.emit('submit:meal', [$chosen.attr('name'), 'eriku'], (e) => runner.next(e));
                 if(e !== undefined) {
@@ -85,10 +87,12 @@ class Inn extends Space {
             let $card = $cards[0];
             yield window.setTimeout(() => runner.next(), 400);
             $card.css('transform', `translate(${window.innerWidth / 2}px, ${window.innerHeight / 2}px) scale(${1}) rotateY(0)`);
+            instruct('Take free meal? (Select one)');
             const $chosen = yield card.confirm(($s) => {
                 if(my().cards.indexOf($s.attr('name')) !== -1) { return error('You have already eaten this meal'); }
                 return true;
             }, (c) => runner.next(c));
+            instruct('');
             if($chosen.length) {
                 $cards.forEach(($card) => {
                     window.setTimeout(() => $card.remove(), 700);
@@ -109,6 +113,7 @@ class Inn extends Space {
             ];
             $card.css('transform', `translate(${xx}px, ${window.innerHeight / 2}px) scale(${scale}) rotateY(0)`);
         });
+        instruct('Choose a meal: (Select one)');
         const $chosen = yield card.confirm(($s) => {
             let [price, discount] = [0, 0];
             if($s.length === 1) {
@@ -121,6 +126,7 @@ class Inn extends Space {
             if(my().cards.indexOf($s.attr('name')) !== -1) { return error('You have already eaten this meal'); }
             return true;
         }, (c) => runner.next(c));
+        instruct('');
         $cards.forEach(($card) => {
             $card.css('transform', `translate(${endX}px, ${startY}px) scale(${PILE_WIDTH / CARD_WIDTH * currentZoom()}) rotateY(180deg)`);
             window.setTimeout(() => $card.remove(), 700);
@@ -171,6 +177,7 @@ class Village extends Space {
             $card.css('transform', `translate(${window.innerWidth / 2 - (CARD_WIDTH + 50) * (1 - i)}px, ${window.innerHeight / 2}px) scale(1) rotateY(0)`);
         });
         let which, min = 3, max = 0, price;
+        instruct('Purchase souvenirs: (Select any)');
         const $chosen = yield card.confirm(($s) => {
             price = $s.toArray()
                 .map((el) => {
@@ -187,6 +194,7 @@ class Village extends Space {
             if(price - discount > my().coins) { return error('You can\'t afford all that'); }
             return true;
         }, (c) => runner.next(c));
+        instruct('');
         $cards.forEach(($card) => {
             if($chosen.toArray().map((c) => $(c).attr('name')).indexOf($card.attr('name')) === -1) {
                 $card.css('transform', `translate(${startX}px, ${startY}px) scale(${PILE_WIDTH / CARD_WIDTH * currentZoom()}) rotateY(180deg)`);
@@ -230,6 +238,7 @@ class Temple extends Space {
             .click(function() {
                 card.coin(-1);
                 socket.emit('donate', [1, false], ()=>{});
+                instruct(`Donate up to ${max - donations} more`);
                 if(++donations >= max) {
                     $(this)
                         .off('click')
@@ -238,9 +247,11 @@ class Temple extends Space {
                 }
             });
         $('#cards').append($coin);
+        instruct(`Donate up to ${max} coins`);
         yield window.setTimeout(() => runner.next(), 400);
         $coin.css('transform', `translate(${window.innerWidth / 2}px, ${window.innerHeight / 2}px)`);
         yield card.confirm(() => donations >= 1, () => runner.next());
+        instruct('');
         $coin.css('transform', `translate(${window.innerWidth / 2}px, -100px)`);
         window.setTimeout(() => $coin.remove(), 700);
     }
@@ -266,13 +277,15 @@ class Encounter extends Space {
                 })
             ];
             card.show(...$cards);
-            yield window.setTimeout(() => runner.next(), 400);
+            instruct('Choose one');
             $cards.forEach(($card, i) => {
                 $card.css('transform', `translate(${(window.innerWidth - CARD_WIDTH - 50) / 2 + (CARD_WIDTH + 25) * i}px, ${window.innerHeight / 2}px) scale(1) rotateY(0)`);
             });
+            yield window.setTimeout(() => runner.next(), 400);
             const $chosen = yield card.confirm(($s) => {
                 return $s.length === 1;
             }, (c) => runner.next(c));
+            instruct('');
             $cards.forEach(($card) => {
                 if($chosen.attr('name') !== $card.attr('name')) {
                     $card.css('transform', `translate(${startX}px, ${startY}px) scale(${PILE_WIDTH / CARD_WIDTH * currentZoom()}) rotateY(180deg)`);
@@ -304,7 +317,7 @@ class Encounter extends Space {
                 runner.next();
             }, 700);
         }
-        const [effect] = yield* cards.get(e).draw(runner, socket, my(), card);
+        const [effect] = yield* cards.get(e).draw(runner, socket, my(), card, instruct);
         if(effect) {
             const type = cards.get(effect).type;
             const [xx, yy] = [{

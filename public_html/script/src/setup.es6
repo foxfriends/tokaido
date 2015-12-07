@@ -2,7 +2,7 @@
 require('babel/polyfill');
 import {default as $} from 'jquery';
 import {socket} from './socket.es6';
-import {error} from './notification.es6';
+import {error, instruct} from './notification.es6';
 import * as card from './cards.es6';
 import * as data from './data.es6';
 import * as drag from './board_scroll.es6';
@@ -12,6 +12,7 @@ import {
     CARD_WH_RATIO, TC_WIDTH, TC_HEIGHT, SETUP, PLAY
 } from './const.es6';
 import {init as initChat} from './chat.es6';
+import {showRules} from './rules.es6';
 
 let setCardTray = (i, player) => {
     $('.card-tray').eq(i)
@@ -108,7 +109,9 @@ export let runner = function*(runner) {
         card.show(...cards);
         yield window.setTimeout(() => runner.next(), 200);
         cards.forEach(($card) => $card.css('transform', `translateY(${window.innerHeight}px)`));
+        instruct('Choose a traveller');
         const traveller = (yield card.confirm(($s) => $s.length === 1, (c) => runner.next(c))).attr('name');
+        instruct('');
         cards.forEach(($card) => $card.css('transform', `translateY(${$card.attr('name') === traveller ? window.innerHeight * 2 : 0}px)`));
         window.setTimeout(() => card.remove(...cards), 700);
         yield socket.emit('submit:traveller', traveller, () => runner.next());
@@ -119,6 +122,12 @@ export let runner = function*(runner) {
     }
     populate_board: {
         initChat();
+        const F1 = 112;
+        $(window).keydown((e) => {
+            if(e.which === F1) {
+                showRules();
+            }
+        });
         //Position gameboard elements correctly
         setCardTray(0, data.me());
         for(let i = 1; i < data.players(); i++) {

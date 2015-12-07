@@ -21,7 +21,7 @@ module.exports = (id) => {
             "t[\\s\\.]*i[\\s\\.]*t([\\s\\.]t)?" +
         ")(ed|ing|er)?(e|ie|y)?s?)+\\b", "i");
 
-        let random_cjk = () => `&#${(0x4e00 + Math.floor(Math.random() * (0x9faf - 0x4e00))).toString(16)}`;
+        let random_cjk = () => `&#x${(0x4e00 + Math.floor(Math.random() * (0x9faf - 0x4e00))).toString(16)}`;
 
         while(msg !== (msg = msg.replace(swears, random_cjk())));
 
