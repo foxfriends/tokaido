@@ -4,11 +4,10 @@ import * as data from './data.es6';
 import {socket} from './socket.es6';
 import {default as $} from 'jquery';
 import {
-    PLAY, SOUVENIR_PILE_X, ENCOUNTER_PILE_X, SPRINGS_PILE_X, MEAL_PILE_X, MEALSET_PILE_X,
+    PLAY, DONE, SOUVENIR_PILE_X, ENCOUNTER_PILE_X, SPRINGS_PILE_X, MEAL_PILE_X, MEALSET_PILE_X,
     PADDY_PILE_X, MOUNTAIN_PILE_X, SEA_PILE_X, PILE_Y, PANO_PILE_Y, PILE_WIDTH, CARD_WIDTH, CARD_HEIGHT
 } from './const.es6';
 import * as action from './action.es6';
-import * as evt from './event.es6';
 import {activate, deactivate, windowRelPos, currentZoom} from './board_scroll.es6';
 import * as cards from '../../../cards/index.es6';
 import * as card from './cards.es6';
@@ -169,5 +168,13 @@ export let runner = function*(runner) {
             socket.emit('turn:end');
         }
         yield socket.once('turn:end', () => runner.next());
+        let done = true;
+        for(let i of data.iPlayers()) {
+            if(i.position[0] !== board.length - 1) {
+                done = false;
+            }
+        }
+        if(!done) { continue; }
+        socket.emit('game:ready', DONE);
     }
 };

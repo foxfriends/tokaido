@@ -23,7 +23,7 @@
                 min-height: 32px;
                 line-height: 32px;
 
-                * { font-family: "Advent"; }
+                font-family: "Advent";
 
                 &:first-of-type { border-radius: 0 20px 0 0; }
                 &.purple { background-color: transparentize(lighten(#6b0e65, 30%), 0.3); }
@@ -31,6 +31,12 @@
                 &.white { background-color: transparentize(lighten(#a29f98, 30%), 0.3); }
                 &.green { background-color: transparentize(lighten(#4F8E02, 30%), 0.3); }
                 &.blue { background-color: transparentize(lighten(#7DC1C0, 30%), 0.3); }
+
+                span.message-time {
+                    font-family: "Advent";
+                    font-size: 12px;
+                    color: $title-color;
+                }
             }
         }
         input {

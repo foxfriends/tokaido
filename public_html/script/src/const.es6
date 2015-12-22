@@ -34,6 +34,9 @@ export const PANO_PILE_Y = 700 + PILE_HEIGHT / 2;
 export const JOIN = 0;
 export const SETUP = 1;
 export const PLAY = 2;
+export const DONE = 3;
+export const FINISHED = 4;
+
 export const [SMALL_OBJECT, FOOD, CLOTHING, ART, LEGENDARY] = [1,2,3,4,5];
 
 export const PURPLE_DONATION_PILE = 180;

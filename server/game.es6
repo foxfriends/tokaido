@@ -241,4 +241,70 @@ module.exports = (id) => {
         }
         res();
     });
+    const calculateAchievements = () => {
+        const c = {}, ret = {};
+        const max = {
+            spring: 0,
+            encounter: 0,
+            souvenir: 0,
+            meal: 0
+        };
+        for(let p of data.iPlayers(player.game())) {
+            c[p.name] = {
+                spring: 0,
+                encounter: 0,
+                souvenir: 0,
+                meal: 0
+            };
+            ret[p.name] = [];
+            for(let card of p.cards) {
+                switch(cards.get(card).type) {
+                    case 'spring':
+                    case 'encounter':
+                    case 'souvenir':
+                        c[p.name][cards.get(card).type]++;
+                        break;
+                    case 'meal':
+                        c[p.name].meal += cards.get(card).price;
+                        break;
+                }
+            }
+            if(c[p.name].spring > max.spring) {
+                max.spring = c[p.name].spring;
+            }
+            if(c[p.name].encounter > max.encounter) {
+                max.encounter = c[p.name].encounter;
+            }
+            if(c[p.name].souvenir > max.souvenir) {
+                max.souvenir = c[p.name].souvenir;
+            }
+            if(c[p.name].meal > max.meal) {
+                max.meal = c[p.name].meal;
+            }
+        }
+        for(let p of data.iPlayers(player.game())) {
+            if(c[p.name].spring === max.spring) {
+                ret[p.name].push('bather');
+            }
+            if(c[p.name].encounter === max.encounter) {
+                ret[p.name].push('chatterbox');
+            }
+            if(c[p.name].souvenir === max.souvenir) {
+                ret[p.name].push('collector');
+            }
+            if(c[p.name].meal === max.meal) {
+                ret[p.name].push('gourmet');
+            }
+        }
+        return ret;
+    };
+    socket.on('request:achievements', (x, res) => {
+        const ret = calculateAchievements();
+        res(ret);
+    });
+    socket.on('request:final-score', (x, res) => {
+        const cards = calculateAchievements();
+        data.giveCard(player.game(), player.name(), ...cards[player.name()]);
+        res();
+    });
 };

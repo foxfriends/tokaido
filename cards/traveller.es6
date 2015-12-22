@@ -20,7 +20,9 @@ module.exports = {
             if(player.cards.indexOf('sea5') === -1) {
                 opts.push('sea');
             }
-            if(opts.length === 1) {
+            if(opts.length === 0) {
+                which = '';
+            } else  if(opts.length === 1) {
                 which = opts[0];
             } else {
                 let [$cards, startX] = [[], []];
@@ -53,7 +55,11 @@ module.exports = {
                 });
                 which = $chosen.attr('name');
             }
-            return yield socket.emit('acquire:panorama', which, (p) => runner.next(p));
+            if(which !== '') {
+                return yield socket.emit('acquire:panorama', which, (p) => runner.next(p));
+            } else {
+                return [];
+            }
         }
     },
     'chuubei': {

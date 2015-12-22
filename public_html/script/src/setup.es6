@@ -1,5 +1,5 @@
 'use strict';
-require('babel/polyfill');
+require('babel-polyfill');
 import {default as $} from 'jquery';
 import {socket} from './socket.es6';
 import {error, instruct} from './notification.es6';
@@ -158,7 +158,11 @@ export let runner = function*(runner) {
         }
         if(delayArrange) {
             yield window.setTimeout(() => runner.next(), 10);
+            data.arrange();
+        } else {
+            //Wait for the board to finish scrolling
+            data.arrange();
+            yield window.setTimeout(() => runner.next(), 8000);
         }
-        data.arrange();
     }
 };

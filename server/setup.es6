@@ -70,8 +70,8 @@ module.exports = (id) => {
             if(state > data.get(player.game()).state) {
                 data.set(player.game(), 'state', state);
             }
-            updateData(player.game());
             data.set(player.game(), 'readystate', 0);
+            updateData(player.game());
             io.to(player.game()).emit('game:ready');
         }
     });

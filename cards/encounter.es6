@@ -1,5 +1,5 @@
 'use strict';
-require('babel/polyfill');
+require('babel-polyfill');
 let $ = require('jquery');
 const CARD_WIDTH = 300;
 const CARD_HEIGHT = 461;
@@ -33,7 +33,9 @@ module.exports = {
                 if(player.cards.indexOf('sea5') === -1) {
                     opts.push('sea');
                 }
-                if(opts.length === 1) {
+                if(opts.length === 0) {
+                    which = '';
+                } else  if(opts.length === 1) {
                     which = opts[0];
                 } else {
                     const $cards = [
@@ -67,7 +69,11 @@ module.exports = {
                     which = $chosen.attr('name');
                 }
             }
-            return yield socket.emit('acquire:panorama', which, (p) => runner.next(p));
+            if(which !== '') {
+                return yield socket.emit('acquire:panorama', which, (p) => runner.next(p));
+            } else {
+                return [];
+            }
         }
     },
     'annaibito-m': {
@@ -87,7 +93,9 @@ module.exports = {
                 if(player.cards.indexOf('sea5') === -1) {
                     opts.push('sea');
                 }
-                if(opts.length === 1) {
+                if(opts.length === 0) {
+                    which = '';
+                } else  if(opts.length === 1) {
                     which = opts[0];
                 } else {
                     const $cards = [
@@ -121,7 +129,11 @@ module.exports = {
                     which = $chosen.attr('name');
                 }
             }
-            return yield socket.emit('acquire:panorama', which, (p) => runner.next(p));
+            if(which !== '') {
+                return yield socket.emit('acquire:panorama', which, (p) => runner.next(p));
+            } else {
+                return [];
+            }
         }
     },
     'annaibito-s': {
@@ -141,7 +153,9 @@ module.exports = {
                 if(player.cards.indexOf('mountain4') === -1) {
                     opts.push('mountain');
                 }
-                if(opts.length === 1) {
+                if(opts.length === 0) {
+                    which = '';
+                } else  if(opts.length === 1) {
                     which = opts[0];
                 } else {
                     const $cards = [
@@ -175,7 +189,11 @@ module.exports = {
                     which = $chosen.attr('name');
                 }
             }
-            return yield socket.emit('acquire:panorama', which, (p) => runner.next(p));
+            if(which !== '') {
+                return yield socket.emit('acquire:panorama', which, (p) => runner.next(p));
+            } else {
+                return [];
+            }
         }
     },
     'samurai': {

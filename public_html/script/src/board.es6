@@ -1,5 +1,5 @@
 'use strict';
-require('babel/polyfill');
+require('babel-polyfill');
 import {default as $} from 'jquery';
 
 import {socket} from './socket.es6';
@@ -238,8 +238,9 @@ class Temple extends Space {
             .click(function() {
                 card.coin(-1);
                 socket.emit('donate', [1, false], ()=>{});
+                ++donations;
                 instruct(`Donate up to ${max - donations} more`);
-                if(++donations >= max) {
+                if(donations >= max) {
                     $(this)
                         .off('click')
                         .css('transform', `translate(${window.innerWidth / 2}px, -100px)`);

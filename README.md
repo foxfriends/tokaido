@@ -4,4 +4,4 @@ this game are mine.
 
 TODO:
 * Sound
-* End game
+* Card tray squish

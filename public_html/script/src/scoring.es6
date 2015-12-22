@@ -1,7 +1,8 @@
 'use strict';
 import * as cards from '../../../cards/index.es6';
-import {player, iPlayers} from './data.es6';
+import {get as data, player, iPlayers} from './data.es6';
 import {board} from './board.es6';
+import {DONE} from './const.es6';
 
 let souvenirPoints = (p) => {
     let counts = [0, 0, 0, 0, 0];
@@ -31,13 +32,7 @@ export let score = (p) => {
             s += cards.get(card).score(p);
         }
     }
-    let done = true;
-    for(let i of iPlayers()) {
-        if(i.position[0] !== board.length - 1) {
-            done = false;
-        }
-    }
-    if(done) {
+    if(data().state === DONE) {
         let donations = [];
         for(let i of iPlayers()) {
             donations[i.donations] = (donations[i.donations] && donations[i.donations].length) ? [...donations[i.donations], p.name] : [p.name];

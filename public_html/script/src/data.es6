@@ -1,5 +1,5 @@
 'use strict';
-require('babel/polyfill');
+require('babel-polyfill');
 import {default as $} from 'jquery';
 import {score} from './scoring.es6';
 import {board} from './board.es6';
