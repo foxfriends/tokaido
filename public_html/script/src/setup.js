@@ -1,18 +1,18 @@
 'use strict';
 require('babel-polyfill');
 import {default as $} from 'jquery';
-import {socket} from './socket.es6';
-import {error, instruct} from './notification.es6';
-import * as card from './cards.es6';
-import * as data from './data.es6';
-import * as drag from './board_scroll.es6';
-import {board} from './board.es6';
+import {socket} from './socket.js';
+import {error, instruct} from './notification.js';
+import * as card from './cards.js';
+import * as data from './data.js';
+import * as drag from './board_scroll.js';
+import {board} from './board.js';
 import {
     SCOREBOARD_HEIGHT, BOARD_WIDTH, BOARD_HEIGHT, TITLE_COLOR, TC_WH_RATIO,
     CARD_WH_RATIO, TC_WIDTH, TC_HEIGHT, SETUP, PLAY
-} from './const.es6';
-import {init as initChat} from './chat.es6';
-import {showRules} from './rules.es6';
+} from './const.js';
+import {init as initChat} from './chat.js';
+import {showRules} from './rules.js';
 
 let setCardTray = (i, player) => {
     $('.card-tray').eq(i)

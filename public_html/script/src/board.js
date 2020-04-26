@@ -2,18 +2,18 @@
 require('babel-polyfill');
 import {default as $} from 'jquery';
 
-import {socket} from './socket.es6';
-import * as cards from '../../../cards/index.es6';
-import * as card from './cards.es6';
-import {me as my} from './data.es6';
-import {error, instruct} from './notification.es6';
-import {currentZoom, windowRelPos} from './board_scroll.es6';
+import {socket} from './socket.js';
+import * as cards from '../../../cards/index.js';
+import * as card from './cards.js';
+import {me as my} from './data.js';
+import {error, instruct} from './notification.js';
+import {currentZoom, windowRelPos} from './board_scroll.js';
 
 import {
     SPRINGS_PILE_X, SOUVENIR_PILE_X, ENCOUNTER_PILE_X, MEAL_PILE_X, MEALSET_PILE_X,
     PADDY_PILE_X, MOUNTAIN_PILE_X, SEA_PILE_X, PILE_Y, PANO_PILE_Y, PILE_WIDTH,
     CARD_WIDTH, CARD_HEIGHT
-} from './const.es6';
+} from './const.js';
 
 const [UP, DOWN] = [-1, 1];
 

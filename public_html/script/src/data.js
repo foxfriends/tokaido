@@ -1,8 +1,8 @@
 'use strict';
 require('babel-polyfill');
 import {default as $} from 'jquery';
-import {score} from './scoring.es6';
-import {board} from './board.es6';
+import {score} from './scoring.js';
+import {board} from './board.js';
 import {
     SCOREBOARD_SPACE_WIDTH, SCOREBOARD_SPACE_HEIGHT, SCOREBOARD_HEIGHT, SCOREBOARD_WIDTH,
     CARD_HEIGHT, CARD_WIDTH,
@@ -10,8 +10,8 @@ import {
     PADDY_PILE_X, MOUNTAIN_PILE_X, SEA_PILE_X, PILE_Y, PANO_PILE_Y, PILE_WIDTH,
     PURPLE_DONATION_PILE, YELLOW_DONATION_PILE, GREEN_DONATION_PILE, WHITE_DONATION_PILE,
     BLUE_DONATION_PILE, DONATION_PILE_Y, DONATION_PILE_ANGLE
-} from './const.es6';
-import * as cards from '../../../cards/index.es6';
+} from './const.js';
+import * as cards from '../../../cards/index.js';
 
 let data, name;
 export let get = () => data;

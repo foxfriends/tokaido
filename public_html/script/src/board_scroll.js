@@ -1,7 +1,7 @@
 'use strict';
 import {default as $} from 'jquery';
 import 'jquery-mousewheel';
-import {BOARD_WIDTH, BOARD_HEIGHT, SCOREBOARD_HEIGHT} from './const.es6';
+import {BOARD_WIDTH, BOARD_HEIGHT, SCOREBOARD_HEIGHT} from './const.js';
 
 const $board = $('#gameboard');
 let followMouse = false, x, y, zoom = 1;

@@ -1,14 +1,14 @@
 'use strict';
-import {socket} from './socket.es6';
+import {socket} from './socket.js';
 import {default as $} from 'jquery';
-import * as data from './data.es6';
-import * as card from './cards.es6';
+import * as data from './data.js';
+import * as card from './cards.js';
 import {
     PILE_WIDTH, CARD_WIDTH, FINISHED
-} from './const.es6';
-import {currentZoom} from './board_scroll.es6';
-import {instruct} from './notification.es6';
-import {score} from './scoring.es6';
+} from './const.js';
+import {currentZoom} from './board_scroll.js';
+import {instruct} from './notification.js';
+import {score} from './scoring.js';
 
 export let runner = function*(runner) {
     if(data.get().state !== FINISHED) {

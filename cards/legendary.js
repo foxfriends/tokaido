@@ -1,5 +1,5 @@
 'use strict';
-let {get} = require('./index.es6');
+let {get} = require('./index.js');
 
 let shoema = (player) => {
     //1 point per Souvenir/Legendary

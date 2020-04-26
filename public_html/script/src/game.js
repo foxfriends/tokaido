@@ -1,17 +1,17 @@
 'use strict';
-import {board, spaceType} from './board.es6';
-import * as data from './data.es6';
-import {socket} from './socket.es6';
+import {board, spaceType} from './board.js';
+import * as data from './data.js';
+import {socket} from './socket.js';
 import {default as $} from 'jquery';
 import {
     PLAY, DONE, SOUVENIR_PILE_X, ENCOUNTER_PILE_X, SPRINGS_PILE_X, MEAL_PILE_X, MEALSET_PILE_X,
     PADDY_PILE_X, MOUNTAIN_PILE_X, SEA_PILE_X, PILE_Y, PANO_PILE_Y, PILE_WIDTH, CARD_WIDTH, CARD_HEIGHT
-} from './const.es6';
-import * as action from './action.es6';
-import {activate, deactivate, windowRelPos, currentZoom} from './board_scroll.es6';
-import * as cards from '../../../cards/index.es6';
-import * as card from './cards.es6';
-import {instruct} from './notification.es6';
+} from './const.js';
+import * as action from './action.js';
+import {activate, deactivate, windowRelPos, currentZoom} from './board_scroll.js';
+import * as cards from '../../../cards/index.js';
+import * as card from './cards.js';
+import {instruct} from './notification.js';
 
 export let runner = function*(runner) {
     socket.on('game:event', ([which, d]) => {

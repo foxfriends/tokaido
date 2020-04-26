@@ -1,7 +1,7 @@
 'use strict';
 import {default as io} from 'socket.io-client';
-import {set as setData} from './data.es6';
-import {error, notification, success} from './notification.es6';
+import {set as setData} from './data.js';
+import {error, notification, success} from './notification.js';
 
 export let socket = io();
 socket.on('error', error);

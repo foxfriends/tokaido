@@ -1,5 +1,5 @@
 'use strict';
-let {get} = require('./index.es6');
+let {get} = require('./index.js');
 
 module.exports = {
     'foresight': {

@@ -1,8 +1,8 @@
 'use strict';
-import * as cards from '../../../cards/index.es6';
-import {get as data, player, iPlayers} from './data.es6';
-import {board} from './board.es6';
-import {DONE} from './const.es6';
+import * as cards from '../../../cards/index.js';
+import {get as data, player, iPlayers} from './data.js';
+import {board} from './board.js';
+import {DONE} from './const.js';
 
 let souvenirPoints = (p) => {
     let counts = [0, 0, 0, 0, 0];

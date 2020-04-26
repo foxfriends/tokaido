@@ -3,8 +3,8 @@
   "version": "1.0.0",
   "description": "Online version of the board game Tokaido",
   "scripts": {
-    "test": "echo No tests! && exit 1",
-    "start": "babel-node --presets es2015 server/server.es6"
+    "start": "node server/server.js",
+    "build": "webpack"
   },
   "keywords": [
     "tokaido",
@@ -22,7 +22,8 @@
   "author": "Cameron Eldridge",
   "license": "ISC",
   "dependencies": {
-    "babel-polyfill": "^6.3.14",
+    "@babel/preset-es2015": "^7.0.0-beta.53",
+    "babel-polyfill": "^6.26.0",
     "ejs": "^2.3.4",
     "express": "^4.13.3",
     "jquery": "^2.1.4",
@@ -32,17 +33,16 @@
     "socket.io-client": "^1.3.7"
   },
   "devDependencies": {
-    "autoprefixer-loader": "^3.1.0",
-    "babel-cli": "^6.3.17",
-    "babel-core": "^5.8.25",
-    "babel-loader": "^5.3.2",
+    "@babel/core": "^7.9.0",
+    "babel-cli": "^6.26.0",
     "css-loader": "^0.19.0",
-    "extract-text-webpack-plugin": "^0.8.2",
     "file-loader": "^0.8.4",
-    "node-sass": "^3.3.3",
-    "sass-loader": "^3.0.0",
+    "mini-css-extract-plugin": "^0.9.0",
+    "node-sass": "^4.14.0",
+    "sass-loader": "^2.0.1",
     "style-loader": "^0.13.0",
     "url-loader": "^0.5.6",
-    "webpack": "^1.12.2"
+    "webpack": "^4.42.0",
+    "webpack-cli": "^3.3.11"
   }
 }

@@ -1,20 +1,25 @@
 'use strict';
-var ExtractTextPlugin = require('extract-text-webpack-plugin');
+const path = require('path');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 module.exports = {
-    entry: './public_html/script/src/index.es6',
+    mode: 'development',
+    entry: './public_html/script/src/index.js',
     output: {
-        path: './public_html/',
+        path: path.resolve('./public_html/'),
         filename: 'script/tokaido.js'
     },
     module: {
-        loaders: [
-            { test: /\.scss$/, loader: ExtractTextPlugin.extract('style', 'css!autoprefixer!sass') },
-            { test: /\.es6$/, loader: 'babel' },
-            { test: /\.(otf|ttf)$/, loader: 'url' },
-            { test: /\.(svg|png|jpe?g)$/, loader: 'url?limit=5000&name=/image/[path][name].[ext]&context=public_html/image/src!image-webpack' }
+        rules: [
+            { test: /\.scss$/, use: [
+                MiniCssExtractPlugin.loader,
+                'css-loader',
+                'sass-loader',
+            ]},
+            { test: /\.(otf|ttf)$/, use: 'url-loader' },
+            { test: /\.(svg|png|jpe?g)$/, use: 'url-loader?limit=5000&name=/image/[path][name].[ext]&context=public_html/image/src!image-webpack-loader' }
         ]
     },
     plugins: [
-        new ExtractTextPlugin('style/main.css')
-    ]
+        new MiniCssExtractPlugin(),
+    ],
 };

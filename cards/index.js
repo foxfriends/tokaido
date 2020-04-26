@@ -1,11 +1,11 @@
 'use strict';
-export const traveller = require('./traveller.es6');
-export const souvenir = require('./souvenir.es6');
-export const encounter = require('./encounter.es6');
-export const meal = require('./meal.es6');
-export const legendary = require('./legendary.es6');
-export const calligraphy = require('./calligraphy.es6');
-export const amulet = require('./amulet.es6');
+const traveller = require('./traveller.js');
+const souvenir = require('./souvenir.js');
+const encounter = require('./encounter.js');
+const meal = require('./meal.js');
+const legendary = require('./legendary.js');
+const calligraphy = require('./calligraphy.js');
+const amulet = require('./amulet.js');
 
 let capitalize = (s) => s[0].toUpperCase() + s.substr(1);
 
@@ -35,7 +35,7 @@ let other = (n) => {
     }
 };
 
-export const get = (name) => traveller[name] || souvenir[name] || encounter[name] || meal[name] ||
+const get = (name) => traveller[name] || souvenir[name] || encounter[name] || meal[name] ||
                     legendary[name] || calligraphy[name] || amulet[name] || other(name);
 
 module.exports = {

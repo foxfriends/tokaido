@@ -1,6 +1,6 @@
 'use strict';
 import {default as $} from 'jquery';
-import {CARD_WIDTH, CARD_HEIGHT} from './const.es6';
+import {CARD_WIDTH, CARD_HEIGHT} from './const.js';
 
 const $cards = $('#cards');
 let flipCards = window.setInterval(() => {

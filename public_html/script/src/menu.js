@@ -1,11 +1,11 @@
 'use strict';
 require('babel-polyfill');
 import {default as $} from 'jquery';
-import {socket} from './socket.es6';
-import {error} from './notification.es6';
-import {showRules, hideRules} from './rules.es6';
-import {BOARD_WIDTH, BOARD_HEIGHT, SCOREBOARD_HEIGHT} from './const.es6';
-import * as data from './data.es6';
+import {socket} from './socket.js';
+import {error} from './notification.js';
+import {showRules, hideRules} from './rules.js';
+import {BOARD_WIDTH, BOARD_HEIGHT, SCOREBOARD_HEIGHT} from './const.js';
+import * as data from './data.js';
 
 let moveShadow = (where) => {
     //Place the shadow behind the selected color

@@ -1,5 +1,5 @@
 'use strict';
-import * as encounters from './encounter.es6';
+const encounters = require('./encounter.js');
 const CARD_WIDTH = 300;
 const CARD_HEIGHT = 461;
 

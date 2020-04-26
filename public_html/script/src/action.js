@@ -1,8 +1,8 @@
 'use strict';
 import {default as $} from 'jquery';
-import * as data from './data.es6';
-import {board, spaceType} from './board.es6';
-import {currentZoom, boardRelPos} from './board_scroll.es6';
+import * as data from './data.js';
+import {board, spaceType} from './board.js';
+import {currentZoom, boardRelPos} from './board_scroll.js';
 
 let makeDraggable = ($e, onmove, ondrop) => {
     let moveValue;

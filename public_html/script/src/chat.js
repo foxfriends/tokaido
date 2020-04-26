@@ -1,8 +1,8 @@
 'use strict';
 import {default as $} from 'jquery';
 
-import {socket} from './socket.es6';
-import * as data from './data.es6';
+import {socket} from './socket.js';
+import * as data from './data.js';
 
 let format = (time) => {
     const d = new Date(time);
