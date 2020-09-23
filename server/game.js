@@ -153,6 +153,11 @@ module.exports = (id) => {
                 name: player.name(),
                 coins: -price + discount
             });
+        } else {
+            sendEvent('choose', {
+                cards: [],
+                name: player.name(),
+            });
         }
         updateData(player.game());
         res();
