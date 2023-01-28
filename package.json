@@ -13,12 +13,12 @@
   ],
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/OinkIguana/tokaido.git"
+    "url": "git+https://github.com/foxfriends/tokaido.git"
   },
   "bugs": {
-    "url": "https://github.com/OinkIguana/tokaido/issues"
+    "url": "https://github.com/foxfriends/tokaido/issues"
   },
-  "homepage": "https://github.com/OinkIguana/tokaido#readme",
+  "homepage": "https://github.com/foxfriends/tokaido#readme",
   "author": "Cameron Eldridge",
   "license": "ISC",
   "dependencies": {
