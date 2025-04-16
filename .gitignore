@@ -1,8 +1,13 @@
 node_modules
 .DS_Store
 /public_html/script/tokaido.js
-/public_html/main.css
 /rules/
 /public_html/image/*
 !/public_html/image/src
+/public_html/*.css
+/public_html/*.jpg
+/public_html/*.png
+/public_html/*.svg
+/public_html/*.ttf
+/public_html/*.otf
 /games/

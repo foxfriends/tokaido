@@ -29,7 +29,7 @@
   "dependencies": {
     "ejs": "^3.1.10",
     "express": "^4.21.2",
-    "jquery": "^3.5.0",
+    "jquery": "^3.7.1",
     "jquery-mousewheel": "^3.1.13",
     "pg": "^4.4.3",
     "socket.io": "^4.8.0",
@@ -38,14 +38,12 @@
   "devDependencies": {
     "@babel/core": "^7.9.0",
     "babel-cli": "^6.26.0",
-    "css-loader": "^6.7.3",
+    "css-loader": "^7.1.2",
     "fast-sass-loader": "^2.0.1",
-    "file-loader": "^6.2.0",
-    "mini-css-extract-plugin": "^0.11.0",
+    "mini-css-extract-plugin": "^2.9.2",
     "sass": "^1.86.3",
-    "style-loader": "^0.13.0",
-    "url-loader": "^4.1.1",
-    "webpack": "^5.94.0",
-    "webpack-cli": "^5.1.4"
+    "style-loader": "^4.0.0",
+    "webpack": "^5.99.5",
+    "webpack-cli": "^6.0.1"
   }
 }
