@@ -8,3 +8,5 @@
 /public_html/*.ttf
 /public_html/*.otf
 /games/
+.terraform
+.terraform.lock.hcl

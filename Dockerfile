@@ -1,5 +1,5 @@
-FROM node:22.14.0 AS build
-WORKDIR /build
+FROM node:22.14.0
+WORKDIR /app
 COPY ./package.json ./package-lock.json ./
 RUN npm ci
 COPY ./webpack.config.js ./

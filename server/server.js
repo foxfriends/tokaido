@@ -10,6 +10,9 @@ app.set('view engine', 'ejs');
 app.set('views', '');
 
 app.use('/', express.static('public_html'));
+app.use('/health', (req, res) => {
+  res.send('Ok');
+});
 //If not calling for a specific file, only page is index.html.ejs
 app.use((req, res) => {
     res.render('public_html/index.html.ejs');
