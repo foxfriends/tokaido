@@ -13,7 +13,7 @@ module.exports = {
             { test: /\.scss$/, use: [
                 MiniCssExtractPlugin.loader,
                 'css-loader',
-                'sass-loader',
+                'fast-sass-loader',
             ]},
             { test: /\.(otf|ttf)$/, use: 'url-loader' },
             { test: /\.(svg|png|jpe?g)$/, use: 'url-loader?limit=5000&name=/image/[path][name].[ext]&context=public_html/image/src!image-webpack-loader' }
